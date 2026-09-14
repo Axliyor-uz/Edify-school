@@ -1,0 +1,548 @@
+{
+  "_readme": [
+    "THE PHYSICS SAMPLE PAPER — edit this file to change what the Milliy sertifikat",
+    "physics builder's \"Namunaviy variant\" button loads. Contract: docs/MILLIY_QUIZ.md.",
+    "",
+    "WHY 35 QUESTIONS / 100 MINUTES. ⚠️ Unlike maths, NO published physics blueprint",
+    "is encoded in this repo (maths has EXAM_BLUEPRINT; nothing equivalent exists",
+    "here), so this length is THIS FILE'S OWN, not a national spec — it matches the",
+    "`fizika` defaults in MILLIY_SUBJECTS so pressing the button fills the builder",
+    "to exactly its target. A teacher who wants another length changes the target",
+    "and edits the paper; nothing is enforced against a protocol that does not exist.",
+    "",
+    "THE DISTRIBUTION THIS FILE FOLLOWS, one line per taxonomy topic:",
+    "  mexanika                        12  (kinematika 4 - dinamika 3 - saqlanish 4 - statika 1)",
+    "  molekulyar-fizika-va-termodinamika  6",
+    "  elektr-va-magnetizm              8",
+    "  optika-va-nisbiylik-nazariyasi   5",
+    "  kvant-va-yadro-fizikasi          4",
+    "  → 35 slots: 30 closed (Y-1) + 5 short typed (O)",
+    "⚠️ NOTHING ENFORCES THAT. The builder has no per-section quotas (by design —",
+    "see checkMilliyAdd), so the counts above are this file's own discipline.",
+    "Recount them by hand if you add or remove an entry.",
+    "",
+    "Per entry:",
+    "  topicId     a `fizika` TOPIC slug. It becomes the item's sectionId, which is",
+    "              what the teacher's results page groups by. The taxonomy keeps the",
+    "              five classical branches and nothing finer:",
+    "                mexanika",
+    "                molekulyar-fizika-va-termodinamika",
+    "                elektr-va-magnetizm",
+    "                optika-va-nisbiylik-nazariyasi",
+    "                kvant-va-yadro-fizikasi",
+    "  subtopicId  optional, for a more precise label. Must belong to its topic.",
+    "              Physics subtopics carry a \"Group — Leaf\" prefix, so they read",
+    "              e.g. `dinamika-elastiklik-kuchi-guk-qonuni`.",
+    "  question    a string, or {uz, ru, en}. A bare string is used for all three.",
+    "  options     A-D (OptionKey is A..D). PRESENT => closed item; ABSENT => typed",
+    "              item. There is no separate flag, so the two cannot contradict.",
+    "  answer      closed -> the correct option key; typed -> the literal answer.",
+    "  acceptedAnswers  typed only: other spellings graded correct.",
+    "  numeric     typed only, default FALSE. ⚠️ SET IT TRUE on every calculation",
+    "              answer — like chemistry, every typed answer here is a number, and",
+    "              numeric grading normalizes `0,2` / `0.2` / spacing so a right",
+    "              answer is never marked wrong for formatting.",
+    "  explanation shown on the results screen when the teacher left answers visible.",
+    "  difficultyId 1 easy - 2 medium - 3 hard (default 2).",
+    "",
+    "⚠️ FORMULAS ARE PLAIN TEXT (v = at, E = mc², 6,6·10⁻³⁴), never LaTeX. These",
+    "strings run through the same LatexRenderer as every other question, so a stray",
+    "`$`, `_` or `^` would be read as math and render as garbage.",
+    "",
+    "⚠️ AUTHORED UZBEK-ONLY: a bare string fills ru and en with the same text, so a",
+    "student who picked Russian sees Uzbek rather than a blank. Add {uz, ru, en}",
+    "objects per entry as translations are made."
+  ],
+  "title": {
+    "uz": "Fizika — namunaviy variant",
+    "ru": "Физика — образцовый вариант",
+    "en": "Physics — sample paper"
+  },
+  "durationMinutes": 100,
+  "questions": [
+    {
+      "topicId": "mexanika",
+      "subtopicId": "kinematika-tekis-togri-chiziqli-harakat",
+      "question": "Avtomobil 72 km/soat tezlik bilan harakatlanmoqda. Uning SI birliklaridagi tezligi qancha?",
+      "options": {
+        "A": "10 m/s",
+        "B": "15 m/s",
+        "C": "20 m/s",
+        "D": "25 m/s"
+      },
+      "answer": "C",
+      "explanation": "1 km/soat = 1/3,6 m/s. 72 : 3,6 = 20 m/s.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "mexanika",
+      "subtopicId": "kinematika-tekis-ozgaruvchan-harakat",
+      "question": "Tinch holatdan 2 m/s² tezlanish bilan harakatlanayotgan jism 5 s da qancha yo'l bosadi?",
+      "options": {
+        "A": "10 m",
+        "B": "20 m",
+        "C": "25 m",
+        "D": "50 m"
+      },
+      "answer": "C",
+      "explanation": "Boshlang'ich tezlik nolga teng: s = at²/2 = 2·25/2 = 25 m.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "mexanika",
+      "subtopicId": "kinematika-erkin-tushish-va-tik-otilgan-jism",
+      "question": "20 m balandlikdan erkin tushayotgan jism yerga qanday tezlik bilan uriladi? (g = 10 m/s²)",
+      "options": {
+        "A": "10 m/s",
+        "B": "14 m/s",
+        "C": "20 m/s",
+        "D": "40 m/s"
+      },
+      "answer": "C",
+      "explanation": "v = √(2gh) = √(2·10·20) = √400 = 20 m/s.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "mexanika",
+      "subtopicId": "kinematika-harakatlarning-nisbiyligi",
+      "question": "Ikki poyezd bir-biriga qarab 20 m/s va 15 m/s tezlik bilan harakatlanmoqda. Ularning bir-biriga nisbatan tezligi qancha?",
+      "options": {
+        "A": "5 m/s",
+        "B": "17,5 m/s",
+        "C": "35 m/s",
+        "D": "300 m/s"
+      },
+      "answer": "C",
+      "explanation": "Qarama-qarshi yo'nalishdagi harakatda nisbiy tezlik tezliklar yig'indisiga teng: 20 + 15 = 35 m/s.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "mexanika",
+      "subtopicId": "dinamika-nyutonning-ikkinchi-qonuni",
+      "question": "Massasi 4 kg jismga 12 N kuch ta'sir qilsa, u qanday tezlanish oladi?",
+      "options": {
+        "A": "0,33 m/s²",
+        "B": "3 m/s²",
+        "C": "8 m/s²",
+        "D": "48 m/s²"
+      },
+      "answer": "B",
+      "explanation": "Nyutonning ikkinchi qonuni: a = F/m = 12/4 = 3 m/s².",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "mexanika",
+      "subtopicId": "dinamika-elastiklik-kuchi-guk-qonuni",
+      "question": "Bikrligi 200 N/m bo'lgan prujinani 5 sm ga cho'zish uchun qanday kuch kerak?",
+      "options": {
+        "A": "4 N",
+        "B": "10 N",
+        "C": "40 N",
+        "D": "1000 N"
+      },
+      "answer": "B",
+      "explanation": "Guk qonuni: F = kx. x = 5 sm = 0,05 m, F = 200·0,05 = 10 N.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "mexanika",
+      "subtopicId": "dinamika-ishqalanish-kuchi",
+      "question": "Massasi 10 kg jism gorizontal sirt bo'ylab siljitilmoqda. Ishqalanish koeffitsienti 0,2 bo'lsa, ishqalanish kuchi qancha? (g = 10 m/s²)",
+      "options": {
+        "A": "2 N",
+        "B": "20 N",
+        "C": "50 N",
+        "D": "200 N"
+      },
+      "answer": "B",
+      "explanation": "F = μN = μmg = 0,2·10·10 = 20 N.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "mexanika",
+      "subtopicId": "saqlanish-qonunlari-impuls-va-impulsning-saqlanish-qonuni",
+      "question": "Massasi 2 kg jism 5 m/s tezlik bilan harakatlanmoqda. Uning impulsi necha kg·m/s ga teng? Javobni son bilan yozing.",
+      "answer": "10",
+      "acceptedAnswers": [
+        "10 kg·m/s",
+        "10 kgm/s"
+      ],
+      "numeric": true,
+      "explanation": "p = mv = 2·5 = 10 kg·m/s.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "mexanika",
+      "subtopicId": "saqlanish-qonunlari-kinetik-energiya",
+      "question": "Massasi 4 kg jism 10 m/s tezlik bilan harakatlanmoqda. Uning kinetik energiyasi qancha?",
+      "options": {
+        "A": "20 J",
+        "B": "40 J",
+        "C": "200 J",
+        "D": "400 J"
+      },
+      "answer": "C",
+      "explanation": "Ek = mv²/2 = 4·100/2 = 200 J.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "mexanika",
+      "subtopicId": "saqlanish-qonunlari-mexanik-ish-va-quvvat",
+      "question": "10 N kuch jismni o'z yo'nalishida 5 m ko'chirdi. Bajarilgan ish qancha?",
+      "options": {
+        "A": "2 J",
+        "B": "15 J",
+        "C": "50 J",
+        "D": "500 J"
+      },
+      "answer": "C",
+      "explanation": "A = F·s·cos α, α = 0 bo'lgani uchun A = 10·5 = 50 J.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "mexanika",
+      "subtopicId": "saqlanish-qonunlari-mexanik-energiyaning-saqlanish-qonuni",
+      "question": "Mexanik energiyaning saqlanish qonuni qaysi shartda bajariladi?",
+      "options": {
+        "A": "Faqat ishqalanish kuchi mavjud bo'lganda",
+        "B": "Ishqalanish va qarshilik kuchlari hisobga olinmaganda",
+        "C": "Jism faqat tinch turganda",
+        "D": "Har qanday holatda, hech qanday shartsiz"
+      },
+      "answer": "B",
+      "explanation": "Yopiq sistemada faqat konservativ kuchlar ish bajarganda kinetik va potensial energiyalar yig'indisi o'zgarmaydi; ishqalanish energiyaning bir qismini ichki energiyaga aylantiradi.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "mexanika",
+      "subtopicId": "statika-va-gidrostatika-arximed-kuchi-va-suzish-sharti",
+      "question": "Hajmi 0,002 m³ bo'lgan jism suvga to'liq botirilgan. Unga ta'sir etuvchi Arximed kuchi qancha? (ρ = 1000 kg/m³, g = 10 m/s²)",
+      "options": {
+        "A": "0,02 N",
+        "B": "2 N",
+        "C": "20 N",
+        "D": "200 N"
+      },
+      "answer": "C",
+      "explanation": "FA = ρgV = 1000·10·0,002 = 20 N.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "molekulyar-fizika-va-termodinamika",
+      "subtopicId": "molekulyar-kinetika-modda-miqdori-va-avogadro-soni",
+      "question": "Normal sharoitda 44,8 l ideal gaz necha mol moddani tashkil etadi?",
+      "options": {
+        "A": "1 mol",
+        "B": "2 mol",
+        "C": "4 mol",
+        "D": "22,4 mol"
+      },
+      "answer": "B",
+      "explanation": "Normal sharoitda 1 mol gaz 22,4 l hajmni egallaydi: 44,8 : 22,4 = 2 mol.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "molekulyar-fizika-va-termodinamika",
+      "subtopicId": "molekulyar-kinetika-ideal-gaz-holat-tenglamasi",
+      "question": "Ideal gazning holat tenglamasi (Mendeleyev va Klapeyron tenglamasi) qaysi ko'rinishda yoziladi?",
+      "options": {
+        "A": "pV = mRT",
+        "B": "pV = (m/M)RT",
+        "C": "pV = RT/m",
+        "D": "p/V = (m/M)RT"
+      },
+      "answer": "B",
+      "explanation": "Modda miqdori n = m/M bo'lgani uchun pV = nRT = (m/M)RT.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "molekulyar-fizika-va-termodinamika",
+      "subtopicId": "molekulyar-kinetika-izojarayonlar",
+      "question": "Izotermik jarayonda gazning bosimi 2 marta orttirilsa, hajmi qanday o'zgaradi?",
+      "options": {
+        "A": "2 marta ortadi",
+        "B": "2 marta kamayadi",
+        "C": "4 marta kamayadi",
+        "D": "O'zgarmaydi"
+      },
+      "answer": "B",
+      "explanation": "Boyl va Mariott qonuni: pV = const, demak bosim 2 marta ortsa hajm 2 marta kamayadi.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "molekulyar-fizika-va-termodinamika",
+      "subtopicId": "termodinamika-termodinamikaning-birinchi-qonuni",
+      "question": "Gazga 500 J issiqlik berildi va u 200 J ish bajardi. Gazning ichki energiyasi necha joulga o'zgardi? Javobni son bilan yozing.",
+      "answer": "300",
+      "acceptedAnswers": [
+        "300 J",
+        "300 Dj"
+      ],
+      "numeric": true,
+      "explanation": "Termodinamikaning birinchi qonuni: ΔU = Q − A = 500 − 200 = 300 J.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "molekulyar-fizika-va-termodinamika",
+      "subtopicId": "termodinamika-issiqlik-miqdori-va-solishtirma-issiqlik-sigimi",
+      "question": "2 kg suvni 10 °C ga isitish uchun qancha issiqlik miqdori kerak? (c = 4200 J/(kg·°C))",
+      "options": {
+        "A": "8,4 kJ",
+        "B": "42 kJ",
+        "C": "84 kJ",
+        "D": "840 kJ"
+      },
+      "answer": "C",
+      "explanation": "Q = cmΔt = 4200·2·10 = 84 000 J = 84 kJ.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "molekulyar-fizika-va-termodinamika",
+      "subtopicId": "agregat-holatlar-havoning-namligi",
+      "question": "Havoning nisbiy namligi 100% ga teng bo'lsa, bu nimani bildiradi?",
+      "options": {
+        "A": "Havo mutlaqo quruq",
+        "B": "Havodagi suv bug'i to'yingan holatda",
+        "C": "Havo harorati 100 °C ga teng",
+        "D": "Atmosfera bosimi normal qiymatda"
+      },
+      "answer": "B",
+      "explanation": "Nisbiy namlik — havodagi bug' bosimining shu haroratdagi to'yingan bug' bosimiga nisbati. 100% da bug' to'yingan bo'ladi va shudring tusha boshlaydi.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "elektr-va-magnetizm",
+      "subtopicId": "elektrostatika-elektr-zaryadi-va-kulon-qonuni",
+      "question": "Ikki nuqtaviy zaryad orasidagi masofa 2 marta orttirilsa, ular orasidagi o'zaro ta'sir kuchi qanday o'zgaradi?",
+      "options": {
+        "A": "2 marta ortadi",
+        "B": "2 marta kamayadi",
+        "C": "4 marta kamayadi",
+        "D": "O'zgarmaydi"
+      },
+      "answer": "C",
+      "explanation": "Kulon qonunida kuch masofa kvadratiga teskari proporsional: masofa 2 marta ortsa kuch 4 marta kamayadi.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "elektr-va-magnetizm",
+      "subtopicId": "ozgarmas-tok-zanjir-qismi-uchun-om-qonuni",
+      "question": "Qarshiligi 20 Ω bo'lgan o'tkazgich uchlariga 10 V kuchlanish berildi. Undagi tok kuchi qancha?",
+      "options": {
+        "A": "0,5 A",
+        "B": "0,2 A",
+        "C": "2 A",
+        "D": "200 A"
+      },
+      "answer": "A",
+      "explanation": "Zanjir qismi uchun Om qonuni: I = U/R = 10/20 = 0,5 A.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "elektr-va-magnetizm",
+      "subtopicId": "ozgarmas-tok-otkazgichlarni-ketma-ket-va-parallel-ulash",
+      "question": "Har biri 6 Ω dan bo'lgan ikkita qarshilik parallel ulangan. Ularning umumiy qarshiligi qancha?",
+      "options": {
+        "A": "3 Ω",
+        "B": "6 Ω",
+        "C": "12 Ω",
+        "D": "0,33 Ω"
+      },
+      "answer": "A",
+      "explanation": "Parallel ulashda 1/R = 1/6 + 1/6 = 1/3, demak R = 3 Ω.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "elektr-va-magnetizm",
+      "subtopicId": "ozgarmas-tok-tok-ishi-va-quvvati-joul-va-lens-qonuni",
+      "question": "Quvvati 100 W bo'lgan lampa 2 soat uzluksiz ishladi. U necha kVt·soat energiya sarfladi? Javobni son bilan yozing.",
+      "answer": "0,2",
+      "acceptedAnswers": [
+        "0.2",
+        "0,2 kVt·soat"
+      ],
+      "numeric": true,
+      "explanation": "A = Pt = 0,1 kVt · 2 soat = 0,2 kVt·soat.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "elektr-va-magnetizm",
+      "subtopicId": "elektrostatika-kondensatorlar-va-sigim",
+      "question": "Sig'imi 2 mkF bo'lgan kondensator 100 V kuchlanishga ulandi. Uning zaryadi qancha?",
+      "options": {
+        "A": "200 mkC",
+        "B": "50 mkC",
+        "C": "2 mC",
+        "D": "0,02 C"
+      },
+      "answer": "A",
+      "explanation": "q = CU = 2·10⁻⁶ · 100 = 2·10⁻⁴ C = 200 mkC.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "elektr-va-magnetizm",
+      "subtopicId": "magnit-maydon-magnit-induksiya-va-amper-kuchi",
+      "question": "Uzunligi 0,5 m o'tkazgichdan 4 A tok o'tmoqda. U magnit induksiyasi 0,2 Tl bo'lgan maydonga perpendikulyar joylashgan bo'lsa, Amper kuchi qancha?",
+      "options": {
+        "A": "0,04 N",
+        "B": "0,4 N",
+        "C": "4 N",
+        "D": "40 N"
+      },
+      "answer": "B",
+      "explanation": "F = BIL sin α, α = 90° bo'lgani uchun F = 0,2·4·0,5 = 0,4 N.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "elektr-va-magnetizm",
+      "subtopicId": "magnit-maydon-elektromagnit-induksiya-hodisasi",
+      "question": "Faradey qonuniga ko'ra konturdagi induksiya elektr yurituvchi kuchi nimaga proporsional?",
+      "options": {
+        "A": "Magnit oqimining o'zgarish tezligiga",
+        "B": "Magnit oqimining o'ziga",
+        "C": "Kontur qarshiligiga",
+        "D": "Konturdagi tok kuchiga"
+      },
+      "answer": "A",
+      "explanation": "Elektromagnit induksiya qonuni: EYK magnit oqimining vaqt bo'yicha o'zgarish tezligiga teng (ishorasi qarama-qarshi).",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "elektr-va-magnetizm",
+      "subtopicId": "ozgaruvchan-tok-transformator",
+      "question": "Transformatorning birlamchi g'altagida 200, ikkilamchisida 50 ta o'ram bor. Birlamchi kuchlanish 220 V bo'lsa, ikkilamchi kuchlanish qancha?",
+      "options": {
+        "A": "55 V",
+        "B": "110 V",
+        "C": "220 V",
+        "D": "880 V"
+      },
+      "answer": "A",
+      "explanation": "U2/U1 = N2/N1 = 50/200 = 1/4, demak U2 = 220/4 = 55 V (pasaytiruvchi transformator).",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "optika-va-nisbiylik-nazariyasi",
+      "subtopicId": "geometrik-optika-yoruglikning-sinish-qonuni",
+      "question": "Yorug'lik havodan suvga o'tganda nima ro'y beradi?",
+      "options": {
+        "A": "Tezligi kamayadi, sinish burchagi tushish burchagidan kichik bo'ladi",
+        "B": "Tezligi ortadi, sinish burchagi tushish burchagidan katta bo'ladi",
+        "C": "Tezligi ham, yo'nalishi ham o'zgarmaydi",
+        "D": "Tezligi kamayadi, lekin nur sinmaydi"
+      },
+      "answer": "A",
+      "explanation": "Suv optik jihatdan zichroq muhit: n > 1, yorug'lik tezligi kamayadi va nur perpendikulyarga yaqinlashadi.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "optika-va-nisbiylik-nazariyasi",
+      "subtopicId": "geometrik-optika-tola-ichki-qaytish",
+      "question": "To'la ichki qaytish qanday sharoitda ro'y beradi?",
+      "options": {
+        "A": "Yorug'lik optik zichroq muhitdan kamroq zich muhitga chegaraviy burchakdan katta burchak ostida tushganda",
+        "B": "Yorug'lik kamroq zich muhitdan zichroq muhitga o'tganda",
+        "C": "Tushish burchagi nolga teng bo'lganda",
+        "D": "Faqat vakuumda"
+      },
+      "answer": "A",
+      "explanation": "Chegaraviy burchakdan katta burchakda singan nur yo'qoladi va yorug'lik butunlay qaytadi — optik tolali aloqa shu hodisaga asoslangan.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "optika-va-nisbiylik-nazariyasi",
+      "subtopicId": "geometrik-optika-linzalar-va-linza-formulasi",
+      "question": "Yig'uvchi linzaning fokus masofasi 0,2 m. Uning optik kuchi necha dioptriyaga teng? Javobni son bilan yozing.",
+      "answer": "5",
+      "acceptedAnswers": [
+        "5 dptr",
+        "+5"
+      ],
+      "numeric": true,
+      "explanation": "D = 1/F = 1/0,2 = 5 dptr. Yig'uvchi linzada optik kuch musbat.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "optika-va-nisbiylik-nazariyasi",
+      "subtopicId": "tolqin-optikasi-yoruglik-interferensiyasi",
+      "question": "Yorug'lik interferensiyasi qanday to'lqinlar qo'shilganda kuzatiladi?",
+      "options": {
+        "A": "Kogerent, ya'ni chastotasi bir xil va fazalar farqi o'zgarmas to'lqinlar",
+        "B": "Chastotasi turlicha bo'lgan har qanday to'lqinlar",
+        "C": "Faqat qutblangan to'lqinlar",
+        "D": "Faqat ko'rinmas nurlar"
+      },
+      "answer": "A",
+      "explanation": "Barqaror maksimum va minimumlar hosil bo'lishi uchun to'lqinlar kogerent bo'lishi shart.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "optika-va-nisbiylik-nazariyasi",
+      "subtopicId": "nisbiylik-nazariyasi-massa-va-energiyaning-boglanishi",
+      "question": "Eynshteynning massa va energiya orasidagi bog'lanish formulasi qaysi?",
+      "options": {
+        "A": "E = mc²",
+        "B": "E = mv²/2",
+        "C": "E = mgh",
+        "D": "E = hν"
+      },
+      "answer": "A",
+      "explanation": "Tinchlikdagi energiya E = mc², bu yerda c — vakuumdagi yorug'lik tezligi.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "kvant-va-yadro-fizikasi",
+      "subtopicId": "kvant-fizikasi-fotoeffekt-va-eynshteyn-tenglamasi",
+      "question": "Fotoeffekt uchun Eynshteyn tenglamasi qaysi?",
+      "options": {
+        "A": "hν = A + mv²/2",
+        "B": "hν = A − mv²/2",
+        "C": "hν = mc²",
+        "D": "hν = kT"
+      },
+      "answer": "A",
+      "explanation": "Foton energiyasi chiqish ishiga va chiqarilgan elektronning maksimal kinetik energiyasiga sarflanadi.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "kvant-va-yadro-fizikasi",
+      "subtopicId": "kvant-fizikasi-foton-energiyasi-va-impulsi",
+      "question": "Chastotasi 5·10¹⁴ Hz bo'lgan foton energiyasi qancha? (h = 6,6·10⁻³⁴ J·s)",
+      "options": {
+        "A": "3,3·10⁻¹⁹ J",
+        "B": "1,32·10⁻¹⁹ J",
+        "C": "3,3·10⁻²⁰ J",
+        "D": "6,6·10⁻¹⁹ J"
+      },
+      "answer": "A",
+      "explanation": "E = hν = 6,6·10⁻³⁴ · 5·10¹⁴ = 3,3·10⁻¹⁹ J.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "kvant-va-yadro-fizikasi",
+      "subtopicId": "yadro-fizikasi-atom-yadrosining-tuzilishi",
+      "question": "Uran-238 yadrosida nechta neytron bor? (Z = 92) Javobni son bilan yozing.",
+      "answer": "146",
+      "acceptedAnswers": [
+        "146 ta"
+      ],
+      "numeric": true,
+      "explanation": "N = A − Z = 238 − 92 = 146 neytron.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "kvant-va-yadro-fizikasi",
+      "subtopicId": "yadro-fizikasi-radioaktiv-yemirilish-qonuni",
+      "question": "Radioaktiv moddaning yarim yemirilish davri 5 kun. 20 kundan keyin boshlang'ich yadrolarning qancha qismi yemirilmay qoladi?",
+      "options": {
+        "A": "1/4 qismi",
+        "B": "1/8 qismi",
+        "C": "1/16 qismi",
+        "D": "1/32 qismi"
+      },
+      "answer": "C",
+      "explanation": "20 kun — 4 ta yarim yemirilish davri: (1/2)⁴ = 1/16.",
+      "difficultyId": 2
+    }
+  ]
+}

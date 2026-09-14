@@ -1,0 +1,1135 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // --- HELPER FUNCTIONS ---
+    function isAuth() {
+      return request.auth != null;
+    }
+    function isOwner(userId) {
+      return isAuth() && request.auth.uid == userId;
+    }
+
+    // Check if the requester is the PARENT of the target Student
+    function isParentOf(studentId) {
+      return isAuth() &&
+             studentId in get(/databases/$(database)/documents/parents/$(request.auth.uid)).data.children;
+    }
+
+    // Check if the requester is the Manager (Owner) of a specific center.
+    // Grants READ-level access only — write rules must use isActiveCenterManager.
+    function isCenterManager(centerId) {
+      return isAuth() &&
+             get(/databases/$(database)/documents/centers/$(centerId)).data.ownerUid == request.auth.uid;
+    }
+
+    // 🟢 APPROVAL GATE: manager of a center that a super admin has APPROVED
+    // (centers.status == 'active'). ALL manager WRITE privileges flow through
+    // this, so a pending/suspended center can see its data but change nothing.
+    // A missing status field (legacy docs) counts as NOT approved.
+    function isActiveCenterManager(centerId) {
+      let center = get(/databases/$(database)/documents/centers/$(centerId)).data;
+      return isAuth() &&
+             center.ownerUid == request.auth.uid &&
+             center.get('status', '') == 'active';
+    }
+
+    // 🟢 OPTION 2 HELPER: Check if a teacher belongs to the requester's center
+    // Requires center_teachers document ID to be exactly the teacherUid.
+    // Only used on WRITE paths (classes update/delete) → requires approved center.
+    function isTeacherInMyCenter(teacherUid) {
+      let centerTeacherPath = /databases/$(database)/documents/center_teachers/$(teacherUid);
+      return exists(centerTeacherPath) && isActiveCenterManager(get(centerTeacherPath).data.centerId);
+    }
+
+    // 🟢 ATTENDANCE HELPER: is the REQUESTER a teacher who belongs to `centerId`?
+    // (center_teachers doc id == teacher uid). Used by staff/face attendance.
+    function isTeacherOfCenter(centerId) {
+      let myPath = /databases/$(database)/documents/center_teachers/$(request.auth.uid);
+      return isAuth() && exists(myPath) && get(myPath).data.centerId == centerId;
+    }
+
+    // 🟢 SUPER ADMIN HELPER
+    function isSuperAdmin() {
+      return request.auth != null && request.auth.token.super_admin == true;
+    }
+
+    // 👑 GOD MODE FOR SUPER ADMIN 👑
+    match /{document=**} {
+      allow read, write: if isSuperAdmin();
+    }
+
+    // --- 1. USERNAMES ---
+    match /usernames/{username} {
+      allow read: if true;
+      allow create: if isAuth()
+                    && !exists(/databases/$(database)/documents/usernames/$(username))
+                    && request.resource.data.uid == request.auth.uid;
+      allow delete: if isAuth() && resource.data.uid == request.auth.uid;
+      allow update: if false;
+    }
+
+    // --- 1.2 APP CONFIG (native clients' update gate) ---
+    // appConfig/androidStudent: { latestVersionCode, minRequiredVersionCode,
+    // blockedVersionCodes?, storeUrl?, message? } — read by the Android student
+    // app BEFORE login to decide force/optional update. Nothing sensitive.
+    // Writes only via console / super admin (god-mode rule above).
+    match /appConfig/{clientId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // --- 1.5 PARENTS COLLECTION ---
+    // ⚠️ LEGACY / UNUSED: a parent-with-an-account model that no app code reads or
+    // writes (only the `isParentOf` helper above mentions it). The parent feature
+    // that actually shipped is account-free and lives in `parent_links` below —
+    // see docs/PARENTS.md before building anything on this collection.
+    match /parents/{parentId} {
+      allow read, write: if isOwner(parentId);
+    }
+
+    // --- 1.6 PARENT QR ACCESS (docs/PARENTS.md) ---
+    //
+    // ⚠️ **Denied to every client, on purpose — this is not an oversight.**
+    // (The god-mode wildcard above still admits a `super_admin` custom claim, as
+    // it does for every collection; that is the platform owner, not an app user.)
+    // The document id of a `parent_links` doc IS the parent's credential: a
+    // browser able to `list` this collection could open every family's report in
+    // the center, and one able to `get` a doc it already knows could read the
+    // scope and the student id behind someone else's link.
+    //
+    // Both sides therefore go through the Admin SDK and nothing else:
+    //   manager → /api/manager/parent-links[/{token}]  (requireActiveCenterManager)
+    //   parent  → /api/parent/{token}                  (no auth — the token IS it)
+    //
+    // A parent has no Firebase account at all, so there is no `request.auth` for
+    // a rule here to authorize even in principle. Do not "open this up a little"
+    // to save an API route.
+    match /parent_links/{token} {
+      allow read, write: if false;
+    }
+
+    // --- 2. USERS (Profile + XP Memory) ---
+    //
+    // ⚠️ SECURITY: users/{uid} is client-writable, so anything stored here that
+    // grants privilege or costs money must be UNWRITABLE by the owner. These
+    // fields are set only by the Admin SDK (API routes) or a super admin (god
+    // mode above):
+    //   role, centerId        → authorization hints; the real gate is always an
+    //                           ownerUid check (isActiveCenterManager / the server
+    //                           twin in lib/server/verifyCenterManager.ts)
+    //   subscription,
+    //   currentLimits,
+    //   includedFeatures,
+    //   usage                 → the paid plan + AI quota that lib/ai/featureGatekeeper
+    //                           reads as its authorization source
+    //   verifiedTeacher       → trust badge
+    //   isActive              → moderation / ban flag
+    //
+    // Locked on CREATE as well as UPDATE: the owner may delete their own doc, so
+    // an update-only lock would be bypassed by delete-then-recreate. See docs/AUTH.md.
+    match /users/{userId} {
+      allow read: if isAuth();
+
+      // Signup is the only place a client may choose a role, and the account must
+      // be born unverified, unsubscribed and at zero XP.
+      allow create: if isOwner(userId)
+                    && request.resource.data.get('role', '') in ['student', 'teacher', 'manager']
+                    && !request.resource.data.keys().hasAny(
+                         ['subscription', 'currentLimits', 'includedFeatures', 'usage', 'isActive'])
+                    && request.resource.data.get('verifiedTeacher', false) == false
+                    && request.resource.data.get('totalXP', 0) == 0;
+
+      allow delete: if isOwner(userId);
+
+      allow update: if (
+        isOwner(userId) &&
+        !request.resource.data.diff(resource.data).affectedKeys().hasAny(
+          ['role', 'centerId', 'subscription', 'currentLimits',
+           'includedFeatures', 'usage', 'verifiedTeacher', 'isActive'])
+      ) || (
+        isAuth() &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['followersCount', 'followingCount']) &&
+        (request.resource.data.get('followersCount', 0) - resource.data.get('followersCount', 0) in [-1, 0, 1]) &&
+        (request.resource.data.get('followingCount', 0) - resource.data.get('followingCount', 0) in [-1, 0, 1])
+      );
+
+      // 🔒 PRIVATE CONTACT DETAILS — users/{uid}/private/contact = {email, phone}
+      //
+      // The parent `users/{uid}` doc is readable by every signed-in user (class
+      // rosters, leaderboards, social profiles, explore all need it), and Firestore
+      // has NO field-level read rules — so any field left on it is world-readable to
+      // anyone who signs up. Contact details therefore live down here, where the
+      // rule is a flat owner-only check.
+      //
+      // Teachers and managers who legitimately need a student's/teacher's contact
+      // details do NOT read this path. They call /api/directory/contact, which
+      // verifies the relationship with the Admin SDK. Do not widen this rule to
+      // grant them access — a rules-level relationship check would need a query,
+      // which rules cannot do.
+      match /private/{docId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      // SOCIAL SUBCOLLECTIONS
+      match /following/{targetId} {
+        allow read: if isAuth();
+        allow create: if isAuth() && request.auth.uid == userId && resource == null;
+        allow delete: if isAuth() && (request.auth.uid == userId || request.auth.uid == targetId) && resource != null;
+      }
+
+      match /followers/{followerId} {
+        allow read: if isAuth();
+        allow create: if isAuth() && request.auth.uid == followerId && resource == null;
+        allow delete: if isAuth() && (request.auth.uid == followerId || request.auth.uid == userId) && resource != null;
+      }
+
+      match /bookmarks/{bookmarkId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /test_stats/{testId} {
+        allow read: if isOwner(userId) || isParentOf(userId);
+        allow write: if isOwner(userId);
+      }
+    }
+
+    // --- 3. QUESTION BANK ---
+    // ⚠️ Dead collection (no code reads or writes it — the live banks are
+    // `questions1` and `teacher_questions`). Writes are off: an open write here
+    // let any signed-in user dump arbitrary documents into the project.
+    match /questions/{document=**} {
+      allow read: if isAuth();
+      allow write: if false;
+    }
+
+    // --- 4. CUSTOM TESTS ---
+    match /custom_tests/{testId} {
+      allow create, read: if isAuth();
+      allow update, delete: if isAuth() && resource.data.teacherId == request.auth.uid;
+    }
+
+    // --- 5. CLASSES ---
+    match /classes/{classId} {
+      allow read: if isAuth();
+
+      // 🟢 CENTER MEMBERSHIP IS NOW centerId-ANCHORED (2026-07-15).
+      // A class belongs to a center iff classes.centerId == that center — a
+      // linked teacher's personal / other groups NEVER enter the center.
+      // Stamping a centerId at create therefore requires belonging to that
+      // center (its active manager, or one of its linked teachers); a class
+      // without centerId ('' / missing) is a personal teacher class anyone
+      // may create (unchanged).
+      allow create: if isAuth() && (
+         request.resource.data.get('centerId', '') == '' ||
+         isActiveCenterManager(request.resource.data.centerId) ||
+         isTeacherOfCenter(request.resource.data.centerId)
+      );
+
+      // ⚠️ centerId is IMMUTABLE from the client on every update branch below —
+      // a teacher must not push their personal group into a center, and a
+      // manager must not move a group between centers. God mode / Admin SDK
+      // only. (The `get('centerId','') != ''` guards keep the empty-string
+      // legacy value from building an invalid /centers/ path.)
+      allow update: if isAuth() && (
+         // 1. O'qituvchi O'ZINING SHAXSIY guruhini tahrirlayapti. Markaz
+         //    guruhida (centerId != '') o'qituvchi guruh HUJJATIGA umuman
+         //    yoza olmaydi — ro'yxat (studentIds), nom, kod, qulf faqat
+         //    menejer tomonidan boshqariladi (2026-07-19). Subkolleksiyalar
+         //    (assignments/exams/materials) bunga kirmaydi.
+         (
+           resource.data.teacherId == request.auth.uid &&
+           resource.data.get('centerId', '') == '' &&
+           !request.resource.data.diff(resource.data).affectedKeys().hasAny(['centerId'])
+         ) ||
+
+         // 2. Menejer O'Z MARKAZINING guruhini tahrirlayapti (centerId bo'yicha).
+         //    Agar o'qituvchi o'zgartirilsa (A → B), YANGI o'qituvchi shu
+         //    markazdan bo'lishi shart. O'qituvchi markazdan chiqarilgan bo'lsa
+         //    ham guruh markazniki bo'lib qoladi va menejer uni boshqara oladi.
+         (
+           resource.data.get('centerId', '') != '' &&
+           isActiveCenterManager(resource.data.centerId) &&
+           !request.resource.data.diff(resource.data).affectedKeys().hasAny(['centerId']) &&
+           (
+             !request.resource.data.diff(resource.data).affectedKeys().hasAny(['teacherId', 'teacherName']) ||
+             isTeacherInMyCenter(request.resource.data.teacherId)
+           )
+         ) ||
+
+         // 4. O'quvchi o'zini qo'shmoqda yoki chiqarmoqda (self-join / self-leave).
+         //    ⚠️ Bu yerda FAQAT o'z uid'ini qo'sha/olib tashlay oladi. Ilgari bu
+         //    shart `hasOnly(['studentIds'])` edi — ya'ni istalgan foydalanuvchi
+         //    istalgan guruhga o'zgalarni qo'shishi YOKI butun ro'yxatni o'chirib
+         //    tashlashi mumkin edi.
+         //    Markaz guruhiga (centerId != '') o'quvchi O'ZINI QO'SHA OLMAYDI —
+         //    faqat menejer yozadi. CHIQISH (self-leave) esa markaz guruhida ham
+         //    ruxsat etiladi: student settings'dagi akkauntni o'chirish oqimi
+         //    barcha guruhlardan arrayRemove qiladi va sinishi mumkin emas.
+         (
+           request.resource.data.diff(resource.data).affectedKeys().hasOnly(['studentIds']) &&
+           request.resource.data.get('studentIds', []).toSet()
+             .difference(resource.data.get('studentIds', []).toSet())
+             .hasOnly([request.auth.uid]) &&
+           resource.data.get('studentIds', []).toSet()
+             .difference(request.resource.data.get('studentIds', []).toSet())
+             .hasOnly([request.auth.uid]) &&
+           (
+             resource.data.get('centerId', '') == '' ||
+             request.resource.data.get('studentIds', []).toSet()
+               .difference(resource.data.get('studentIds', []).toSet()).size() == 0
+           )
+         )
+      );
+
+      // Guruhni o'chirish: shaxsiy guruhni — o'qituvchining o'zi; markaz
+      // guruhini (centerId != '') — FAQAT menejer (o'qituvchi o'chira olmaydi).
+      allow delete: if isAuth() && (
+         (
+           resource.data.teacherId == request.auth.uid &&
+           resource.data.get('centerId', '') == ''
+         ) ||
+         (
+           resource.data.get('centerId', '') != '' &&
+           isActiveCenterManager(resource.data.centerId)
+         )
+      );
+
+      // 5a. ASSIGNMENTS
+      match /assignments/{assignmentId} {
+        function getClassData() {
+           return get(/databases/$(database)/documents/classes/$(classId)).data;
+        }
+
+        allow read: if isAuth() && (
+           getClassData().teacherId == request.auth.uid ||
+           request.auth.uid in getClassData().studentIds ||
+           true
+        );
+
+        allow create, delete: if isAuth() && getClassData().teacherId == request.auth.uid;
+        allow update: if isAuth() && (
+           getClassData().teacherId == request.auth.uid
+           ||
+           (
+             request.resource.data.diff(resource.data).affectedKeys().hasOnly(['completedBy']) &&
+             request.resource.data.completedBy.hasAll([request.auth.uid])
+           )
+        );
+      }
+
+      // 5b. REQUESTS
+      match /requests/{requestId} {
+        allow read: if isAuth() && (
+          get(/databases/$(database)/documents/classes/$(classId)).data.teacherId == request.auth.uid ||
+          resource.data.studentId == request.auth.uid
+        );
+        // Markaz guruhiga (centerId != '') join-so'rov YARATIB BO'LMAYDI —
+        // ro'yxatga faqat menejer qo'shadi (JoinClassModal buni kod bilan
+        // topilgan sinf hujjatidan oldindan tekshirib, xabar ko'rsatadi).
+        allow create: if isAuth() &&
+          get(/databases/$(database)/documents/classes/$(classId)).data.get('centerId', '') == '';
+        allow delete: if isAuth() && get(/databases/$(database)/documents/classes/$(classId)).data.teacherId == request.auth.uid;
+      }
+
+      // 5c. CLASS LEADERBOARD
+      match /leaderboard/{studentId} {
+         allow read: if isAuth();
+         allow write: if isOwner(studentId);
+      }
+
+      // 5d. CLASS MATERIALS
+      match /materials/{materialId} {
+        allow read: if isAuth() && (
+           get(/databases/$(database)/documents/classes/$(classId)).data.teacherId == request.auth.uid
+           ||
+           (
+             request.auth.uid in get(/databases/$(database)/documents/classes/$(classId)).data.studentIds
+             && resource.data.isVisible == true
+           )
+        );
+        allow create, update, delete: if isAuth() &&
+           get(/databases/$(database)/documents/classes/$(classId)).data.teacherId == request.auth.uid;
+      }
+
+      // 5e. EXAMS (BSB / CHSB)
+      match /exams/{examId} {
+        function getClassData() {
+           return get(/databases/$(database)/documents/classes/$(classId)).data;
+        }
+
+        allow read: if isAuth() && (
+           getClassData().teacherId == request.auth.uid ||
+           request.auth.uid in getClassData().studentIds
+        );
+        allow create, delete: if isAuth() && getClassData().teacherId == request.auth.uid;
+        allow update: if isAuth() && (
+           getClassData().teacherId == request.auth.uid
+           ||
+           (
+             request.resource.data.diff(resource.data).affectedKeys().hasOnly(['submittedStudentIds']) &&
+             request.resource.data.submittedStudentIds.hasAll([request.auth.uid])
+           )
+        );
+      }
+    }
+
+    // --- 5.5 ONLINE LIBRARY BOOKS ---
+    match /online_books/{bookId} {
+      allow read: if isAuth();
+      allow update: if isAuth() &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['viewscount', 'downloadscount']);
+      allow create, delete: if false;
+    }
+
+    // --- 6. ERROR LOGS ---
+    // ⚠️ Dead collection (nothing in the app writes it). `create: if true` was an
+    // unauthenticated write endpoint — anyone on the internet could inflate your
+    // Firestore bill. Signed-in callers only, in case a client logger is added.
+    match /error_logs/{logId} {
+      allow create: if isAuth();
+      allow read, update, delete: if false;
+    }
+
+    // --- 7. ATTEMPTS (Detailed Results) ---
+    match /attempts/{attemptId} {
+      allow read: if request.auth != null && (
+        resource == null ||
+        resource.data.userId == request.auth.uid ||
+        get(/databases/$(database)/documents/classes/$(resource.data.classId)).data.teacherId == request.auth.uid ||
+        isParentOf(resource.data.userId)
+      );
+
+      allow delete: if request.auth != null &&
+        get(/databases/$(database)/documents/classes/$(resource.data.classId)).data.teacherId == request.auth.uid;
+
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid && (
+        request.resource.data.get('type', 'assignment') == 'exam' ||
+        (
+          request.resource.data.get('type', 'assignment') != 'exam' &&
+          (
+            !('dueAt' in get(/databases/$(database)/documents/classes/$(request.resource.data.classId)/assignments/$(request.resource.data.assignmentId)).data) ||
+            get(/databases/$(database)/documents/classes/$(request.resource.data.classId)/assignments/$(request.resource.data.assignmentId)).data.dueAt == null ||
+            request.time < get(/databases/$(database)/documents/classes/$(request.resource.data.classId)/assignments/$(request.resource.data.assignmentId)).data.dueAt
+          ) && (
+            !('openAt' in get(/databases/$(database)/documents/classes/$(request.resource.data.classId)/assignments/$(request.resource.data.assignmentId)).data) ||
+            get(/databases/$(database)/documents/classes/$(request.resource.data.classId)/assignments/$(request.resource.data.assignmentId)).data.openAt == null ||
+            request.time >= get(/databases/$(database)/documents/classes/$(request.resource.data.classId)/assignments/$(request.resource.data.assignmentId)).data.openAt
+          )
+        )
+      );
+
+      allow update: if request.auth != null && (
+        get(/databases/$(database)/documents/classes/$(resource.data.classId)).data.teacherId == request.auth.uid
+        ||
+        (
+          request.resource.data.userId == request.auth.uid &&
+          request.resource.data.get('type', 'assignment') != 'exam' &&
+          (
+            !('dueAt' in get(/databases/$(database)/documents/classes/$(request.resource.data.classId)/assignments/$(request.resource.data.assignmentId)).data) ||
+            get(/databases/$(database)/documents/classes/$(request.resource.data.classId)/assignments/$(request.resource.data.assignmentId)).data.dueAt == null ||
+            request.time < get(/databases/$(database)/documents/classes/$(request.resource.data.classId)/assignments/$(request.resource.data.assignmentId)).data.dueAt
+          )
+        )
+      );
+    }
+
+    // --- 8. NOTIFICATIONS ---
+    // Cross-user creates are legitimate and common (a submission notifies the
+    // teacher, an assignment notifies students, a follow notifies the followee),
+    // so we cannot require userId == request.auth.uid here.
+    //
+    // What we CAN forbid is the phishing payload: `link` is rendered as trusted
+    // in-app chrome, so it must be a RELATIVE path. `create: if isAuth()` alone
+    // let any user push "https://evil.example/login" to any other user. The regex
+    // is fully anchored (matches() matches the whole string) and rejects both
+    // absolute URLs and protocol-relative "//host" links.
+    match /notifications/{notificationId} {
+      allow read, update, delete: if isAuth() && resource.data.userId == request.auth.uid;
+      allow create: if isAuth()
+                    && request.resource.data.userId is string
+                    && request.resource.data.get('read', false) == false
+                    && (
+                         request.resource.data.get('link', null) == null ||
+                         request.resource.data.link.matches('/|/[A-Za-z0-9_][A-Za-z0-9/_.?=&%~+-]*')
+                       );
+    }
+
+    // --- 9. GLOBAL LEADERBOARDS ---
+    match /leaderboards/{periodId}/users/{userId} {
+       allow read: if isAuth();
+       allow write: if isOwner(userId);
+    }
+
+    match /questions1/{questionId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // --- RASCH MODEL: per-topic levels & exam history ---
+    // Collection names must match services/RASCHProgressService.ts exactly —
+    // a rule guarding the wrong name reads as "no rule", i.e. access denied.
+    //
+    // RASCH_levels/{uid}: one doc per student — levels, baseline, chart history.
+    // The student owns it and writes it from the client (the level maths lives
+    // in lib/RASCHlevels.ts), so the rules pin down what they may claim: the doc
+    // must be theirs, and examCount must be a real count.
+    // NOTE: a determined student could still POST a flattering level, since the
+    // client computes it. Move saveExamResult() behind an API route with the
+    // Admin SDK if these levels ever gate something that matters (a leaderboard,
+    // a certificate).
+    function isPercent(v) {
+      return v is number && v >= 0 && v <= 100;
+    }
+
+    // SAT Math scaled score is an APPROXIMATION (lib/SATscore.ts), not College
+    // Board's real equated score — the range check is the same 200-800 shape
+    // regardless.
+    function isScaledScore(v) {
+      return v is number && v >= 200 && v <= 800;
+    }
+
+    match /RASCH_levels/{uid} {
+      allow read: if isOwner(uid);
+      allow write: if isOwner(uid)
+                   && request.resource.data.userId == uid
+                   && request.resource.data.examCount is int
+                   && request.resource.data.examCount >= 0;
+    }
+
+    // RASCH_attempts: append-only record of a finished exam. Written once by the
+    // owner, never updated or deleted — the history cannot be rewritten.
+    match /RASCH_attempts/{attemptId} {
+      allow read: if isAuth() && resource.data.userId == request.auth.uid;
+      allow create: if isAuth()
+                    && request.resource.data.userId == request.auth.uid
+                    && isPercent(request.resource.data.percent)
+                    && request.resource.data.total is int;
+      allow update, delete: if false;
+    }
+
+
+    // --- 10. REPORTED QUESTIONS ---
+    match /reported_questions/{questionId} {
+      allow create, update: if isAuth();
+      allow read, delete: if false;
+    }
+
+    // --- 11. AI USAGE ---
+    // The daily AI quota counter. Was world-readable AND world-writable, so
+    // anyone could zero out their own usage (or anyone else's) and bypass the
+    // cap entirely. `/api/analyze` now reads and writes it with the Admin SDK,
+    // which bypasses rules — so no client ever needs access. See docs/AI.md.
+    match /ai_usage/{docId} {
+      allow read, write: if false;
+    }
+
+    match /ai_sessions/{sessionId} {
+      allow read, write: if isAuth() && (resource == null || resource.data.teacherId == request.auth.uid || request.resource.data.teacherId == request.auth.uid);
+    }
+
+    // --- 12. TEACHER QUESTIONS ---
+    match /teacher_questions/{questionId} {
+      allow read: if isAuth();
+      allow create: if isAuth() && request.resource.data.creatorId == request.auth.uid;
+      allow update, delete: if isAuth() && (
+        resource.data.get('creatorId', 'yoq') == request.auth.uid ||
+        resource.data.get('teacherId', 'yoq') == request.auth.uid
+      );
+    }
+
+    // --- 12b. TEACHER RASCH QUIZZES (docs/RASCH_QUIZ.md) ---
+    //
+    // A 45-question paper a teacher assembled, opened by a private 6-digit
+    // `accessCode`. The student's lookup is a QUERY on that code, so the read
+    // rule cannot depend on the document's own contents being matched — it has
+    // to allow a signed-in user to read the collection, exactly as
+    // `custom_tests` does.
+    //
+    // ⚠️ KNOWN TRAP, same as custom_tests: the paper EMBEDS its questions, and
+    // therefore their correct answers. A signed-in student who enumerates this
+    // collection can read the key without ever entering a code. The 6-digit code
+    // is a convenience for sharing, NOT a security boundary — do not present it
+    // as one, and do not use these papers for anything that must be invigilated
+    // until the questions move behind an Admin-SDK route.
+    match /teacher_rasch_quizzes/{quizId} {
+      allow read: if isAuth();
+      allow create: if isAuth() && request.resource.data.teacherId == request.auth.uid;
+      allow update, delete: if isAuth() && resource.data.teacherId == request.auth.uid;
+    }
+
+    // One sitting: `teacher_rasch_results/{quizId}_{uid}`.
+    //
+    // The student writes their own row (a retake overwrites it — the id is
+    // deterministic); the teacher reads every row of their own papers. `read`
+    // covers `list` too, and the teacher's query filters `teacherId ==`, which is
+    // what makes it provable. Nobody may delete: a result the student produced is
+    // not the teacher's to erase, and the student cannot quietly withdraw one.
+    match /teacher_rasch_results/{resultId} {
+      allow read: if isAuth() && (
+        resource.data.studentId == request.auth.uid ||
+        resource.data.teacherId == request.auth.uid
+      );
+      allow create: if isAuth()
+                    && request.resource.data.studentId == request.auth.uid
+                    && request.resource.data.total is int
+                    && isPercent(request.resource.data.percent);
+      // A retake replaces the row, but it stays the SAME student's row and stays
+      // attached to the SAME paper — neither may be rewritten.
+      allow update: if isAuth()
+                    && resource.data.studentId == request.auth.uid
+                    && request.resource.data.studentId == resource.data.studentId
+                    && request.resource.data.quizId == resource.data.quizId
+                    && request.resource.data.teacherId == resource.data.teacherId
+                    && isPercent(request.resource.data.percent);
+      allow delete: if false;
+    }
+
+    // --- 12c. MILLIY SERTIFIKAT SUBJECT PAPERS (biology…) ---
+    //
+    // The non-maths Milliy sertifikat papers (docs/MILLIY_QUIZ.md). Structurally
+    // the same contract as 12b — a teacher owns the paper, a student owns their
+    // own sitting — and deliberately so: the student types one 6-digit code into
+    // one box, and `findPaperByCode` queries BOTH collections.
+    //
+    // ⚠️ Maths papers do NOT live here (they are `teacher_rasch_quizzes`); a
+    // maths sitting also moves `RASCH_levels`, which a subject sitting never does.
+    //
+    // ⚠️ SAME KNOWN TRAP as `teacher_rasch_quizzes` and `custom_tests`: the paper
+    // EMBEDS its questions and therefore their correct answers, and the student's
+    // lookup is a QUERY on `accessCode`, so the read rule cannot require the code
+    // to be matched. A signed-in student who enumerates this collection can read
+    // the key without ever entering a code. **The 6-digit code is a convenience
+    // for sharing, NOT a security boundary** — do not present it as one, and do
+    // not use these papers for anything that must be invigilated until the
+    // questions move behind an Admin-SDK route.
+    match /milliy_quizzes/{quizId} {
+      allow read: if isAuth();
+      allow create: if isAuth() && request.resource.data.teacherId == request.auth.uid;
+      allow update, delete: if isAuth() && resource.data.teacherId == request.auth.uid;
+    }
+
+    // One sitting: `milliy_quiz_results/{quizId}_{uid}`.
+    //
+    // The student writes their own row (a retake overwrites it — the id is
+    // deterministic); the teacher reads every row of their own papers. `read`
+    // covers `list` too, and both list queries filter on the field the rule proves
+    // ownership from (`teacherId ==` for the teacher, `studentId ==` for the
+    // student) — without that clause Firestore answers permission-denied rather
+    // than returning everyone's rows. Nobody may delete: a result the student
+    // produced is not the teacher's to erase, and the student cannot quietly
+    // withdraw one.
+    match /milliy_quiz_results/{resultId} {
+      allow read: if isAuth() && (
+        resource.data.studentId == request.auth.uid ||
+        resource.data.teacherId == request.auth.uid
+      );
+      allow create: if isAuth()
+                    && request.resource.data.studentId == request.auth.uid
+                    && request.resource.data.total is int
+                    && isPercent(request.resource.data.percent);
+      // A retake replaces the row, but it stays the SAME student's row and stays
+      // attached to the SAME paper — neither may be rewritten.
+      allow update: if isAuth()
+                    && resource.data.studentId == request.auth.uid
+                    && request.resource.data.studentId == resource.data.studentId
+                    && request.resource.data.quizId == resource.data.quizId
+                    && request.resource.data.teacherId == resource.data.teacherId
+                    && isPercent(request.resource.data.percent);
+      allow delete: if false;
+    }
+
+    // --- 12d. SAT MATH (adaptive, docs/SAT_QUIZ.md) ---
+    //
+    // A teacher-built, adaptive SAT Math test: Module 1 (fixed) + two Module 2
+    // pools (Easier / Harder), opened by a private 6-digit code. Structurally
+    // the SAME contract as 12b/12c — a teacher owns the test, a student owns
+    // their own sitting — but its own collections and its OWN code namespace:
+    // SAT is a separate program with its own code-entry screen (`/sat`), so
+    // (unlike the Milliy sertifikat subjects, which share one code box across
+    // two collections) there is nothing to cross-check here.
+    //
+    // ⚠️ SAME KNOWN TRAP as `teacher_rasch_quizzes`/`milliy_quizzes`: the test
+    // EMBEDS its questions and therefore their correct answers, and the
+    // student's lookup is a QUERY on `accessCode`, so the read rule cannot
+    // require the code to be matched. A signed-in student who enumerates this
+    // collection can read the key without ever entering a code. **The 6-digit
+    // code is a convenience for sharing, NOT a security boundary** — do not
+    // present it as one, and do not use these tests for anything that must be
+    // invigilated until the questions move behind an Admin-SDK route.
+    match /sat_math_tests/{testId} {
+      allow read: if isAuth();
+      allow create: if isAuth() && request.resource.data.teacherId == request.auth.uid;
+      allow update, delete: if isAuth() && resource.data.teacherId == request.auth.uid;
+    }
+
+    // One sitting: `sat_math_results/{testId}_{uid}`.
+    //
+    // The student writes their own row (a retake overwrites it — the id is
+    // deterministic); the teacher reads every row of their own tests. `read`
+    // covers `list` too, and both list queries filter on the field the rule
+    // proves ownership from (`teacherId ==` for the teacher, `studentId ==`
+    // for the student) — without that clause Firestore answers
+    // permission-denied rather than returning everyone's rows. Nobody may
+    // delete: a result the student produced is not the teacher's to erase, and
+    // the student cannot quietly withdraw one.
+    match /sat_math_results/{resultId} {
+      allow read: if isAuth() && (
+        resource.data.studentId == request.auth.uid ||
+        resource.data.teacherId == request.auth.uid
+      );
+      allow create: if isAuth()
+                    && request.resource.data.studentId == request.auth.uid
+                    && request.resource.data.total is int
+                    && isScaledScore(request.resource.data.scaledScore);
+      // A retake replaces the row, but it stays the SAME student's row and
+      // stays attached to the SAME test — neither may be rewritten.
+      allow update: if isAuth()
+                    && resource.data.studentId == request.auth.uid
+                    && request.resource.data.studentId == resource.data.studentId
+                    && request.resource.data.testId == resource.data.testId
+                    && request.resource.data.teacherId == resource.data.teacherId
+                    && isScaledScore(request.resource.data.scaledScore);
+      allow delete: if false;
+    }
+
+    // --- 13. EXAMS ---
+    match /bsb_chsb_tests/{testId} {
+      allow read: if isAuth();
+      allow create: if isAuth() && request.resource.data.teacherId == request.auth.uid;
+      allow update, delete: if isAuth() && resource.data.teacherId == request.auth.uid;
+    }
+
+    // IELTS test banks — public docs are answer-free (answers_split; key in ielts_answer_keys).
+    // Platform-dataset docs have teacherId: null — only admin god-mode / Admin SDK writes them.
+    match /ielts_reading_tests/{testId} {
+      allow read: if isAuth();
+      allow create: if isAuth() && request.resource.data.teacherId == request.auth.uid;
+      allow update, delete: if isAuth() && resource.data.teacherId == request.auth.uid;
+    }
+    match /ielts_listening_tests/{testId} {
+      allow read: if isAuth();
+      allow create: if isAuth() && request.resource.data.teacherId == request.auth.uid;
+      allow update, delete: if isAuth() && resource.data.teacherId == request.auth.uid;
+    }
+    match /ielts_writing_tests/{testId} {
+      allow read: if isAuth();
+      allow create: if isAuth() && request.resource.data.teacherId == request.auth.uid;
+      allow update, delete: if isAuth() && resource.data.teacherId == request.auth.uid;
+    }
+    match /ielts_speaking_tests/{testId} {
+      allow read: if isAuth();
+      allow create: if isAuth() && request.resource.data.teacherId == request.auth.uid;
+      allow update, delete: if isAuth() && resource.data.teacherId == request.auth.uid;
+    }
+
+    // The split answer key — NEVER student-readable. Owning teacher only; platform keys
+    // (teacherId null) are admin/Admin-SDK only; grading happens in /api/ielts/submit.
+    match /ielts_answer_keys/{testId} {
+      // `resource == null`: legacy tests have no key doc yet — loadTestForEdit's get()
+      // must see not-found, not permission-denied. A missing doc reveals nothing.
+      allow read: if isAuth() && (resource == null || resource.data.teacherId == request.auth.uid);
+      allow create: if isAuth() && request.resource.data.teacherId == request.auth.uid;
+      allow update: if isAuth() && resource.data.teacherId == request.auth.uid;
+      // `resource == null` keeps deleteIeltsTest's batch working for legacy tests that
+      // never got a key doc (deleting a missing doc reveals and changes nothing).
+      allow delete: if isAuth() && (resource == null || resource.data.teacherId == request.auth.uid);
+    }
+
+    // Library-card summaries written in the same batch as the test doc (saveIeltsTest /
+    // W&S saves) — title, counts, typeBreakdown. NEVER contains answers, so read is open
+    // like the test banks. Ownership mirrors the banks; platform metas (teacherId null)
+    // are admin/Admin-SDK only.
+    match /ielts_test_meta/{testId} {
+      allow read: if isAuth();
+      allow create: if isAuth() && request.resource.data.teacherId == request.auth.uid;
+      allow update: if isAuth() && resource.data.teacherId == request.auth.uid;
+      // `resource == null`: deleteIeltsTest batches a meta delete even for legacy tests
+      // that never had one.
+      allow delete: if isAuth() && (resource == null || resource.data.teacherId == request.auth.uid);
+    }
+
+    // --- 14. ACTIVE GAMES ---
+    match /active_games/{roomId} {
+      allow read: if isAuth();
+      allow create: if isAuth() && request.resource.data.host == request.auth.uid;
+      allow update: if isAuth() && (
+        resource.data.host == request.auth.uid ||
+        resource.data.guest == request.auth.uid ||
+        resource.data.guest == null
+      );
+      allow delete: if isAuth() && (
+        resource.data.host == request.auth.uid ||
+        resource.data.guest == request.auth.uid
+      );
+    }
+
+    // ============================================================================
+    // --- 15. IELTS PLATFORM ---
+    // ============================================================================
+    // Group reads are teacher/member only — joining goes through /api/ielts/join (Admin SDK),
+    // so join codes can no longer be harvested by listing all groups. Both live client queries
+    // (teacherId == uid; studentIds array-contains uid) stay provable for list evaluation.
+    // Center-managed IELTS groups (2026-07-29): docs with `centerId` are born ONLY in
+    // /api/manager/ielts-groups (Admin SDK) as the twin of a classes/{classId} doc.
+    // Their roster is manager-owned: the manager mirrors classes.studentIds here
+    // (limited-key update below); the TEACHER cannot touch the group doc at all
+    // (assignments subcollection stays theirs — content vs roster split).
+    match /ielts_groups/{groupId} {
+      allow read: if isAuth() && (
+        resource.data.teacherId == request.auth.uid ||
+        request.auth.uid in resource.data.studentIds ||
+        (resource.data.get('centerId', null) != null && isCenterManager(resource.data.centerId))
+      );
+      // Client create is teacher-personal only — stamping a centerId requires the API.
+      allow create: if isAuth() &&
+        request.resource.data.teacherId == request.auth.uid &&
+        request.resource.data.get('centerId', null) == null;
+      allow update: if isAuth() && (
+        // Teacher branch: personal groups only; cannot self-stamp a centerId.
+        (resource.data.teacherId == request.auth.uid &&
+          resource.data.get('centerId', null) == null &&
+          request.resource.data.get('centerId', null) == null) ||
+        // Manager branch: their center's managed groups, roster/teacher/display keys only
+        // (centerId/classId/managed/joinCode stay immutable client-side).
+        (resource.data.get('centerId', null) != null &&
+          isActiveCenterManager(resource.data.centerId) &&
+          request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['studentIds', 'teacherId', 'teacherName', 'title', 'description', 'targetBand', 'updatedAt']))
+      );
+      // Managed groups are deleted only via the manager API (pair delete, Admin SDK).
+      allow delete: if isAuth() &&
+        resource.data.teacherId == request.auth.uid &&
+        resource.data.get('centerId', null) == null;
+
+      match /assignments/{assignmentId} {
+        allow read: if isAuth();
+        // completedBy is server-written (Admin SDK) — clients no longer self-add.
+        allow create, update, delete: if isAuth() && get(/databases/$(database)/documents/ielts_groups/$(groupId)).data.teacherId == request.auth.uid;
+      }
+
+      // create goes through /api/ielts/join (Admin SDK). Teacher reads/approves/rejects;
+      // a student may withdraw their own request.
+      match /requests/{requestId} {
+        allow read: if isAuth() && get(/databases/$(database)/documents/ielts_groups/$(groupId)).data.teacherId == request.auth.uid;
+        allow create: if false;
+        allow update: if false;
+        allow delete: if isAuth() && (
+          get(/databases/$(database)/documents/ielts_groups/$(groupId)).data.teacherId == request.auth.uid ||
+          resource.data.studentId == request.auth.uid
+        );
+      }
+    }
+
+    // Attempts are written ONLY by /api/ielts/submit (Admin SDK) — clients cannot create or
+    // forge scores. Teacher update covers writing/speaking grading (band + comments).
+    match /ielts_attempts/{attemptId} {
+      // `resource == null` keeps the runner's first-attempt existence check working:
+      // a get() on a missing doc must return not-found, not permission-denied.
+      allow read: if isAuth() && (
+        resource == null ||
+        resource.data.userId == request.auth.uid ||
+        ('groupId' in resource.data &&
+          get(/databases/$(database)/documents/ielts_groups/$(resource.data.groupId)).data.teacherId == request.auth.uid)
+      );
+      allow create: if false;
+      allow update: if isAuth() &&
+        'groupId' in resource.data &&
+        get(/databases/$(database)/documents/ielts_groups/$(resource.data.groupId)).data.teacherId == request.auth.uid &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['reviewStatus', 'teacherGrade']);
+      allow delete: if false;
+    }
+
+    // ============================================================================
+    // --- 16. B2B CENTER MANAGEMENT ---
+    // ============================================================================
+    match /centers/{centerId} {
+      allow read: if isAuth();
+      // Self-signup must start as 'pending' — only a super admin (god mode
+      // above) or the Admin SDK can create/flip a center to 'active'.
+      allow create: if isAuth() &&
+                    request.resource.data.ownerUid == request.auth.uid &&
+                    request.resource.data.get('status', '') == 'pending';
+      // The owner may edit display fields only — never status/subscription/ownerUid.
+      allow update: if isAuth() &&
+                    resource.data.ownerUid == request.auth.uid &&
+                    request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name', 'slug', 'size']);
+      allow delete: if isAuth() && resource.data.ownerUid == request.auth.uid;
+    }
+
+    match /crm_leads/{leadId} {
+      allow create: if isAuth() && isActiveCenterManager(request.resource.data.centerId);
+      allow read: if isAuth() && isCenterManager(resource.data.centerId);
+      allow update, delete: if isAuth() && isActiveCenterManager(resource.data.centerId);
+    }
+
+    // 🟢 NEW — Rooms (center-only). Managed by the center manager; readable by
+    // center members. Query-safe list (same pattern as attendance).
+    match /rooms/{roomId} {
+      allow get: if isAuth() && (
+        resource == null ||
+        isCenterManager(resource.data.centerId) ||
+        isTeacherOfCenter(resource.data.centerId)
+      );
+      allow list: if isAuth();
+      allow create, update: if isAuth() && isActiveCenterManager(request.resource.data.centerId);
+      allow delete: if isAuth() && isActiveCenterManager(resource.data.centerId);
+    }
+
+    match /center_finances/{financeId} {
+      allow read: if isAuth() && (
+        isCenterManager(resource.data.centerId) ||
+        resource.data.studentId == request.auth.uid
+      );
+      allow create: if isAuth() && isActiveCenterManager(request.resource.data.centerId);
+      allow update, delete: if isAuth() && isActiveCenterManager(resource.data.centerId);
+    }
+
+    match /center_attendance/{attendanceId} {
+      // GET (single doc): keep the strict per-document check (cheap — 1 get()).
+      // 🟢 resource == null → future/empty dates don't error.
+      allow get: if isAuth() && (
+        resource == null ||
+        isCenterManager(resource.data.centerId) ||
+        get(/databases/$(database)/documents/classes/$(resource.data.classId)).data.teacherId == request.auth.uid ||
+        request.auth.uid in resource.data.records
+      );
+
+      // LIST (range query by classId/centerId): the grid + dashboard read many
+      // days at once. A per-document get() here exceeds Firestore's access limit
+      // and throws "insufficient permissions". Authorize the query to any signed-in
+      // user instead — consistent with `classes`/`users` already being read: isAuth().
+      // (Writes below stay locked to the class teacher / center manager.)
+      allow list: if isAuth();
+
+      allow create: if isAuth() && (
+        isActiveCenterManager(request.resource.data.centerId) ||
+        get(/databases/$(database)/documents/classes/$(request.resource.data.classId)).data.teacherId == request.auth.uid
+      );
+
+      allow update: if isAuth() && (
+        isActiveCenterManager(resource.data.centerId) ||
+        get(/databases/$(database)/documents/classes/$(resource.data.classId)).data.teacherId == request.auth.uid
+      );
+
+      allow delete: if isAuth() && isActiveCenterManager(resource.data.centerId);
+    }
+
+    // 🟢 NEW — Attendance monthly rollups (denormalized analytics).
+    // Doc id: `${classId}_${YYYY-MM}`. Written by the class teacher or center
+    // manager; readable by any signed-in center member.
+    match /center_attendance_summary/{summaryId} {
+      allow read: if isAuth();
+      allow create, update: if isAuth() && (
+        isActiveCenterManager(request.resource.data.centerId) ||
+        get(/databases/$(database)/documents/classes/$(request.resource.data.classId)).data.teacherId == request.auth.uid
+      );
+      allow delete: if isAuth() && isActiveCenterManager(resource.data.centerId);
+    }
+
+    // 🟢 NEW — Teacher / staff attendance. Doc id: `${staffUid}_${date}`.
+    // Written only by the center manager; readable by the staff member + manager.
+    match /center_staff_attendance/{staffDayId} {
+      // GET (single doc): strict — the staff member themselves or the manager.
+      allow get: if isAuth() && (
+        resource == null ||
+        resource.data.staffUid == request.auth.uid ||
+        isCenterManager(resource.data.centerId)
+      );
+      // LIST (month range query by centerId): per-doc get() would exceed the
+      // access limit, so authorize the query to any signed-in user (same pattern
+      // as center_attendance). Writes stay manager-only.
+      allow list: if isAuth();
+      allow create, update: if isAuth() && isActiveCenterManager(request.resource.data.centerId);
+      allow delete: if isAuth() && isActiveCenterManager(resource.data.centerId);
+    }
+
+    // 🟢 NEW — Face enrollments (Phase 4). Doc id = enrolled user uid.
+    // Managed by the center manager or a teacher of that center. Users may read
+    // their own enrollment. Never public.
+    match /face_enrollments/{enrollUid} {
+      allow read: if isAuth() && (
+        enrollUid == request.auth.uid ||
+        (resource != null && (isCenterManager(resource.data.centerId) || isTeacherOfCenter(resource.data.centerId)))
+      );
+      allow create: if isAuth() && (
+        isActiveCenterManager(request.resource.data.centerId) ||
+        isTeacherOfCenter(request.resource.data.centerId)
+      );
+      allow update, delete: if isAuth() && (
+        isActiveCenterManager(resource.data.centerId) ||
+        isTeacherOfCenter(resource.data.centerId)
+      );
+    }
+
+    // 🟢 YANGILANGAN: teacherId Document ID sifatida ishlatiladi!
+    match /center_teachers/{teacherId} {
+      // GET (single doc): the manager's add-teacher flow does a getDoc
+      // EXISTENCE CHECK before creating the link, so a missing doc must be
+      // readable (`resource == null`) — without it the whole add-teacher flow
+      // dies with permission-denied before the write is ever attempted.
+      // A denied get therefore means exactly "this teacher is linked to a
+      // center that isn't yours" — the teachers page maps that error to its
+      // "boshqa markazga biriktirilgan" message.
+      allow get: if isAuth() && (
+        resource == null ||
+        isCenterManager(resource.data.centerId) ||
+        teacherId == request.auth.uid
+      );
+
+      // LIST: every query filters `centerId ==` (useCenterClasses, teachers
+      // page), so isCenterManager runs ONE constant-path get() per query.
+      allow list: if isAuth() && (
+        isCenterManager(resource.data.centerId) ||
+        teacherId == request.auth.uid
+      );
+
+      // Document ID aniq o'qituvchining UID (teacherId) si bo'lishini talab qilamiz.
+      // ⚠️ Faqat ADMIN TASDIQLAGAN markaz o'qituvchi qo'sha oladi (approval gate).
+      allow create: if isAuth() &&
+                    isActiveCenterManager(request.resource.data.centerId) &&
+                    teacherId == request.resource.data.teacherId;
+
+      allow update, delete: if isAuth() && isActiveCenterManager(resource.data.centerId);
+    }
+
+    // 🟢 CENTER STUDENT ROSTER (2026-07-15). Doc id MUST be
+    // `${centerId}_${studentId}` (rules-enforced) — a student may belong to
+    // SEVERAL centers (unlike teachers), each center holding its own link.
+    // This is how a student can be in the center with no class yet. Created
+    // by: the manager (add-existing / lazy backfill), the create-student API
+    // (Admin SDK), and the group-enroll flow.
+    match /center_students/{linkId} {
+      // GET: the student themselves, center staff, or missing-doc probe.
+      allow get: if isAuth() && (
+        resource == null ||
+        resource.data.studentId == request.auth.uid ||
+        isCenterManager(resource.data.centerId) ||
+        isTeacherOfCenter(resource.data.centerId)
+      );
+      // LIST: manager queries filter `centerId ==`; a student's own "my
+      // centers" query filters `studentId ==` — both constant-path provable.
+      allow list: if isAuth() && (
+        isCenterManager(resource.data.centerId) ||
+        resource.data.studentId == request.auth.uid
+      );
+      allow create: if isAuth() &&
+        isActiveCenterManager(request.resource.data.centerId) &&
+        linkId == request.resource.data.centerId + '_' + request.resource.data.studentId;
+      allow update, delete: if isAuth() && isActiveCenterManager(resource.data.centerId);
+    }
+
+    // 🟢 Manager-created STUDENT accounts: the manager-visible password.
+    // Doc id = student uid; exactly the center_teacher_credentials contract
+    // (API-only writes, owning-center manager reads, student can't read own).
+    match /center_student_credentials/{studentUid} {
+      allow get: if isAuth() && (resource == null || isCenterManager(resource.data.centerId));
+      allow list: if isAuth() && isCenterManager(resource.data.centerId);
+      allow write: if false;
+    }
+
+    // 🟢 Manager-created teacher accounts: the manager-visible password.
+    // Doc id = teacher uid. Written ONLY by /api/manager/teachers/* (Admin
+    // SDK); readable ONLY by the owning center's manager — not even the
+    // teacher themselves (they get the password from the manager). Same
+    // API-writes-only pattern as finance. `resource == null` on get so the
+    // info panel's read for a link-only teacher (no credentials doc) doesn't
+    // throw. See docs/MANAGER.md § "Manager-created teacher accounts".
+    match /center_teacher_credentials/{teacherUid} {
+      allow get: if isAuth() && (resource == null || isCenterManager(resource.data.centerId));
+      allow list: if isAuth() && isCenterManager(resource.data.centerId);
+      allow write: if false;
+    }
+
+    // ─── 🟢 FINANCE (docs/FINANCE_PLAN.md §6) ─────────────────────────────────
+    // The most sensitive data in the app: reads are CENTER MANAGER ONLY (no
+    // attendance-style `isAuth()` list relaxation), writes are API-routes-only
+    // (Admin SDK bypasses rules; the client must never write money docs).
+    //
+    // The `list` rules stay within the rules-engine document-access limit
+    // because every client query filters `centerId ==` (iron rule #5), making
+    // `resource.data.centerId` provable so isCenterManager() runs ONE constant-
+    // path get() per query — unlike the per-doc varying lookups that broke
+    // attendance lists. If a query ever throws "insufficient permissions",
+    // the fallback is API-route reads, not relaxing these rules.
+
+    match /center_finance_settings/{centerId} {
+      allow read: if isAuth() && isCenterManager(centerId);
+      allow write: if false;
+    }
+
+    match /center_student_finance/{profileId} {
+      allow get: if isAuth() && (resource == null || isCenterManager(resource.data.centerId));
+      allow list: if isAuth() && isCenterManager(resource.data.centerId);
+      allow write: if false;
+    }
+
+    match /center_charges/{chargeId} {
+      allow get: if isAuth() && (resource == null || isCenterManager(resource.data.centerId));
+      allow list: if isAuth() && isCenterManager(resource.data.centerId);
+      allow write: if false;
+    }
+
+    match /center_payments/{paymentId} {
+      allow get: if isAuth() && (resource == null || isCenterManager(resource.data.centerId));
+      allow list: if isAuth() && isCenterManager(resource.data.centerId);
+      allow write: if false;
+    }
+
+    match /center_expenses/{expenseId} {
+      allow get: if isAuth() && (resource == null || isCenterManager(resource.data.centerId));
+      allow list: if isAuth() && isCenterManager(resource.data.centerId);
+      allow write: if false;
+    }
+
+    match /center_payouts/{payoutId} {
+      allow get: if isAuth() && (resource == null || isCenterManager(resource.data.centerId));
+      allow list: if isAuth() && isCenterManager(resource.data.centerId);
+      allow write: if false;
+    }
+
+    // 🟢 NEW — System Config (Syllabus, etc.)
+    // Anyone can read, only super admins can write.
+    match /system_config/{document=**} {
+      allow read: if isAuth();
+      allow write: if isSuperAdmin();
+    }
+
+    // ── Face Terminal (Hikvision) ────────────────────────────────────────────
+
+    // 🔒 Private config: AK/SK secrets for Hikvision API.
+    // ONLY Cloud Functions (Admin SDK) should ever read/write this.
+    // Client reads are DENIED so keys never leak to the browser.
+    match /_private/{configId} {
+      allow read, write: if false;
+    }
+
+    // 🟢 Face events: written by Cloud Functions (hikPollAttendance),
+    // read by center managers to process into staff attendance.
+    match /face_events/{eventId} {
+      // GET (single doc): strict per-document check (cheap — 1 get()).
+      allow get: if isAuth() && (
+        resource == null ||
+        isCenterManager(resource.data.centerId) ||
+        isTeacherOfCenter(resource.data.centerId)
+      );
+      // LIST (query by centerId + processed==false, listenFaceEvents): a
+      // per-doc get() here exceeds Firestore's access limit once enough
+      // events match and throws "insufficient permissions" — authorize the
+      // query to any signed-in user instead, same pattern as
+      // center_attendance / center_staff_attendance (rule #2 in ATTENDANCE.md).
+      allow list: if isAuth();
+      // Only managers can mark events as processed (update processed=true).
+      allow update: if isAuth() && isCenterManager(resource.data.centerId);
+      // Cloud Functions (Admin SDK) create events — clients may NOT create/delete.
+      allow create, delete: if false;
+    }
+
+    // 🟢 Scan state tracker: tracks in/out state per staff per day.
+    // Written/read ONLY by Cloud Functions (Admin SDK) — never by clients.
+    match /att_day/{dayId} {
+      allow read, write: if false;
+    }
+
+  }
+}

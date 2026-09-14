@@ -1,0 +1,485 @@
+{
+  "_readme": [
+    "THE ONA TILI SAMPLE PAPER — edit this file to change what the Milliy sertifikat",
+    "ona tili builder's \"Namunaviy variant\" button loads. Contract: docs/MILLIY_QUIZ.md.",
+    "",
+    "WHY 30 QUESTIONS / 90 MINUTES. ⚠️ Unlike maths, NO published ona tili blueprint",
+    "is encoded in this repo (maths has EXAM_BLUEPRINT; nothing equivalent exists",
+    "here), so this length is THIS FILE'S OWN, not a national spec — it matches the",
+    "`ona-tili` defaults in MILLIY_SUBJECTS so pressing the button fills the builder",
+    "to exactly its target.",
+    "",
+    "⚠️ THIS IS ONA TILI, NOT \"ona tili va adabiyot\". The taxonomy has no literature",
+    "topic (see scripts/addNativeLanguageTopics.mjs for why), so a question about a",
+    "novel or a poet has nowhere to sit and must not be filed under a grammar",
+    "section — it would land in the teacher's per-topic report as \"Sintaksis\".",
+    "",
+    "THE DISTRIBUTION THIS FILE FOLLOWS, one line per taxonomy topic:",
+    "  fonetika-va-grafika            5",
+    "  leksikologiya                  6",
+    "  soz-tarkibi-va-soz-yasalishi   3",
+    "  morfologiya                    6",
+    "  sintaksis                      5",
+    "  imlo-va-tinish-belgilari       3",
+    "  uslubiyat-va-nutq-madaniyati   2",
+    "  → 30 slots: 26 closed (Y-1) + 4 short typed (O)",
+    "⚠️ NOTHING ENFORCES THAT. The builder has no per-section quotas (by design —",
+    "see checkMilliyAdd), so the counts above are this file's own discipline.",
+    "Recount them by hand if you add or remove an entry.",
+    "",
+    "Per entry:",
+    "  topicId     an `ona-tili` TOPIC slug. It becomes the item's sectionId, which",
+    "              is what the teacher's results page groups by:",
+    "                fonetika-va-grafika",
+    "                leksikologiya",
+    "                soz-tarkibi-va-soz-yasalishi",
+    "                morfologiya",
+    "                sintaksis",
+    "                imlo-va-tinish-belgilari",
+    "                uslubiyat-va-nutq-madaniyati",
+    "  subtopicId  optional, for a more precise label. Must belong to its topic.",
+    "              Ona tili subtopics carry a \"Group — Leaf\" prefix, so they read",
+    "              e.g. `mano-munosabatlari-sinonimlar`.",
+    "  question    a string, or {uz, ru, en}. A bare string is used for all three.",
+    "  options     A-D (OptionKey is A..D). PRESENT => closed item; ABSENT => typed",
+    "              item. There is no separate flag, so the two cannot contradict.",
+    "  answer      closed -> the correct option key; typed -> the literal answer.",
+    "  acceptedAnswers  typed only: other spellings graded correct.",
+    "  numeric     typed only, default FALSE — the opposite of chemistry and physics:",
+    "              here almost every typed answer is a WORD, so it is graded as text",
+    "              (whitespace-collapsed, case-insensitive).",
+    "",
+    "⚠️ A TYPED ANSWER MUST NOT CONTAIN AN APOSTROPHE. Text grading collapses spaces",
+    "and case but NOT apostrophes (lib/ExamTeacher.ts, textMatch), so `ko'makchi`",
+    "would be marked wrong for a student who typed `ko\\u2018makchi` or `komakchi`. Every typed",
+    "entry below deliberately has an apostrophe-free answer (`yuklama`, `atama`,",
+    "`atov gap`) — keep that rule when adding one, or list every spelling in",
+    "acceptedAnswers.",
+    "",
+    "⚠️ AUTHORED UZBEK-ONLY: a bare string fills ru and en with the same text, so a",
+    "student who picked Russian sees Uzbek rather than a blank. ⚠️ And unlike the",
+    "science papers, most of these questions CANNOT be translated — they ask about",
+    "Uzbek words. A ru/en variant would have to be a different question."
+  ],
+  "title": {
+    "uz": "Ona tili — namunaviy variant",
+    "ru": "Родной язык — образцовый вариант",
+    "en": "Uzbek language — sample paper"
+  },
+  "durationMinutes": 90,
+  "questions": [
+    {
+      "topicId": "fonetika-va-grafika",
+      "subtopicId": "nutq-tovushlari-unli-tovushlar-tasnifi",
+      "question": "Hozirgi o'zbek adabiy tilida nechta unli tovush bor?",
+      "options": {
+        "A": "5 ta",
+        "B": "6 ta",
+        "C": "9 ta",
+        "D": "10 ta"
+      },
+      "answer": "B",
+      "explanation": "O'zbek tilida 6 ta unli tovush bor: a, o, i, e, u, o'.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "fonetika-va-grafika",
+      "subtopicId": "nutq-tovushlari-undosh-tovushlar-tasnifi",
+      "question": "Hozirgi o'zbek adabiy tilida nechta undosh tovush bor?",
+      "options": {
+        "A": "20 ta",
+        "B": "23 ta",
+        "C": "24 ta",
+        "D": "26 ta"
+      },
+      "answer": "C",
+      "explanation": "O'zbek tilidagi 30 ta tovushning 6 tasi unli, 24 tasi undosh tovushdir.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "fonetika-va-grafika",
+      "subtopicId": "nutq-tovushlari-bogin-va-bogin-kochirish",
+      "question": "«Maktab» so'zi nechta bo'g'indan iborat?",
+      "options": {
+        "A": "1 ta",
+        "B": "2 ta",
+        "C": "3 ta",
+        "D": "4 ta"
+      },
+      "answer": "B",
+      "explanation": "So'z mak-tab tarzida bo'g'inlarga ajraladi — 2 bo'g'in. Bo'g'inlar soni unlilar soniga teng.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "fonetika-va-grafika",
+      "subtopicId": "nutq-tovushlari-urgu-soz-va-mantiq-urgusi",
+      "question": "O'zbek tilida so'z urg'usi odatda qaysi bo'g'inga tushadi?",
+      "options": {
+        "A": "Birinchi bo'g'inga",
+        "B": "Ikkinchi bo'g'inga",
+        "C": "Oxirgi bo'g'inga",
+        "D": "O'rtadagi bo'g'inga"
+      },
+      "answer": "C",
+      "explanation": "O'zbek tilida urg'u asosan oxirgi bo'g'inga tushadi; ayrim so'zlarda va qo'shimchalarda istisnolar bor.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "fonetika-va-grafika",
+      "subtopicId": "nutq-tovushlari-alifbo-va-yozuv-tarixi",
+      "question": "Hozirgi o'zbek lotin yozuvida (tutuq belgisidan tashqari) nechta harf bor? Javobni son bilan yozing.",
+      "answer": "29",
+      "acceptedAnswers": [
+        "29 ta"
+      ],
+      "numeric": true,
+      "explanation": "O'zbek lotin alifbosida 29 ta harf va bitta tutuq belgisi (') mavjud.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "leksikologiya",
+      "subtopicId": "mano-munosabatlari-sinonimlar",
+      "question": "«Chiroyli» so'ziga sinonim bo'la oladigan so'zni toping.",
+      "options": {
+        "A": "Xunuk",
+        "B": "Go'zal",
+        "C": "Katta",
+        "D": "Aqlli"
+      },
+      "answer": "B",
+      "explanation": "Sinonimlar — ma'nosi bir-biriga yaqin so'zlar: chiroyli, go'zal, ko'rkam.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "leksikologiya",
+      "subtopicId": "mano-munosabatlari-antonimlar",
+      "question": "«Yaqin» so'zining antonimi qaysi?",
+      "options": {
+        "A": "Uzoq",
+        "B": "Do'st",
+        "C": "Baland",
+        "D": "Tez"
+      },
+      "answer": "A",
+      "explanation": "Antonimlar — ma'nosi qarama-qarshi so'zlar: yaqin — uzoq.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "leksikologiya",
+      "subtopicId": "mano-munosabatlari-omonimlar",
+      "question": "Omonimlar qanday so'zlar?",
+      "options": {
+        "A": "Shakli bir xil, ma'nosi butunlay boshqa so'zlar",
+        "B": "Ma'nosi bir-biriga yaqin so'zlar",
+        "C": "Ma'nosi qarama-qarshi so'zlar",
+        "D": "Faqat shevada ishlatiladigan so'zlar"
+      },
+      "answer": "A",
+      "explanation": "Omonimlar bir xil yoziladi va aytiladi, lekin ma'nolari o'zaro bog'liq emas: «yoz» (fasl) va «yoz» (yozmoq).",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "leksikologiya",
+      "subtopicId": "mano-munosabatlari-paronimlar",
+      "question": "Quyidagi juftliklarning qaysi biri paronimlardir?",
+      "options": {
+        "A": "Abonent — abonement",
+        "B": "Katta — kichik",
+        "C": "Chiroyli — go'zal",
+        "D": "Yoz (fasl) — yoz (yozmoq)"
+      },
+      "answer": "A",
+      "explanation": "Paronimlar — talaffuzi va yozilishi o'xshash, lekin ma'nosi har xil so'zlar. Qolgan javoblar: antonim, sinonim va omonim.",
+      "difficultyId": 3
+    },
+    {
+      "topicId": "leksikologiya",
+      "subtopicId": "frazeologiya-frazeologik-birikmalar",
+      "question": "«Og'zi qulog'ida» iborasi qanday ma'noni bildiradi?",
+      "options": {
+        "A": "Juda xursand",
+        "B": "Qattiq xafa",
+        "C": "Hayron qolgan",
+        "D": "Juda charchagan"
+      },
+      "answer": "A",
+      "explanation": "Frazeologizm yaxlit ko'chma ma'no bildiradi: «og'zi qulog'ida» — juda xursand, quvonchi ichiga sig'mayotgan.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "leksikologiya",
+      "subtopicId": "lugat-boyligi-atamalar-terminlar",
+      "question": "Faqat ma'lum bir fan yoki kasb sohasida qat'iy bir ma'noda qo'llanadigan so'zlar qanday nomlanadi? Javobni bitta so'z bilan yozing.",
+      "answer": "atama",
+      "acceptedAnswers": [
+        "atamalar",
+        "termin",
+        "terminlar"
+      ],
+      "explanation": "Atamalar (terminlar) — bir sohaga oid, ko'chma ma'nosi yo'q, aniq bir tushunchani bildiruvchi so'zlar: kesim, fotosintez, valentlik.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "soz-tarkibi-va-soz-yasalishi",
+      "subtopicId": "soz-tarkibi-ozak-va-negiz",
+      "question": "«Kitobxonlik» so'zining o'zagi qaysi?",
+      "options": {
+        "A": "Kitob",
+        "B": "Kitobxon",
+        "C": "Xon",
+        "D": "Lik"
+      },
+      "answer": "A",
+      "explanation": "So'z kitob + xon + lik tarzida tahlil qilinadi; bo'linmaydigan ma'noli qism — «kitob» o'zagi.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "soz-tarkibi-va-soz-yasalishi",
+      "subtopicId": "soz-yasalishi-qoshma-sozlar",
+      "question": "Quyidagi so'zlarning qaysi biri qo'shma so'z?",
+      "options": {
+        "A": "Beshbarmoq",
+        "B": "Kitoblar",
+        "C": "Yozuvchi",
+        "D": "Qizil"
+      },
+      "answer": "A",
+      "explanation": "Qo'shma so'z ikki o'zakning birikuvidan yasaladi: besh + barmoq. «Yozuvchi» — qo'shimcha bilan yasalgan, «kitoblar» — shakl yasalgan so'z.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "soz-tarkibi-va-soz-yasalishi",
+      "subtopicId": "soz-yasalishi-juft-va-takroriy-sozlar",
+      "question": "Quyidagi so'zlarning qaysi biri juft so'z?",
+      "options": {
+        "A": "Opa-singil",
+        "B": "Ko'zoynak",
+        "C": "Mehnatsevar",
+        "D": "Gulzor"
+      },
+      "answer": "A",
+      "explanation": "Juft so'zlar ikki mustaqil so'zning teng bog'lanishidan hosil bo'ladi va chiziqcha bilan yoziladi: opa-singil, ota-ona.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "morfologiya",
+      "subtopicId": "mustaqil-soz-turkumlari-ot-va-uning-kategoriyalari",
+      "question": "«Do'stlik» so'zi qaysi so'z turkumiga mansub?",
+      "options": {
+        "A": "Ot",
+        "B": "Sifat",
+        "C": "Fe'l",
+        "D": "Ravish"
+      },
+      "answer": "A",
+      "explanation": "«-lik» qo'shimchasi bilan yasalgan mavhum ot; «kim? nima?» so'rog'iga javob beradi.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "morfologiya",
+      "subtopicId": "mustaqil-soz-turkumlari-sifat-va-daraja-shakllari",
+      "question": "«Ko'kimtir» so'zi sifatning qaysi darajasida?",
+      "options": {
+        "A": "Oddiy daraja",
+        "B": "Qiyosiy daraja",
+        "C": "Orttirma daraja",
+        "D": "Ozaytirma daraja"
+      },
+      "answer": "D",
+      "explanation": "«-imtir» belgining me'yordan kamligini bildiradi — ozaytirma daraja (ko'kish, sarg'ish kabi).",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "morfologiya",
+      "subtopicId": "mustaqil-soz-turkumlari-son-va-uning-turlari",
+      "question": "«Uchtadan» so'zi sonning qaysi turiga kiradi?",
+      "options": {
+        "A": "Sanoq son",
+        "B": "Tartib son",
+        "C": "Taqsim son",
+        "D": "Chama son"
+      },
+      "answer": "C",
+      "explanation": "«-tadan» qo'shimchasi predmetning teng bo'lib taqsimlanishini bildiradi — taqsim son.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "morfologiya",
+      "subtopicId": "mustaqil-soz-turkumlari-olmosh-turlari",
+      "question": "«O'zim» so'zi olmoshning qaysi turiga kiradi?",
+      "options": {
+        "A": "Kishilik olmoshi",
+        "B": "O'zlik olmoshi",
+        "C": "So'roq olmoshi",
+        "D": "Ko'rsatish olmoshi"
+      },
+      "answer": "B",
+      "explanation": "«O'z» o'zlik olmoshi bo'lib, egalik qo'shimchalari bilan turlanadi: o'zim, o'zing, o'zi.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "morfologiya",
+      "subtopicId": "fel-va-uning-shakllari-fel-nisbatlari",
+      "question": "«Yozdirdi» fe'li qaysi nisbatda?",
+      "options": {
+        "A": "Aniq nisbat",
+        "B": "O'zlik nisbati",
+        "C": "Orttirma nisbat",
+        "D": "Majhul nisbat"
+      },
+      "answer": "C",
+      "explanation": "«-dir» qo'shimchasi harakatni boshqa shaxsga bajartirishni bildiradi — orttirma nisbat.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "morfologiya",
+      "subtopicId": "yordamchi-soz-turkumlari-yuklama",
+      "question": "«Faqat», «hatto» so'zlari va «-gina» qo'shimchasi qaysi yordamchi so'z turkumiga kiradi? Javobni bitta so'z bilan yozing.",
+      "answer": "yuklama",
+      "acceptedAnswers": [
+        "yuklamalar",
+        "yuklama soz turkumi"
+      ],
+      "explanation": "Yuklamalar so'z va gaplarga qo'shimcha ma'no (ta'kid, chegara, so'roq, gumon) yuklaydi. Ko'makchilar ot bilan fe'lni bog'laydi, bog'lovchilar esa gap bo'laklarini.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "sintaksis",
+      "subtopicId": "soz-birikmasi-boshqaruv-aloqasi",
+      "question": "«Kitobni o'qidi» birikmasida qanday sintaktik aloqa mavjud?",
+      "options": {
+        "A": "Boshqaruv",
+        "B": "Bitishuv",
+        "C": "Moslashuv",
+        "D": "Teng bog'lanish"
+      },
+      "answer": "A",
+      "explanation": "Hokim so'z tobe so'zdan ma'lum kelishik shaklini talab qilmoqda (tushum kelishigi) — bu boshqaruv aloqasi.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "sintaksis",
+      "subtopicId": "gap-bolaklari-ega-va-kesim",
+      "question": "«Bahor keldi» gapida «bahor» qaysi gap bo'lagi vazifasida kelgan?",
+      "options": {
+        "A": "Ega",
+        "B": "Kesim",
+        "C": "Hol",
+        "D": "To'ldiruvchi"
+      },
+      "answer": "A",
+      "explanation": "«Kim? nima?» so'rog'iga javob beruvchi bosh bo'lak — ega; «keldi» esa kesim.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "sintaksis",
+      "subtopicId": "gap-bolaklari-uyushiq-bolaklar",
+      "question": "«Bog'da olma, nok, uzum pishdi» gapida uyushiq bo'laklar qaysi gap bo'lagi vazifasida kelgan?",
+      "options": {
+        "A": "Ega",
+        "B": "Kesim",
+        "C": "To'ldiruvchi",
+        "D": "Aniqlovchi"
+      },
+      "answer": "A",
+      "explanation": "«Olma, nok, uzum» bir xil so'roqqa javob beradi va bitta kesimga bog'lanadi — uyushiq egalar.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "sintaksis",
+      "subtopicId": "gap-turlari-boglovchisiz-qoshma-gap",
+      "question": "«Yomg'ir yog'di, havo salqinlashdi» gapi qaysi turdagi qo'shma gap?",
+      "options": {
+        "A": "Bog'langan qo'shma gap",
+        "B": "Ergashgan qo'shma gap",
+        "C": "Bog'lovchisiz qo'shma gap",
+        "D": "Sodda yoyiq gap"
+      },
+      "answer": "C",
+      "explanation": "Ikki sodda gap bog'lovchisiz, faqat ohang va vergul yordamida birikkan.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "sintaksis",
+      "subtopicId": "gap-turlari-bir-bosh-bolakli-gaplar",
+      "question": "«Kuz. Sovuq shamol.» kabi gaplar bir bosh bo'lakli gaplarning qaysi turiga kiradi? Javobni yozing.",
+      "answer": "atov gap",
+      "acceptedAnswers": [
+        "atov gaplar",
+        "atov"
+      ],
+      "explanation": "Atov gaplar predmet yoki hodisani atab ko'rsatadi va bosh bo'lagi bosh kelishikdagi ot bilan ifodalanadi.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "imlo-va-tinish-belgilari",
+      "subtopicId": "orfografiya-qoshib-va-ajratib-yozish",
+      "question": "Quyidagi so'zlarning qaysi biri to'g'ri yozilgan?",
+      "options": {
+        "A": "Ko'z oynak",
+        "B": "Ko'zoynak",
+        "C": "Ko'z-oynak",
+        "D": "Kozoynak"
+      },
+      "answer": "B",
+      "explanation": "Qo'shma otlar qo'shib yoziladi: ko'zoynak, otboqar, gulsapsar.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "imlo-va-tinish-belgilari",
+      "subtopicId": "punktuatsiya-vergul",
+      "question": "Gapda undalma qanday ajratiladi?",
+      "options": {
+        "A": "Vergul bilan",
+        "B": "Tire bilan",
+        "C": "Ikki nuqta bilan",
+        "D": "Qavs bilan"
+      },
+      "answer": "A",
+      "explanation": "Undalma gapning qaerida kelishidan qat'i nazar vergul bilan ajratiladi: «Bolalar, darsga tayyorlaninglar.»",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "imlo-va-tinish-belgilari",
+      "subtopicId": "punktuatsiya-qoshtirnoq-va-qavs",
+      "question": "Ko'chirma gap qanday tinish belgisi ichiga olinadi?",
+      "options": {
+        "A": "Qo'shtirnoq",
+        "B": "Qavs",
+        "C": "Tire",
+        "D": "Ikki nuqta"
+      },
+      "answer": "A",
+      "explanation": "Ko'chirma gap qo'shtirnoq ichiga olinadi, muallif gapidan esa ikki nuqta yoki tire bilan ajratiladi.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "uslubiyat-va-nutq-madaniyati",
+      "subtopicId": "nutq-uslublari-rasmiy-uslub-idoraviy",
+      "question": "Ariza, tilxat, ma'lumotnoma kabi hujjatlar qaysi uslubda yoziladi?",
+      "options": {
+        "A": "Badiiy uslub",
+        "B": "Ilmiy uslub",
+        "C": "Rasmiy uslub",
+        "D": "So'zlashuv uslubi"
+      },
+      "answer": "C",
+      "explanation": "Rasmiy (idoraviy) uslub qat'iy shakl, standart iboralar va hissiy bo'yoqsizlik bilan ajralib turadi.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "uslubiyat-va-nutq-madaniyati",
+      "subtopicId": "nutq-uslublari-ilmiy-uslub",
+      "question": "Ilmiy uslubning asosiy belgisi nima?",
+      "options": {
+        "A": "Atamalarning ko'p qo'llanishi va bayonning aniqligi",
+        "B": "Ko'chma ma'noli so'zlar va obrazlilik",
+        "C": "Sheva so'zlarining erkin ishlatilishi",
+        "D": "Hissiy bo'yoqdor undalma va so'roqlar"
+      },
+      "answer": "A",
+      "explanation": "Ilmiy uslubda fikr aniq, izchil va isbotli bayon qilinadi; atamalar bir ma'noda qo'llanadi, obrazli vositalar deyarli ishlatilmaydi.",
+      "difficultyId": 2
+    }
+  ]
+}

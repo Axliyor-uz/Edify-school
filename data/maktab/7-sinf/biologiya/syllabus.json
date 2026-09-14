@@ -1,0 +1,113 @@
+
+[  {
+    "category": "7-sinf",
+    "index": 1,
+    "chapters": [
+      {
+        "chapter": "TIRIK ORGANIZMLARNING XILMA XILLIGI",
+        "index": 1,
+        "subtopics": [
+          { "name": "Biologiya – hayot haqidagi fan", "index": 1 },
+          { "name": "Tirik organizmlarning xilma xilligi", "index": 2 },
+          { "name": "Bakteriyalar. Protoktistalar. Zamburug‘lar", "index": 3 },
+          { "name": "O‘simliklarning xilmaxilligi. Sporali o‘simliklar", "index": 4 },
+          { "name": "Urug‘li o‘simliklar", "index": 5 },
+          { "name": "Umurtqasiz hayvonlarning xilmaxilligi", "index": 6 },
+          { "name": "Umurtqali hayvonlarning xilmaxilligi. Baliqlar, amfibiyalar va reptiliyalar", "index": 7 },
+          { "name": "Qushlar va sutemizuvchilar", "index": 8 }
+        ]
+      },
+      {
+        "chapter": "TIRIKLIKNING MOLEKULA VA HUJAYRA DARAJASI",
+        "index": 2,
+        "subtopics": [
+          { "name": "Hujayra – tirik organizmlarning tuzilish birligi", "index": 1 },
+          { "name": "To‘qimalar", "index": 2 }
+
+
+        ]
+      },
+      {
+        "chapter": "ORGAN VA ORGANLAR SISTEMASI",
+        "index": 3,
+        "subtopics": [
+          { "name": "Gulli o‘simliklarning vegetativ organlari. Ildiz", "index": 1 },
+          { "name": "Novda", "index": 2 },
+          { "name": "O‘simliklarning generativ organlari. Gul", "index": 4 },
+          { "name": "Meva", "index": 5 },
+          { "name": "Odam va hayvonlarning organlari va organlar sistemasi", "index": 6 }
+        ]
+      },
+      {
+        "chapter": "KOORDINATSIYA VA O‘Z-O‘ZINI BOSHQARISH",
+        "index": 4,
+        "subtopics": [
+          { "name": "Tirik organizmlarning o‘z-o‘zini boshqarishi", "index": 1 },
+          { "name": "Nerv sistemasi", "index": 3 }
+        ]
+      },
+      {
+        "chapter": "OZIQLANISH",
+        "index": 5,
+        "subtopics": [
+          { "name": "Organizmlarning oziqlanishi", "index": 1 },
+          { "name": "Hayvonlarning oziqlanishi", "index": 4 },
+          { "name": "Odamning ovqat hazm qilish sistemasi", "index": 5 }
+        ]
+      },
+      {
+        "chapter": "NAFAS OLISH",
+        "index": 6,
+        "subtopics": [
+          { "name": "Nafas olishning mohiyati. O‘simliklarning nafas olishi", "index": 1 },
+          { "name": "Odam va hayvonlarning nafas olishi", "index": 2 }
+        ]
+      },
+      {
+        "chapter": "TIRIK ORGANIZMLARDA MODDALAR TRANSPORTI",
+        "index": 7,
+        "subtopics": [
+          { "name": "O‘simliklarda moddalar transporti", "index": 1 },
+          { "name": "Umurtqasizlarning qon aylanish sistemasi", "index": 4 },
+          { "name": "Umurtqalilarning qon aylanish sistemasi", "index": 6 }
+        ]
+      },
+      {
+        "chapter": "AYIRISH (ekskretsiya)",
+        "index": 8,
+        "subtopics": [
+          { "name": "Ayirish", "index": 1 },
+          { "name": "Odam va hayvonlarning ayirishi", "index": 2 }
+        ]
+      },
+      {
+        "chapter": "HARAKATLANISH",
+        "index": 9,
+        "subtopics": [
+          { "name": "Tirik organizmlarning harakatlanishi", "index": 1 },
+          { "name": "Umurtqasizlarning harakatlanish organlari", "index": 3 },
+          { "name": "Umurtqalilarning tayanch-harakat organlari ", "index": 5 }
+        ]
+      },
+      {
+        "chapter": "REPRODUKSIYA, O‘SISH VA RIVOJLANISH",
+        "index": 10,
+        "subtopics": [
+          { "name": "Organizmlarning ko‘payishi", "index": 1 },
+          { "name": "O‘simliklarning individual rivojlanishi", "index": 3 },
+          { "name": "Hayvonlarning ko‘payishi", "index": 5 },
+          { "name": "Hayvonlarning individual rivojlanishi", "index": 6 }
+        ]
+      },
+      {
+        "chapter": "TUR, POPULYATSIYA, EKOSISTEMA, BIOSFERA",
+        "index": 11,
+        "subtopics": [
+          { "name": "Tur, populyatsiya", "index": 1 },
+          { "name": "Ekosistemalar. Biosfera", "index": 3 }
+        ]
+      }
+    ]
+  }
+
+]

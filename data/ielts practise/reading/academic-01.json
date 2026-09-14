@@ -1,0 +1,546 @@
+{
+  "module": "reading",
+  "test_id": "platform_reading_academic_01",
+  "test_title": "Academic Reading Practice Test 1",
+  "test_category": "academic",
+  "total_time_minutes": 60,
+  "passages": [
+    {
+      "title": "Keeping Time Before Clocks",
+      "subtitle": "Three thousand years of measuring the day with water",
+      "instruction": "You should spend about 20 minutes on Questions 1–13, which are based on the passage below.",
+      "difficulty": "easy",
+      "blocks": [
+        {
+          "label": "",
+          "content": "Long before the first mechanical clocks appeared in the bell towers of medieval Europe, people measured the passing day with water. The device the Greeks called the clepsydra — literally 'water thief' — appears in the record of ancient Egypt by the fourteenth century BC, and versions of it were still in everyday use in parts of North Africa and central Asia as recently as the nineteenth century AD. Its principle is disarmingly simple. Water leaves one vessel at a rate that can be predicted; the level that remains, or the level that has collected in a second vessel, shows how much of the day has gone."
+        },
+        {
+          "label": "",
+          "content": "The oldest surviving example was recovered from the temple precinct at Karnak, in Upper Egypt. It is a bowl of alabaster with sloping sides and a single small opening near the base, and its inner surface is marked with columns of small dots. As the water drained away, the level fell past one row of dots after another. The sloping sides were not a decorative flourish. Water escapes faster when the weight of water above the opening is greater, so a straight-sided vessel empties quickly at first and sluggishly at the end, making the earliest hours seem shorter than the last ones. By narrowing the bowl towards its base, Egyptian craftsmen compensated — imperfectly, but usefully — for that changing pressure."
+        },
+        {
+          "label": "",
+          "content": "The Karnak bowl also records a difficulty that no amount of clever geometry could remove. Egyptian hours were seasonal. The interval between sunrise and sunset was divided into twelve parts whatever the date, so an hour of daylight in June was substantially longer than an hour of daylight in December. The bowl therefore carries not one scale but twelve: a different set of markings for each month of the year. The user simply read the column that belonged to the season. It was an elegant answer to an awkward question, and it tells us something important about the people who made it. The Egyptians were not attempting to measure time in the abstract. They were attempting to divide the day."
+        },
+        {
+          "label": "",
+          "content": "The Greeks inherited the instrument and turned it inside out. Instead of watching a vessel empty, Athenian engineers let water flow into a container at a controlled rate and floated a light disc on the rising surface. A rod fixed to the float carried a pointer, and as the water rose the pointer travelled up a graduated scale — or, in the more ambitious designs, turned a drum through a rack and pinion. The advantage was real: an inflow clock could be read at a glance, and its scale could be redrawn for the season without remaking the vessel. Its weakness was equally real. Each filling ran for only one day at most, after which somebody had to empty the container and begin again."
+        },
+        {
+          "label": "",
+          "content": "Athens also found a use for the clepsydra that had nothing to do with astronomy. In the law courts, each speaker was allotted a fixed volume of water, and when the vessel had emptied he was obliged to stop. Surviving court speeches contain instructions to the official in charge — 'stop the water' — issued while a document was read aloud, so that the reading did not consume the speaker's own allowance. A citizen's chance of persuading a jury was, quite literally, measured out for him."
+        },
+        {
+          "label": "",
+          "content": "The most sophisticated water clocks ever built were Chinese. In 1088 the engineer and civil servant Su Song completed, at the imperial capital of Kaifeng, a tower more than ten metres high whose mechanism was driven by a water wheel. Buckets on the rim of the wheel filled one at a time, and each was held by a catch until it was heavy enough to trip it, at which point the wheel turned by exactly one bucket and the next was locked into place. This intermittent, controlled release — an escapement in everything but name — allowed the tower to drive an armillary sphere, a celestial globe and a procession of figures that emerged to announce the hours. The tower was dismantled after the fall of Kaifeng in 1127 and was never rebuilt. The manuscript describing it survived, and it is from that document that every modern reconstruction has been made."
+        },
+        {
+          "label": "",
+          "content": "It is tempting to see the water clock as a curiosity that mechanical timekeeping simply swept away. That is not quite what happened. The verge escapement that appeared in Europe in the late thirteenth century was not, at first, more accurate than a well-made clepsydra; what it offered was convenience. It did not freeze in winter, it did not need refilling, and it did not require a fresh scale for every month. Real accuracy arrived much later, with the pendulum. What the water clock had established, over three thousand years, was the idea itself: that the day could be cut into equal parts by a machine, and that the machine's verdict could be accepted as final."
+        }
+      ],
+      "questions": [
+        {
+          "type": "true_false_not_given",
+          "instructions": "Do the following statements agree with the information given in the passage?\n\nWrite\nTRUE if the statement agrees with the information\nFALSE if the statement contradicts the information\nNOT GIVEN if there is no information on this",
+          "options": [
+            { "label": "TRUE", "description": "if the statement agrees with the information" },
+            { "label": "FALSE", "description": "if the statement contradicts the information" },
+            { "label": "NOT GIVEN", "description": "if there is no information on this" }
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "statement": "Water clocks had fallen out of use everywhere by the end of the eighteenth century.",
+              "correct_answer": "FALSE",
+              "passage_reference": "versions of it were still in everyday use in parts of North Africa and central Asia as recently as the nineteenth century AD",
+              "explanation": "The passage says they were still in everyday use in the nineteenth century, which contradicts the statement."
+            },
+            {
+              "question_number": 2,
+              "statement": "The marks inside the Karnak bowl were arranged in columns.",
+              "correct_answer": "TRUE",
+              "passage_reference": "its inner surface is marked with columns of small dots",
+              "explanation": "Directly stated."
+            },
+            {
+              "question_number": 3,
+              "statement": "The sloping sides of the Karnak bowl were intended to make it more attractive.",
+              "correct_answer": "FALSE",
+              "passage_reference": "The sloping sides were not a decorative flourish.",
+              "explanation": "The passage explicitly denies a decorative purpose and gives a technical one."
+            },
+            {
+              "question_number": 4,
+              "statement": "The Karnak bowl kept time more accurately than the Greek inflow clocks.",
+              "correct_answer": "NOT GIVEN",
+              "passage_reference": "The advantage was real: an inflow clock could be read at a glance",
+              "explanation": "The two devices are described but never compared for accuracy."
+            },
+            {
+              "question_number": 5,
+              "statement": "The length of an Egyptian hour depended on the time of year.",
+              "correct_answer": "TRUE",
+              "passage_reference": "an hour of daylight in June was substantially longer than an hour of daylight in December",
+              "explanation": "Restates the seasonal-hour system."
+            },
+            {
+              "question_number": 6,
+              "statement": "Su Song's tower was rebuilt soon after Kaifeng fell.",
+              "correct_answer": "FALSE",
+              "passage_reference": "The tower was dismantled after the fall of Kaifeng in 1127 and was never rebuilt.",
+              "explanation": "'Never rebuilt' contradicts the statement."
+            }
+          ]
+        },
+        {
+          "type": "table_completion",
+          "instructions": "Complete the table below.\n\nChoose NO MORE THAN TWO WORDS from the passage for each answer.",
+          "word_limit": 2,
+          "options": null,
+          "table_title": "Three water-clock designs",
+          "headers": ["Device", "Where and when", "Main feature", "Chief drawback"],
+          "rows": [
+            {
+              "cells": [
+                "Outflow bowl",
+                "Karnak, Egypt",
+                "sides that sloped inwards to steady the flow",
+                "a separate set of [7] was needed for each month"
+              ]
+            },
+            {
+              "cells": [
+                "Inflow vessel",
+                "Athens, Greece",
+                "a float carrying a [8] that rose with the water level",
+                "it ran for no longer than a single [9]"
+              ]
+            },
+            {
+              "cells": [
+                "Astronomical tower",
+                "Kaifeng, China",
+                "an escapement driven by a water [10]",
+                "it was taken apart in 1127 and never replaced"
+              ]
+            }
+          ],
+          "questions": [
+            {
+              "question_number": 7,
+              "correct_answer": ["markings"],
+              "passage_reference": "a different set of markings for each month of the year",
+              "explanation": "The bowl carried twelve scales, one set of markings per month."
+            },
+            {
+              "question_number": 8,
+              "correct_answer": ["pointer"],
+              "passage_reference": "A rod fixed to the float carried a pointer",
+              "explanation": "The float lifted a rod with a pointer up a graduated scale."
+            },
+            {
+              "question_number": 9,
+              "correct_answer": ["day"],
+              "passage_reference": "Each filling ran for only one day at most",
+              "explanation": "One filling lasted a day at most."
+            },
+            {
+              "question_number": 10,
+              "correct_answer": ["wheel"],
+              "passage_reference": "whose mechanism was driven by a water wheel",
+              "explanation": "The tower's escapement was driven by a water wheel."
+            }
+          ]
+        },
+        {
+          "type": "short_answer",
+          "instructions": "Answer the questions below.\n\nChoose NO MORE THAN THREE WORDS from the passage for each answer.",
+          "word_limit": 3,
+          "questions": [
+            {
+              "question_number": 11,
+              "question_text": "What name did the Greeks give to the water clock?",
+              "correct_answer": ["clepsydra", "(the) clepsydra"],
+              "passage_reference": "The device the Greeks called the clepsydra",
+              "explanation": "'Clepsydra' means 'water thief'."
+            },
+            {
+              "question_number": 12,
+              "question_text": "In which Athenian setting was a speaker's time limited by a water clock?",
+              "correct_answer": ["(the) law courts"],
+              "passage_reference": "In the law courts, each speaker was allotted a fixed volume of water",
+              "explanation": "Speakers in the law courts were given a fixed volume of water."
+            },
+            {
+              "question_number": 13,
+              "question_text": "Which later invention finally brought real accuracy to mechanical clocks?",
+              "correct_answer": ["(the) pendulum"],
+              "passage_reference": "Real accuracy arrived much later, with the pendulum.",
+              "explanation": "Accuracy came with the pendulum, not with the verge escapement."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "The Quiet Comeback of the Hedgerow",
+      "subtitle": "How Britain lost half its hedges, and why it is planting them again",
+      "instruction": "You should spend about 20 minutes on Questions 14–26, which are based on the passage below.",
+      "difficulty": "medium",
+      "blocks": [
+        {
+          "label": "A",
+          "content": "To a visitor, the British hedgerow looks like a piece of surviving wilderness — a ragged green line left over from some older, wilder countryside. It is nothing of the kind. A hedge is a machine for farming. It is planted, laid, trimmed and replanted by people, and its purpose is to keep livestock where the farmer wants them, to mark the limit of one holding against the next, and to break the wind that would otherwise strip topsoil from a bare field. Left entirely alone, most hedges do not remain hedges at all; they grow up, thin out at the base and become a line of small trees through which a determined sheep can walk. Everything that makes a hedge useful — its density, its height, its sharp thorns — is the result of repeated human intervention."
+        },
+        {
+          "label": "B",
+          "content": "The great age of planting came between about 1750 and 1850. Successive Enclosure Acts transferred open, communally farmed fields into private hands, and each new holding had to be fenced at the owner's expense. Since imported timber and iron were costly, the cheapest boundary was a living one. Nurseries across the Midlands raised hawthorn by the million — quick to establish, tolerant of poor soil, and thorny enough to turn a bullock. Historians estimate that something in the order of two hundred thousand miles of hedge were planted in that single century, laid out with the ruler-straight geometry that still marks enclosure country from the air. The patchwork that foreign visitors now photograph as 'timeless' is, in most of England, younger than the United States."
+        },
+        {
+          "label": "C",
+          "content": "The reversal was just as rapid. After 1945, governments across Europe paid farmers to produce more food from the same land. Combine harvesters and tractors grew larger every decade, and a machine that needs a wide turning circle is badly served by a field of four hectares. Grants were available for grubbing out hedges, and farmers took them. Between 1945 and 1990 roughly half of the British hedgerow network — perhaps a hundred and twenty thousand miles of it — was removed, burnt or bulldozed into the ditch. In the most intensively arable counties the loss approached three-quarters. Only in 1997 did hedgerows of historic or ecological importance receive legal protection, by which time the map had already been redrawn."
+        },
+        {
+          "label": "D",
+          "content": "Ecologists who studied the aftermath came to an unexpected conclusion: the serious loss was not the hedge but the network. A hedge is a strip of woodland edge only two metres wide, yet it links one wood to the next, and for a great many species that link is the whole point. Dormice, which will not cross open ground, can occupy a small copse only if a hedge connects it to another. Bats follow hedge lines as navigational routes and abandon a foraging area when a single stretch is removed. Farmland birds such as the yellowhammer and the linnet nest in the thorny base and feed on the seeds and insects it shelters. Remove a field boundary and you do not simply subtract its own wildlife; you cut the corridors along which everything else moves, and the surviving fragments begin to behave like islands."
+        },
+        {
+          "label": "E",
+          "content": "How old is any particular hedge? In the 1970s the ecologist Max Hooper proposed a rule that became famous for its simplicity: count the woody species in a thirty-metre stretch, and the number you find is roughly the age of the hedge in centuries. A hedge with one species is likely to be Victorian; a hedge with eight suggests a boundary already old when the Normans arrived. The logic is that new species colonise a hedge slowly and more or less steadily. Critics have been quick to point out the assumptions buried in that 'more or less'. Colonisation is faster near a wood and slower on exposed ground; a Victorian farmer may have planted a mixture rather than pure hawthorn; a single episode of heavy management can remove decades of accumulation. Hooper's rule survives as a first estimate, to be checked against maps and deeds rather than trusted on its own."
+        },
+        {
+          "label": "F",
+          "content": "Management is where good intentions most often fail. A hedge cut hard every winter with a flail never sets fruit, because the berries that feed birds through February grow on the previous season's wood. The current advice is therefore to cut on a two- or three-year rotation, to raise the blade a little higher each time so that the hedge thickens rather than being repeatedly reduced to the same line, and to cut in late winter rather than autumn, leaving the berry crop available for as long as possible. Cutting is prohibited during the nesting season in any case. Every twenty to thirty years the hedge should be laid — the stems partly cut through, bent over and woven between stakes — a slow craft that produces a stock-proof barrier no machine can match, and one that has become difficult to buy because so few people still practise it."
+        },
+        {
+          "label": "G",
+          "content": "The argument that has finally moved policy, however, is not sentimental but financial. A well-maintained hedge shelters livestock, and sheltered animals convert feed into weight instead of into heat. It intercepts water running off a slope and reduces the loss of soil, which is expensive to replace and increasingly expensive to allow into rivers. It houses the pollinators on which neighbouring fruit and field-bean crops depend. Trials on arable farms have repeatedly found that the yield lost to the strip of ground the hedge occupies is smaller than the yield gained across the sheltered field behind it. Public payment schemes now fund planting and restoration on precisely those grounds, and the length of hedge in Britain has stopped falling. Whether it will return to the network of 1945 is another question, but for the first time in seventy years the line on the graph points upwards."
+        }
+      ],
+      "questions": [
+        {
+          "type": "matching_headings",
+          "instructions": "The passage has seven paragraphs, A–G.\n\nChoose the correct heading for each paragraph from the list of headings below.\n\nWrite the correct number, i–x, in boxes 14–20 on your answer sheet.",
+          "options": [
+            { "id": "i", "text": "A rule for estimating age, and its limits" },
+            { "id": "ii", "text": "Legal protection for the oldest examples" },
+            { "id": "iii", "text": "Advantages that can be counted in money" },
+            { "id": "iv", "text": "A boundary made by people, not by nature" },
+            { "id": "v", "text": "The part hedges play in preventing floods" },
+            { "id": "vi", "text": "Wildlife that depends on a connected network" },
+            { "id": "vii", "text": "Deciding how and when to cut" },
+            { "id": "viii", "text": "A century of intensive planting" },
+            { "id": "ix", "text": "Half a network disappears" },
+            { "id": "x", "text": "Competing claims about ownership" }
+          ],
+          "questions": [
+            {
+              "question_number": 14,
+              "target_paragraph": "A",
+              "correct_answer": "iv",
+              "passage_reference": "A hedge is a machine for farming.",
+              "explanation": "The paragraph's whole point is that hedges are human artefacts, not wilderness."
+            },
+            {
+              "question_number": 15,
+              "target_paragraph": "B",
+              "correct_answer": "viii",
+              "passage_reference": "The great age of planting came between about 1750 and 1850.",
+              "explanation": "One century, two hundred thousand miles planted."
+            },
+            {
+              "question_number": 16,
+              "target_paragraph": "C",
+              "correct_answer": "ix",
+              "passage_reference": "was removed, burnt or bulldozed into the ditch",
+              "explanation": "The paragraph is about post-war removal. Legal protection (ii) is mentioned in one clause only, so it is not the main idea."
+            },
+            {
+              "question_number": 17,
+              "target_paragraph": "D",
+              "correct_answer": "vi",
+              "passage_reference": "the serious loss was not the hedge but the network",
+              "explanation": "Dormice, bats and birds all depend on connection between fragments."
+            },
+            {
+              "question_number": 18,
+              "target_paragraph": "E",
+              "correct_answer": "i",
+              "passage_reference": "count the woody species in a thirty-metre stretch",
+              "explanation": "Hooper's rule plus the criticisms of it."
+            },
+            {
+              "question_number": 19,
+              "target_paragraph": "F",
+              "correct_answer": "vii",
+              "passage_reference": "The current advice is therefore to cut on a two- or three-year rotation",
+              "explanation": "Timing and technique of cutting and laying."
+            },
+            {
+              "question_number": 20,
+              "target_paragraph": "G",
+              "correct_answer": "iii",
+              "passage_reference": "The argument that has finally moved policy, however, is not sentimental but financial.",
+              "explanation": "Shelter, soil, pollination — benefits with a cash value."
+            }
+          ]
+        },
+        {
+          "type": "summary_completion",
+          "instructions": "Complete the summary below.\n\nChoose the correct answer, A–J, for each gap and write the letter in boxes 21–26 on your answer sheet.",
+          "summary_title": "The rise and fall of the British hedge",
+          "summary_text": "Britain's hedgerows were not left behind by nature but deliberately planted, most of them during the [21] of the eighteenth and nineteenth centuries, when open fields passed into private hands. After 1945, however, ever larger [22] made small fields inefficient, and public grants encouraged farmers to remove field boundaries; by 1990 about half the network had gone. Ecologists argue that the true loss was not the hedge itself but the [23] it provided between fragments of woodland. The age of a hedge can be estimated by counting the woody [24] in a measured stretch, although critics note that the method assumes a steady rate of [25]. Today hedges are valued for shelter, for pollinators and for the reduction of soil [26], and their restoration is funded from the public purse.",
+          "options": [
+            { "id": "A", "text": "colonisation" },
+            { "id": "B", "text": "machinery" },
+            { "id": "C", "text": "species" },
+            { "id": "D", "text": "enclosures" },
+            { "id": "E", "text": "erosion" },
+            { "id": "F", "text": "corridors" },
+            { "id": "G", "text": "ownership" },
+            { "id": "H", "text": "flooding" },
+            { "id": "I", "text": "rotation" },
+            { "id": "J", "text": "subsidies" }
+          ],
+          "questions": [
+            {
+              "question_number": 21,
+              "correct_answer": "D",
+              "passage_reference": "Successive Enclosure Acts transferred open, communally farmed fields into private hands",
+              "explanation": "The planting boom was driven by the enclosures."
+            },
+            {
+              "question_number": 22,
+              "correct_answer": "B",
+              "passage_reference": "Combine harvesters and tractors grew larger every decade",
+              "explanation": "Bigger machinery made small fields uneconomic."
+            },
+            {
+              "question_number": 23,
+              "correct_answer": "F",
+              "passage_reference": "you cut the corridors along which everything else moves",
+              "explanation": "The network functions as wildlife corridors."
+            },
+            {
+              "question_number": 24,
+              "correct_answer": "C",
+              "passage_reference": "count the woody species in a thirty-metre stretch",
+              "explanation": "Hooper's rule counts woody species."
+            },
+            {
+              "question_number": 25,
+              "correct_answer": "A",
+              "passage_reference": "new species colonise a hedge slowly and more or less steadily",
+              "explanation": "The assumption is a steady rate of colonisation."
+            },
+            {
+              "question_number": 26,
+              "correct_answer": "E",
+              "passage_reference": "reduces the loss of soil, which is expensive to replace",
+              "explanation": "Hedges reduce soil erosion on slopes."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Why Experts Get It Wrong",
+      "subtitle": "Two decades of research into the accuracy of expert prediction",
+      "instruction": "You should spend about 20 minutes on Questions 27–40, which are based on the passage below.",
+      "difficulty": "hard",
+      "blocks": [
+        {
+          "label": "A",
+          "content": "In 1984 the psychologist Philip Tetlock was invited on to a committee convened by the United States National Research Council to assess the likely direction of the Cold War. What struck him was not that the assembled specialists disagreed — that was expected — but that each of them was so untroubled by the disagreement. Every participant could explain, fluently and at length, why the evidence pointed his way. None appeared to regard the existence of an equally fluent colleague on the opposite side as a reason for doubt. Tetlock left the committee with a question that would occupy him for the next twenty years: if expert judgement is worth having, it ought to be possible to measure how good it is."
+        },
+        {
+          "label": "B",
+          "content": "Measuring it turned out to be harder than it sounds, and for a revealing reason. Expert commentary is almost never stated in a form that can be scored. A forecast that a region is 'entering a period of heightened instability' cannot be marked right or wrong, because no observable outcome would settle it. Tetlock's first methodological decision, therefore, was to insist on questions with a date and a threshold attached: will this government still hold office on 31 December of next year; will inflation in this country exceed six per cent within eighteen months. He then asked his participants not for a yes or a no but for a probability. A forecaster who says 'seventy per cent' is not simply making a claim about the world; he is making a claim about his own reliability, and a long run of such claims can be checked."
+        },
+        {
+          "label": "C",
+          "content": "Between 1984 and 2003 Tetlock collected roughly eighty-two thousand forecasts from two hundred and eighty-four professionals — political scientists, economists, intelligence analysts, journalists — all of whom earned their living commenting on the areas they were asked about. The headline result has been quoted, and misquoted, ever since. Averaged across the whole sample, the experts performed slightly worse than they would have done by assigning equal probabilities to every possible outcome. In the areas of their deepest specialisation they did no better, and on some measures marginally worse, than in areas they knew only casually. The finding was widely reported as showing that expertise is worthless. That is not what it shows."
+        },
+        {
+          "label": "D",
+          "content": "The averages concealed a wide spread, and the spread turned out to be the interesting part. When Tetlock divided his forecasters by how they thought rather than by what they knew, a clear pattern emerged. He borrowed a distinction from the essayist Isaiah Berlin, who had divided writers into hedgehogs, who know one big thing, and foxes, who know many small things. Tetlock's hedgehogs approached every question through a single organising framework and reached conclusions quickly and confidently. His foxes assembled explanations from several incompatible sources, hedged, revised, and were visibly uncomfortable committing themselves. On every scoring measure the foxes won, and the gap widened as the forecasting horizon lengthened."
+        },
+        {
+          "label": "E",
+          "content": "The mechanism appears to be confirmation. A single powerful framework tells its owner which evidence is relevant, and evidence that does not fit is filed as noise. Hedgehogs in the study were markedly more likely to say that an event they had ruled out had 'very nearly' happened, or would have happened but for an accident, or was only technically absent. Such moves protect the framework at the cost of the forecast. Foxes, having no single framework to protect, updated more readily on inconvenient news. There is an uncomfortable corollary here, since the qualities that make a commentator persuasive on television — decisiveness, a memorable single explanation, no visible hesitation — are precisely the qualities associated with poorer accuracy."
+        },
+        {
+          "label": "F",
+          "content": "A second and largely separate weakness is calibration. A perfectly calibrated forecaster is one whose ninety-per-cent predictions come true about ninety per cent of the time. Almost nobody in the original study was calibrated in that sense. Events assigned a probability of ninety per cent occurred roughly seventy per cent of the time, and — more damaging — events declared impossible occurred often enough to matter. Overconfidence of this kind is not repaired by knowing more. It is repaired by keeping score, which is exactly what most professional forecasters never do, because their predictions are published, discussed and then forgotten rather than filed and checked."
+        },
+        {
+          "label": "G",
+          "content": "In 2011 the American intelligence community funded a forecasting tournament to see whether anything could be done about it. Tetlock and Barbara Mellers entered a team of volunteers, the Good Judgment Project, recruited from the public and given nothing that resembled classified access. Over four years the project's best performers beat the tournament's control groups by a wide margin and, in the published assessment, outperformed intelligence analysts who could read the secret traffic. The volunteers were not more intelligent in any conventional sense, and they were certainly not better informed. What distinguished them was procedure: they began from base rates — how often does this sort of thing happen in general — before considering the particulars of the case, they broke large questions into smaller answerable ones, they updated in small increments as news arrived rather than in dramatic reversals, and they worked in teams that argued."
+        },
+        {
+          "label": "H",
+          "content": "The practical lesson is narrower than the headlines suggested, and more useful. Nothing in this research shows that knowledge is useless; the volunteers who succeeded read voraciously, and knowing nothing about a subject remains a poor basis for predicting it. What the research shows is that knowledge is necessary and not sufficient, and that the habits of mind which convert knowledge into accurate forecasts are trainable. A short course in probabilistic reasoning improved the volunteers' scores measurably and the improvement persisted. The awkward part is institutional rather than psychological. Organisations reward confident advice, rarely record what was actually predicted, and almost never go back to check. Until they do, the incentives will continue to favour the hedgehog."
+        }
+      ],
+      "questions": [
+        {
+          "type": "matching_paragraph_information",
+          "instructions": "The passage has eight paragraphs, A–H.\n\nWhich paragraph contains the following information?\n\nWrite the correct letter, A–H, in boxes 27–31 on your answer sheet.\n\nNB You may use any letter more than once.",
+          "options": ["A", "B", "C", "D", "E", "F", "G", "H"],
+          "questions": [
+            {
+              "question_number": 27,
+              "statement": "a description of how vague predictions were replaced with ones that could be scored",
+              "correct_answer": "B",
+              "passage_reference": "to insist on questions with a date and a threshold attached",
+              "explanation": "Paragraph B explains the methodological fix: dates, thresholds and probabilities."
+            },
+            {
+              "question_number": 28,
+              "statement": "reference to a classification of thinkers borrowed from another writer",
+              "correct_answer": "D",
+              "passage_reference": "He borrowed a distinction from the essayist Isaiah Berlin",
+              "explanation": "The fox/hedgehog distinction comes from Berlin."
+            },
+            {
+              "question_number": 29,
+              "statement": "an explanation of why the qualities that make an expert convincing in public may work against accuracy",
+              "correct_answer": "E",
+              "passage_reference": "the qualities that make a commentator persuasive on television",
+              "explanation": "Paragraph E draws the uncomfortable corollary."
+            },
+            {
+              "question_number": 30,
+              "statement": "a claim that ordinary people outperformed specialists with access to restricted information",
+              "correct_answer": "G",
+              "passage_reference": "outperformed intelligence analysts who could read the secret traffic",
+              "explanation": "The Good Judgment Project volunteers beat analysts with classified access."
+            },
+            {
+              "question_number": 31,
+              "statement": "an account of the incident that first prompted the research",
+              "correct_answer": "A",
+              "passage_reference": "In 1984 the psychologist Philip Tetlock was invited on to a committee",
+              "explanation": "The committee experience raised the original question."
+            }
+          ]
+        },
+        {
+          "type": "multiple_choice",
+          "instructions": "Choose the correct letter, A, B, C or D.",
+          "questions": [
+            {
+              "question_number": 32,
+              "question_text": "What surprised Tetlock about the committee he joined in 1984?",
+              "options": [
+                { "id": "A", "text": "The specialists had very little evidence to work with." },
+                { "id": "B", "text": "The specialists were not disturbed by the fact that they disagreed." },
+                { "id": "C", "text": "The specialists refused to explain their reasoning." },
+                { "id": "D", "text": "The specialists all reached the same conclusion." }
+              ],
+              "correct_answer": ["B"],
+              "passage_reference": "each of them was so untroubled by the disagreement",
+              "explanation": "Disagreement was expected; the complacency about it was not."
+            },
+            {
+              "question_number": 33,
+              "question_text": "What does the writer say about the way the 1984–2003 results were reported?",
+              "options": [
+                { "id": "A", "text": "The reporting exaggerated the size of the sample." },
+                { "id": "B", "text": "The reporting drew a conclusion the data do not support." },
+                { "id": "C", "text": "The reporting ignored the role of the intelligence services." },
+                { "id": "D", "text": "The reporting appeared too long after the study ended." }
+              ],
+              "correct_answer": ["B"],
+              "passage_reference": "The finding was widely reported as showing that expertise is worthless. That is not what it shows.",
+              "explanation": "The writer explicitly rejects the popular interpretation."
+            },
+            {
+              "question_number": 34,
+              "question_text": "According to paragraph E, what do hedgehogs tend to do when an event they excluded actually occurs?",
+              "options": [
+                { "id": "A", "text": "They abandon the framework they were using." },
+                { "id": "B", "text": "They argue that the outcome was almost avoided." },
+                { "id": "C", "text": "They decline to make further predictions." },
+                { "id": "D", "text": "They collect additional evidence before responding." }
+              ],
+              "correct_answer": ["B"],
+              "passage_reference": "an event they had ruled out had 'very nearly' happened",
+              "explanation": "They defend the framework by treating the miss as a near-hit."
+            },
+            {
+              "question_number": 35,
+              "question_text": "What does the writer identify as the main obstacle to better forecasting?",
+              "options": [
+                { "id": "A", "text": "The shortage of people who can be trained in probability" },
+                { "id": "B", "text": "The difficulty of obtaining accurate information" },
+                { "id": "C", "text": "The way organisations reward and record advice" },
+                { "id": "D", "text": "The reluctance of experts to work in teams" }
+              ],
+              "correct_answer": ["C"],
+              "passage_reference": "The awkward part is institutional rather than psychological.",
+              "explanation": "Paragraph H places the obstacle in institutions, not individuals."
+            }
+          ]
+        },
+        {
+          "type": "list_selection",
+          "instructions": "Choose TWO letters, A–E.\n\nWhich TWO practices does the writer attribute to the successful volunteers in the Good Judgment Project?",
+          "questions": [
+            {
+              "question_number": 36,
+              "question_text": "Which TWO practices does the writer attribute to the successful volunteers in the Good Judgment Project?",
+              "options": [
+                { "id": "A", "text": "starting from how often such events occur in general" },
+                { "id": "B", "text": "relying on a single explanatory theory" },
+                { "id": "C", "text": "adjusting their estimates gradually as news arrived" },
+                { "id": "D", "text": "avoiding discussion with other forecasters" },
+                { "id": "E", "text": "obtaining access to classified material" }
+              ],
+              "correct_answer": ["A", "C"],
+              "passage_reference": "they began from base rates — how often does this sort of thing happen in general",
+              "explanation": "Base rates first and incremental updating. They worked in arguing teams (so D is wrong) and had no classified access (E is wrong)."
+            }
+          ]
+        },
+        {
+          "type": "matching_sentence_endings",
+          "instructions": "Complete each sentence with the correct ending, A–F, below.\n\nWrite the correct letter, A–F, in boxes 38–40 on your answer sheet.",
+          "options": [
+            { "id": "A", "text": "because no observable outcome could settle the matter." },
+            { "id": "B", "text": "because their predictions are never filed and checked afterwards." },
+            { "id": "C", "text": "because they had been recruited from the general public." },
+            { "id": "D", "text": "because the gap between them grew over longer time horizons." },
+            { "id": "E", "text": "because knowing more does not by itself correct it." },
+            { "id": "F", "text": "because the committee had been convened by the government." }
+          ],
+          "questions": [
+            {
+              "question_number": 38,
+              "sentence_start": "A prediction that a region faces 'heightened instability' cannot be scored",
+              "correct_answer": ["A"],
+              "passage_reference": "cannot be marked right or wrong, because no observable outcome would settle it",
+              "explanation": "Unfalsifiable wording is the problem."
+            },
+            {
+              "question_number": 39,
+              "sentence_start": "Overconfidence is not cured by additional expertise",
+              "correct_answer": ["E"],
+              "passage_reference": "Overconfidence of this kind is not repaired by knowing more.",
+              "explanation": "It is repaired by keeping score, not by knowing more."
+            },
+            {
+              "question_number": 40,
+              "sentence_start": "Most professional forecasters never discover how well calibrated they are",
+              "correct_answer": ["B"],
+              "passage_reference": "their predictions are published, discussed and then forgotten rather than filed and checked",
+              "explanation": "No record is kept, so no feedback is possible."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

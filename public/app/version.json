@@ -1,0 +1,9 @@
+{
+  "app": "uz.wasp2ai.edifymanager",
+  "versionCode": 3,
+  "versionName": "1.2",
+  "apkUrl": "https://edify.uz/app/edify-manager.apk?v=3",
+  "forceUpdate": true,
+  "changelog": "IELTS guruhlari qo'shildi: o'qituvchi tayinlagan mock testlar natijalarini kuzatish. Guruhga bir vaqtda bir nechta o'quvchi qo'shish mumkin. Markaz o'quvchilari hisobi aniqlashtirildi.",
+  "minAndroid": "7.0"
+}

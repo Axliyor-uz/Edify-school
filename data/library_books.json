@@ -1,0 +1,4034 @@
+[
+  {
+    "id": "cengage-math-grade-k",
+    "isbn": "9781647276768",
+    "order": 1,
+    "title": {
+      "en": "USA Math Grade K",
+      "uz": "AQSh Matematika 0-sinf",
+      "ru": "Математика США 0 класс"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Formal Science",
+    "field": {
+      "en": "Mathematics",
+      "uz": "Matematika",
+      "ru": "Математика"
+    },
+    "schoolType": {
+      "en": "Elementary School",
+      "uz": "Boshlang'ich maktab",
+      "ru": "Начальная школа"
+    },
+    "grades": [
+      0
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "Subject": {
+      "en": "General Math",
+      "uz": "Umumiy matematika",
+      "ru": "Общая математика"
+    },
+    "publishedYear": 2023,
+    "authors": [
+      "Ron Larson",
+      "Laurie Boswell"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Kindergarten math textbook. American textbook.",
+      "uz": "0-sinf matematika darsligi. Amerika darsligi.",
+      "ru": "Учебник математики 0 класс. Американский учебник."
+    },
+    "localCoverPath": "./library_covers/usa-math-k.jpg",
+    "telegramLink": "https://t.me/Umidjon0339?text=Assalomu+alaykum!+Menga+shu+kitob+kerak:%0A%0A📘+Kitob:+USA+Math+Grade+K%0A🆔+ID:+cengage-math-grade-k",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkBAAOUajRoLMpmLnYDsGGe4O0FAxxbvkoAAp4Xaxv1MqlJ0v8CbKHMJC8BAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAOcajRoq_20eJrXWRdnib01LdYG2wUAAjieAAJ8ZXhJffH2TMHDlJo8BA"
+  },
+  {
+    "id": "cengage-math-grade-1",
+    "isbn": "9781647277048",
+    "order": 2,
+    "title": {
+      "en": "USA Math Grade 1",
+      "uz": "AQSh Matematika 1-sinf",
+      "ru": "Математика США 1 класс"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Formal Science",
+    "field": {
+      "en": "Mathematics",
+      "uz": "Matematika",
+      "ru": "Математика"
+    },
+    "schoolType": {
+      "en": "Elementary School",
+      "uz": "Boshlang'ich maktab",
+      "ru": "Начальная школа"
+    },
+    "grades": [
+      1
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "Subject": {
+      "en": "General Math",
+      "uz": "Umumiy matematika",
+      "ru": "Общая математика"
+    },
+    "publishedYear": 2023,
+    "authors": [
+      "Ron Larson",
+      "Laurie Boswell"
+    ],
+    "language": "en",
+    "description": {
+      "en": "1st grade math textbook. American textbook.",
+      "uz": "1-sinf matematika darsligi. Amerika darsligi.",
+      "ru": "Учебник математики 1 класс. Американский учебник."
+    },
+    "localCoverPath": "./library_covers/usa-math-1.jpg",
+    "telegramLink": "https://t.me/Umidjon0339?text=Assalomu+alaykum!+Menga+shu+kitob+kerak:%0A%0A📘+Kitob:+USA+Math+Grade+1%0A🆔+ID:+cengage-math-grade-1",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAAM_ajRmmosqAVxNLXzYOWT3eCz6tU4AAlkXaxv1MqlJau8jLPFOwe4BAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIC2Go0uIEL-jS94fb1Aer0laN9fZnVAAI-ngACfGV4SRZNM8NF5t3JPAQ"
+  },
+  {
+    "id": "cengage-math-grade-2",
+    "isbn": "9781647277291",
+    "order": 3,
+    "title": {
+      "en": "USA Math Grade 2",
+      "uz": "AQSh Matematika 2-sinf",
+      "ru": "Математика США 2 класс"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Formal Science",
+    "field": {
+      "en": "Mathematics",
+      "uz": "Matematika",
+      "ru": "Математика"
+    },
+    "schoolType": {
+      "en": "Elementary School",
+      "uz": "Boshlang'ich maktab",
+      "ru": "Начальная школа"
+    },
+    "grades": [
+      2
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "Subject": {
+      "en": "General Math",
+      "uz": "Umumiy matematika",
+      "ru": "Общая математика"
+    },
+    "publishedYear": 2023,
+    "authors": [
+      "Ron Larson",
+      "Laurie Boswell"
+    ],
+    "language": "en",
+    "description": {
+      "en": "2nd grade math textbook. American textbook.",
+      "uz": "2-sinf matematika darsligi. Amerika darsligi.",
+      "ru": "Учебник математики 2 класс. Американский учебник."
+    },
+    "localCoverPath": "./library_covers/usa-math-2.jpg",
+    "telegramLink": "https://t.me/Umidjon0339?text=Assalomu+alaykum!+Menga+shu+kitob+kerak:%0A%0A📘+Kitob:+USA+Math+Grade+2%0A🆔+ID:+cengage-math-grade-2",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramFileId": "BQACAgIAAxkBAAIC4Go0uKjEvUWdAAFyCv82ynyDRx2lkAACSJ4AAnxleElp9uzcHbGo7TwE",
+    "telegramPhotoId": "AgACAgIAAxkDAANAajRmnZFMCjaG1vY1WaqR30Mo3OcAAloXaxv1MqlJneoZE6NKnoMBAAMCAAN4AAM8BA"
+  },
+  {
+    "id": "cengage-math-grade-3",
+    "isbn": "9781647277543",
+    "order": 4,
+    "title": {
+      "en": "USA Math Grade 3",
+      "uz": "AQSh Matematika 3-sinf",
+      "ru": "Математика США 3 класс"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Formal Science",
+    "field": {
+      "en": "Mathematics",
+      "uz": "Matematika",
+      "ru": "Математика"
+    },
+    "schoolType": {
+      "en": "Elementary School",
+      "uz": "Boshlang'ich maktab",
+      "ru": "Начальная школа"
+    },
+    "grades": [
+      3
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "Subject": {
+      "en": "General Math",
+      "uz": "Umumiy matematika",
+      "ru": "Общая математика"
+    },
+    "publishedYear": 2023,
+    "authors": [
+      "Ron Larson",
+      "Laurie Boswell"
+    ],
+    "language": "en",
+    "description": {
+      "en": "3rd grade math textbook. American textbook.",
+      "uz": "3-sinf matematika darsligi. Amerika darsligi.",
+      "ru": "Учебник математики 3 класс. Американский учебник."
+    },
+    "localCoverPath": "./library_covers/usa-math-3.jpg",
+    "telegramLink": "https://t.me/Umidjon0339?text=Assalomu+alaykum!+Menga+shu+kitob+kerak:%0A%0A📘+Kitob:+USA+Math+Grade+3%0A🆔+ID:+cengage-math-grade-3",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANBajRmod0ZUC21tFMVvm7MyVOw7VAAAlsXaxv1MqlJFkbfhmamstsBAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIC6Go0uM9jNVAraPDRtAdvxdhsQj84AAJOngACfGV4SYlHO6TewKBDPAQ"
+  },
+  {
+    "id": "cengage-math-grade-4",
+    "isbn": "9781647277796",
+    "order": 5,
+    "title": {
+      "en": "USA Math Grade 4",
+      "uz": "AQSh Matematika 4-sinf",
+      "ru": "Математика США 4 класс"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Formal Science",
+    "field": {
+      "en": "Mathematics",
+      "uz": "Matematika",
+      "ru": "Математика"
+    },
+    "schoolType": {
+      "en": "Elementary School",
+      "uz": "Boshlang'ich maktab",
+      "ru": "Начальная школа"
+    },
+    "grades": [
+      4
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "Subject": {
+      "en": "General Math",
+      "uz": "Umumiy matematika",
+      "ru": "Общая математика"
+    },
+    "publishedYear": 2023,
+    "authors": [
+      "Ron Larson",
+      "Laurie Boswell"
+    ],
+    "language": "en",
+    "description": {
+      "en": "4th grade math textbook. American textbook.",
+      "uz": "4-sinf matematika darsligi. Amerika darsligi.",
+      "ru": "Учебник математики 4 класс. Американский учебник."
+    },
+    "localCoverPath": "./library_covers/usa-math-4.jpg",
+    "telegramLink": "https://t.me/Umidjon0339?text=Assalomu+alaykum!+Menga+shu+kitob+kerak:%0A%0A📘+Kitob:+USA+Math+Grade+4%0A🆔+ID:+cengage-math-grade-4",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANCajRmpSWThB_dyC0fjLnO97OR-00AAlwXaxv1MqlJmL-I36cGwr8BAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIC8Go0uOGhztMutzIkxfCG42OyvAW4AAJTngACfGV4ScK-bU5YPFUGPAQ"
+  },
+  {
+    "id": "cengage-math-grade-5",
+    "isbn": "9781647278052",
+    "order": 6,
+    "title": {
+      "en": "USA Math Grade 5",
+      "uz": "AQSh Matematika 5-sinf",
+      "ru": "Математика США 5 класс"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Formal Science",
+    "field": {
+      "en": "Mathematics",
+      "uz": "Matematika",
+      "ru": "Математика"
+    },
+    "schoolType": {
+      "en": "Middle School",
+      "uz": "O'rta maktab",
+      "ru": "Средняя школа"
+    },
+    "grades": [
+      5
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "Subject": {
+      "en": "General Math",
+      "uz": "Umumiy matematika",
+      "ru": "Общая математика"
+    },
+    "publishedYear": 2023,
+    "authors": [
+      "Ron Larson",
+      "Laurie Boswell"
+    ],
+    "language": "en",
+    "description": {
+      "en": "5th grade math textbook. American textbook.",
+      "uz": "5-sinf matematika darsligi. Amerika darsligi.",
+      "ru": "Учебник математики 5 класс. Американский учебник."
+    },
+    "localCoverPath": "./library_covers/usa-math-5.jpg",
+    "telegramLink": "https://t.me/Umidjon0339?text=Assalomu+alaykum!+Menga+shu+kitob+kerak:%0A%0A📘+Kitob:+USA+Math+Grade+5%0A🆔+ID:+cengage-math-grade-5",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANDajRmqCfhNTy6QrC93fWb7-DvqEYAAl0Xaxv1MqlJjqL9CAABlc49AQADAgADeAADPAQ",
+    "telegramFileId": "BQACAgIAAxkBAAIC-Go0uPVAd8pcjyvqibqWeUtM-3h8AAJYngACfGV4SaR3QnapLNacPAQ"
+  },
+  {
+    "id": "cengage-math-grade-6",
+    "isbn": "9781647278304",
+    "order": 7,
+    "title": {
+      "en": "USA Math Grade 6",
+      "uz": "AQSh Matematika 6-sinf",
+      "ru": "Математика США 6 класс"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Formal Science",
+    "field": {
+      "en": "Mathematics",
+      "uz": "Matematika",
+      "ru": "Математика"
+    },
+    "schoolType": {
+      "en": "Middle School",
+      "uz": "O'rta maktab",
+      "ru": "Средняя школа"
+    },
+    "grades": [
+      6
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "Subject": {
+      "en": "General Math",
+      "uz": "Umumiy matematika",
+      "ru": "Общая математика"
+    },
+    "publishedYear": 2023,
+    "authors": [
+      "Ron Larson",
+      "Laurie Boswell"
+    ],
+    "language": "en",
+    "description": {
+      "en": "6th grade math textbook. American textbook.",
+      "uz": "6-sinf matematika darsligi. Amerika darsligi.",
+      "ru": "Учебник математики 6 класс. Американский учебник."
+    },
+    "localCoverPath": "./library_covers/usa-math-6.jpg",
+    "telegramLink": "https://t.me/Umidjon0339?text=Assalomu+alaykum!+Menga+shu+kitob+kerak:%0A%0A📘+Kitob:+USA+Math+Grade+6%0A🆔+ID:+cengage-math-grade-6",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANEajRmrGD64towyqKDtK-5M7KyfHQAAl4Xaxv1MqlJ2ruSULlIUWsBAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIDAAFqNLkVcphCq4iJ6IBMvLuOaqFVPgAClp4AAnxleEnqEyeH4JoGoDwE"
+  },
+  {
+    "id": "cengage-math-grade-6-accelerated",
+    "isbn": "9781637361863",
+    "order": 8,
+    "title": {
+      "en": "USA Math Grade 6 Accelerated",
+      "uz": "AQSh Matematika 6-sinf (Tezlashtirilgan)",
+      "ru": "Математика США 6 класс (Ускоренный)"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Formal Science",
+    "field": {
+      "en": "Mathematics",
+      "uz": "Matematika",
+      "ru": "Математика"
+    },
+    "schoolType": {
+      "en": "Middle School",
+      "uz": "O'rta maktab",
+      "ru": "Средняя школа"
+    },
+    "grades": [
+      6
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "Subject": {
+      "en": "General Math",
+      "uz": "Umumiy matematika",
+      "ru": "Общая математика"
+    },
+    "publishedYear": 2023,
+    "authors": [
+      "Ron Larson",
+      "Laurie Boswell"
+    ],
+    "language": "en",
+    "description": {
+      "en": "6th grade accelerated math textbook. American textbook.",
+      "uz": "6-sinf tezlashtirilgan matematika darsligi. Amerika darsligi.",
+      "ru": "Учебник ускоренной математики 6 класс. Американский учебник."
+    },
+    "localCoverPath": "./library_covers/usa-math-6-acc.png",
+    "telegramLink": "https://t.me/Umidjon0339?text=Assalomu+alaykum!+Menga+shu+kitob+kerak:%0A%0A📘+Kitob:+USA+Math+Grade+6+Accelerated%0A🆔+ID:+cengage-math-grade-6-accelerated",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANFajRmr8RYW-7Z8ERzLBmJu-thpNcAAl8Xaxv1MqlJ4cDOWoCZ2AMBAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIDCGo0uT7M4_RS9uQ6RDo37LBsiCoVAAKSngACfGV4SQWYnjpPMBQ8PAQ"
+  },
+  {
+    "id": "cengage-math-grade-7",
+    "isbn": "9781647278441",
+    "order": 9,
+    "title": {
+      "en": "USA Math Grade 7",
+      "uz": "AQSh Matematika 7-sinf",
+      "ru": "Математика США 7 класс"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Formal Science",
+    "field": {
+      "en": "Mathematics",
+      "uz": "Matematika",
+      "ru": "Математика"
+    },
+    "schoolType": {
+      "en": "Middle School",
+      "uz": "O'rta maktab",
+      "ru": "Средняя школа"
+    },
+    "grades": [
+      7
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "Subject": {
+      "en": "General Math",
+      "uz": "Umumiy matematika",
+      "ru": "Общая математика"
+    },
+    "publishedYear": 2023,
+    "authors": [
+      "Ron Larson",
+      "Laurie Boswell"
+    ],
+    "language": "en",
+    "description": {
+      "en": "7th grade math textbook. American textbook.",
+      "uz": "7-sinf matematika darsligi. Amerika darsligi.",
+      "ru": "Учебник математики 7 класс. Американский учебник."
+    },
+    "localCoverPath": "./library_covers/usa-math-7.jpg",
+    "telegramLink": "https://t.me/Umidjon0339?text=Assalomu+alaykum!+Menga+shu+kitob+kerak:%0A%0A📘+Kitob:+USA+Math+Grade+7%0A🆔+ID:+cengage-math-grade-7",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANGajRmszSm2Ipo5LYBtboCma1-SXIAAmAXaxv1MqlJF6cUUxrpBZQBAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIDEGo0uVKQXxK2VMQbYsrU8B4zbLY4AAKdngACfGV4SfLS0u2IFlxePAQ"
+  },
+  {
+    "id": "cengage-math-grade-7-accelerated",
+    "isbn": "9781637362020",
+    "order": 10,
+    "title": {
+      "en": "USA Math Grade 7 Accelerated",
+      "uz": "AQSh Matematika 7-sinf (Tezlashtirilgan)",
+      "ru": "Математика США 7 класс (Ускоренный)"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Formal Science",
+    "field": {
+      "en": "Mathematics",
+      "uz": "Matematika",
+      "ru": "Математика"
+    },
+    "schoolType": {
+      "en": "Middle School",
+      "uz": "O'rta maktab",
+      "ru": "Средняя школа"
+    },
+    "grades": [
+      7
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "Subject": {
+      "en": "General Math",
+      "uz": "Umumiy matematika",
+      "ru": "Общая математика"
+    },
+    "publishedYear": 2023,
+    "authors": [
+      "Ron Larson",
+      "Laurie Boswell"
+    ],
+    "language": "en",
+    "description": {
+      "en": "7th grade accelerated math textbook. American textbook.",
+      "uz": "7-sinf tezlashtirilgan matematika darsligi. Amerika darsligi.",
+      "ru": "Учебник ускоренной математики 7 класс. Американский учебник."
+    },
+    "localCoverPath": "./library_covers/usa-math-7-acc.png",
+    "telegramLink": "https://t.me/Umidjon0339?text=Assalomu+alaykum!+Menga+shu+kitob+kerak:%0A%0A📘+Kitob:+USA+Math+Grade+7+Accelerated%0A🆔+ID:+cengage-math-grade-7-accelerated",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANHajRmtvGL2L5uz_Q0sNJ8AAEWOsR1AAJhF2sb9TKpSVfcYm_DcI5AAQADAgADeAADPAQ",
+    "telegramFileId": "BQACAgIAAxkBAAIDGGo0uWZOdTp-ikxoZc-Qnn0vzGWCAAKZngACfGV4SaSkh2sxEVtoPAQ"
+  },
+  {
+    "id": "cengage-math-grade-8",
+    "isbn": "9781647278588",
+    "order": 11,
+    "title": {
+      "en": "USA Math Grade 8",
+      "uz": "AQSh Matematika 8-sinf",
+      "ru": "Математика США 8 класс"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Formal Science",
+    "field": {
+      "en": "Mathematics",
+      "uz": "Matematika",
+      "ru": "Математика"
+    },
+    "schoolType": {
+      "en": "Middle School",
+      "uz": "O'rta maktab",
+      "ru": "Средняя школа"
+    },
+    "grades": [
+      8
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "Subject": {
+      "en": "General Math",
+      "uz": "Umumiy matematika",
+      "ru": "Общая математика"
+    },
+    "publishedYear": 2023,
+    "authors": [
+      "Ron Larson",
+      "Laurie Boswell"
+    ],
+    "language": "en",
+    "description": {
+      "en": "8th grade math textbook. American textbook.",
+      "uz": "8-sinf matematika darsligi. Amerika darsligi.",
+      "ru": "Учебник математики 8 класс. Американский учебник."
+    },
+    "localCoverPath": "./library_covers/usa-math-8.jpg",
+    "telegramLink": "https://t.me/Umidjon0339?text=Assalomu+alaykum!+Menga+shu+kitob+kerak:%0A%0A📘+Kitob:+USA+Math+Grade+8%0A🆔+ID:+cengage-math-grade-8",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANIajRmugmjVKOUZWGX9FHMycOiGckAAmIXaxv1MqlJdv05CZcCpZMBAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIDIGo0uXem4E1CYCkI1hTgxz_y0xg0AAKgngACfGV4SVVSSNCsGYEHPAQ"
+  },
+  {
+    "id": "cengage-math-algebra-1",
+    "isbn": "9781637362181",
+    "order": 12,
+    "title": {
+      "en": "USA Math Algebra 1",
+      "uz": "AQSh Algebra 1",
+      "ru": "Алгебра США 1"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Formal Science",
+    "field": {
+      "en": "Mathematics",
+      "uz": "Matematika",
+      "ru": "Математика"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "Subject": {
+      "en": "Algebra",
+      "uz": "Algebra",
+      "ru": "Алгебра"
+    },
+    "publishedYear": 2023,
+    "authors": [
+      "Ron Larson",
+      "Laurie Boswell"
+    ],
+    "language": "en",
+    "description": {
+      "en": "9th grade algebra textbook. American textbook.",
+      "uz": "9-sinf algebra darsligi. Amerika darsligi.",
+      "ru": "Учебник алгебры 9 класс. Американский учебник."
+    },
+    "localCoverPath": "./library_covers/usa-math-alg1.jpg",
+    "telegramLink": "https://t.me/Umidjon0339?text=Assalomu+alaykum!+Menga+shu+kitob+kerak:%0A%0A📘+Kitob:+USA+Math+Algebra+1%0A🆔+ID:+cengage-math-algebra-1",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANJajRmvl6JdQSm5vTD8mTjxa8yWm8AAmMXaxv1MqlJyR28l5csVu4BAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIDKGo0uYnfaJpSMECWOgfRgez7ak1lAAK4ngACfGV4SfhC06YYMe2GPAQ"
+  },
+  {
+    "id": "cengage-math-geometry",
+    "isbn": "9781637362341",
+    "order": 13,
+    "title": {
+      "en": "USA Math Geometry",
+      "uz": "AQSh Geometriya",
+      "ru": "Геометрия США"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Formal Science",
+    "field": {
+      "en": "Mathematics",
+      "uz": "Matematika",
+      "ru": "Математика"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      10
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "Subject": {
+      "en": "Geometry",
+      "uz": "Geometriya",
+      "ru": "Геометрия"
+    },
+    "publishedYear": 2023,
+    "authors": [
+      "Ron Larson",
+      "Laurie Boswell"
+    ],
+    "language": "en",
+    "description": {
+      "en": "10th grade geometry textbook. American textbook.",
+      "uz": "10-sinf geometriya darsligi. Amerika darsligi.",
+      "ru": "Учебник геометрии 10 класс. Американский учебник."
+    },
+    "localCoverPath": "./library_covers/usa-math-geo.jpg",
+    "telegramLink": "https://t.me/Umidjon0339?text=Assalomu+alaykum!+Menga+shu+kitob+kerak:%0A%0A📘+Kitob:+USA+Math+Geometry%0A🆔+ID:+cengage-math-geometry",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANKajRmwQni9C-cBTSPiRv-XgRYCqgAAmQXaxv1MqlJbEUPBpBT2tsBAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIDOWo0ubuDqpY_tHTEUMpa4UYSua0qAAK6ngACfGV4SY1Q6SWnAb3wPAQ"
+  },
+  {
+    "id": "cengage-math-algebra-2",
+    "isbn": "9781637362501",
+    "order": 14,
+    "title": {
+      "en": "USA Math Algebra 2",
+      "uz": "AQSh Algebra 2",
+      "ru": "Алгебра США 2"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Formal Science",
+    "field": {
+      "en": "Mathematics",
+      "uz": "Matematika",
+      "ru": "Математика"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      11
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "Subject": {
+      "en": "Algebra",
+      "uz": "Algebra",
+      "ru": "Алгебра"
+    },
+    "publishedYear": 2023,
+    "authors": [
+      "Ron Larson",
+      "Laurie Boswell"
+    ],
+    "language": "en",
+    "description": {
+      "en": "11th grade algebra textbook. American textbook.",
+      "uz": "11-sinf algebra darsligi. Amerika darsligi.",
+      "ru": "Учебник алгебры 11 класс. Американский учебник."
+    },
+    "localCoverPath": "./library_covers/usa-math-alg2.jpg",
+    "telegramLink": "https://t.me/Umidjon0339?text=Assalomu+alaykum!+Menga+shu+kitob+kerak:%0A%0A📘+Kitob:+USA+Math+Algebra+2%0A🆔+ID:+cengage-math-algebra-2",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANLajRmxTqrtXa3wE1cj9r4M4VReY8AAmUXaxv1MqlJ1KPDRX-TOg0BAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIDQWo0uc0uctZ83OiIrVBFvTnTNNedAAK8ngACfGV4Sav5GvQjhZW9PAQ"
+  },
+  {
+    "id": "cengage-math-grade-k-te",
+    "isbn": "9781647276812",
+    "order": 15,
+    "title": {
+      "en": "USA Math Grade K Teacher's Edition",
+      "uz": "AQSh Matematika 0-sinf O'qituvchi kitobi",
+      "ru": "Математика США 0 класс Книга для учителя"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Formal Science",
+    "field": {
+      "en": "Mathematics",
+      "uz": "Matematika",
+      "ru": "Математика"
+    },
+    "schoolType": {
+      "en": "Elementary School",
+      "uz": "Boshlang'ich maktab",
+      "ru": "Начальная школа"
+    },
+    "grades": [
+      0
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Teacher's Edition",
+      "uz": "O'qituvchi kitobi",
+      "ru": "Книга для учителя"
+    },
+    "Subject": {
+      "en": "General Math",
+      "uz": "Umumiy matematika",
+      "ru": "Общая математика"
+    },
+    "publishedYear": 2023,
+    "authors": [
+      "Ron Larson",
+      "Laurie Boswell"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Kindergarten math teacher's edition. Includes lesson plans, answers, and teaching tips. American textbook.",
+      "uz": "0-sinf matematika o'qituvchi kitobi. Dars ishlanmalari, javoblar va o'qitish bo'yicha maslahatlarni o'z ichiga oladi. Amerika darsligi.",
+      "ru": "Книга для учителя математики 0 класс. Включает планы уроков, ответы и советы по обучению. Американский учебник."
+    },
+    "localCoverPath": "./library_covers/usa-math-k-te.jpg",
+    "telegramLink": "https://t.me/Umidjon0339?text=Assalomu+alaykum!+Menga+shu+kitob+kerak:%0A%0A📘+Kitob:+USA+Math+Grade+K+Teacher's+Edition%0A🆔+ID:+cengage-math-grade-k-te",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANMajRmyNjTDob1FdTAbSA54mx0DmIAAmYXaxv1MqlJdg1qLA8hDSoBAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIDSWo0uh_gNz1wrw47wOqioZ0zp84rAAI8ngACfGV4SeCcjv_XKFtcPAQ"
+  },
+  {
+    "id": "cengage-math-grade-1-te",
+    "isbn": "9781647277116",
+    "order": 16,
+    "title": {
+      "en": "USA Math Grade 1 Teacher's Edition",
+      "uz": "AQSh Matematika 1-sinf O'qituvchi kitobi",
+      "ru": "Математика США 1 класс Книга для учителя"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Formal Science",
+    "field": {
+      "en": "Mathematics",
+      "uz": "Matematika",
+      "ru": "Математика"
+    },
+    "schoolType": {
+      "en": "Elementary School",
+      "uz": "Boshlang'ich maktab",
+      "ru": "Начальная школа"
+    },
+    "grades": [
+      1
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Teacher's Edition",
+      "uz": "O'qituvchi kitobi",
+      "ru": "Книга для учителя"
+    },
+    "Subject": {
+      "en": "General Math",
+      "uz": "Umumiy matematika",
+      "ru": "Общая математика"
+    },
+    "publishedYear": 2023,
+    "authors": [
+      "Ron Larson",
+      "Laurie Boswell"
+    ],
+    "language": "en",
+    "description": {
+      "en": "1st grade math teacher's edition. Includes lesson plans, answers, and teaching tips. American textbook.",
+      "uz": "1-sinf matematika o'qituvchi kitobi. Dars ishlanmalari, javoblar va o'qitish bo'yicha maslahatlarni o'z ichiga oladi. Amerika darsligi.",
+      "ru": "Книга для учителя математики 1 класс. Включает планы уроков, ответы и советы по обучению. Американский учебник."
+    },
+    "localCoverPath": "./library_covers/usa-math-1-te.jpg",
+    "telegramLink": "https://t.me/Umidjon0339?text=Assalomu+alaykum!+Menga+shu+kitob+kerak:%0A%0A📘+Kitob:+USA+Math+Grade+1+Teacher's+Edition%0A🆔+ID:+cengage-math-grade-1-te",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANNajRmzKPhFeuLinkPAfigHkWlJdUAAmcXaxv1MqlJcDFLD5CTSUUBAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIDUWo0ui3RiX_QNaBlo5R_kbBd7v0nAAJGngACfGV4SUZSd86wBlRuPAQ"
+  },
+  {
+    "id": "cengage-math-grade-2-te",
+    "isbn": "9781647277369",
+    "order": 17,
+    "title": {
+      "en": "USA Math Grade 2 Teacher's Edition",
+      "uz": "AQSh Matematika 2-sinf O'qituvchi kitobi",
+      "ru": "Математика США 2 класс Книга для учителя"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Formal Science",
+    "field": {
+      "en": "Mathematics",
+      "uz": "Matematika",
+      "ru": "Математика"
+    },
+    "schoolType": {
+      "en": "Elementary School",
+      "uz": "Boshlang'ich maktab",
+      "ru": "Начальная школа"
+    },
+    "grades": [
+      2
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Teacher's Edition",
+      "uz": "O'qituvchi kitobi",
+      "ru": "Книга для учителя"
+    },
+    "Subject": {
+      "en": "General Math",
+      "uz": "Umumiy matematika",
+      "ru": "Общая математика"
+    },
+    "publishedYear": 2023,
+    "authors": [
+      "Ron Larson",
+      "Laurie Boswell"
+    ],
+    "language": "en",
+    "description": {
+      "en": "2nd grade math teacher's edition. Includes lesson plans, answers, and teaching tips. American textbook.",
+      "uz": "2-sinf matematika o'qituvchi kitobi. Dars ishlanmalari, javoblar va o'qitish bo'yicha maslahatlarni o'z ichiga oladi. Amerika darsligi.",
+      "ru": "Книга для учителя математики 2 класс. Включает планы уроков, ответы и советы по обучению. Американский учебник."
+    },
+    "localCoverPath": "./library_covers/usa-math-2-te.png",
+    "telegramLink": "https://t.me/Umidjon0339?text=Assalomu+alaykum!+Menga+shu+kitob+kerak:%0A%0A📘+Kitob:+USA+Math+Grade+2+Teacher's+Edition%0A🆔+ID:+cengage-math-grade-2-te",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANOajRmzxljaPBNEx-xVhxZyYP6LHIAAmgXaxv1MqlJB4aEcqBroTQBAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIDWWo0ukKJF3jT7tTSTj1jyVFR5EK0AAJNngACfGV4SYgC3z5RW_TuPAQ"
+  },
+  {
+    "id": "cengage-math-grade-3-te",
+    "isbn": "9781647277611",
+    "order": 18,
+    "title": {
+      "en": "USA Math Grade 3 Teacher's Edition",
+      "uz": "AQSh Matematika 3-sinf O'qituvchi kitobi",
+      "ru": "Математика США 3 класс Книга для учителя"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Formal Science",
+    "field": {
+      "en": "Mathematics",
+      "uz": "Matematika",
+      "ru": "Математика"
+    },
+    "schoolType": {
+      "en": "Elementary School",
+      "uz": "Boshlang'ich maktab",
+      "ru": "Начальная школа"
+    },
+    "grades": [
+      3
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Teacher's Edition",
+      "uz": "O'qituvchi kitobi",
+      "ru": "Книга для учителя"
+    },
+    "Subject": {
+      "en": "General Math",
+      "uz": "Umumiy matematika",
+      "ru": "Общая математика"
+    },
+    "publishedYear": 2023,
+    "authors": [
+      "Ron Larson",
+      "Laurie Boswell"
+    ],
+    "language": "en",
+    "description": {
+      "en": "3rd grade math teacher's edition. Includes lesson plans, answers, and teaching tips. American textbook.",
+      "uz": "3-sinf matematika o'qituvchi kitobi. Dars ishlanmalari, javoblar va o'qitish bo'yicha maslahatlarni o'z ichiga oladi. Amerika darsligi.",
+      "ru": "Книга для учителя математики 3 класс. Включает планы уроков, ответы и советы по обучению. Американский учебник."
+    },
+    "localCoverPath": "./library_covers/usa-math-3-te.png",
+    "telegramLink": "https://t.me/Umidjon0339?text=Assalomu+alaykum!+Menga+shu+kitob+kerak:%0A%0A📘+Kitob:+USA+Math+Grade+3+Teacher's+Edition%0A🆔+ID:+cengage-math-grade-3-te",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANPajRm08edAYElGa1QpwiLuY7mJJEAAmkXaxv1MqlJa03j0kZxU6wBAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIDYWo0ulLnVRN_36z1ZVbjv9OsDZMsAAJPngACfGV4SSWJtyPtK6QpPAQ"
+  },
+  {
+    "id": "cengage-math-grade-4-te",
+    "isbn": "9781647277864",
+    "order": 19,
+    "title": {
+      "en": "USA Math Grade 4 Teacher's Edition",
+      "uz": "AQSh Matematika 4-sinf O'qituvchi kitobi",
+      "ru": "Математика США 4 класс Книга для учителя"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Formal Science",
+    "field": {
+      "en": "Mathematics",
+      "uz": "Matematika",
+      "ru": "Математика"
+    },
+    "schoolType": {
+      "en": "Elementary School",
+      "uz": "Boshlang'ich maktab",
+      "ru": "Начальная школа"
+    },
+    "grades": [
+      4
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Teacher's Edition",
+      "uz": "O'qituvchi kitobi",
+      "ru": "Книга для учителя"
+    },
+    "Subject": {
+      "en": "General Math",
+      "uz": "Umumiy matematika",
+      "ru": "Общая математика"
+    },
+    "publishedYear": 2023,
+    "authors": [
+      "Ron Larson",
+      "Laurie Boswell"
+    ],
+    "language": "en",
+    "description": {
+      "en": "4th grade math teacher's edition. Includes lesson plans, answers, and teaching tips. American textbook.",
+      "uz": "4-sinf matematika o'qituvchi kitobi. Dars ishlanmalari, javoblar va o'qitish bo'yicha maslahatlarni o'z ichiga oladi. Amerika darsligi.",
+      "ru": "Книга для учителя математики 4 класс. Включает планы уроков, ответы и советы по обучению. Американский учебник."
+    },
+    "localCoverPath": "./library_covers/usa-math-4-te.png",
+    "telegramLink": "https://t.me/Umidjon0339?text=Assalomu+alaykum!+Menga+shu+kitob+kerak:%0A%0A📘+Kitob:+USA+Math+Grade+4+Teacher's+Edition%0A🆔+ID:+cengage-math-grade-4-te",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANQajRm1oTzHoI-paBOprTwEG1F5ZQAAmoXaxv1MqlJvWYB1Y__Vq0BAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIDaWo0unMf0zcEaoOx4MyL_ZMDV0yuAAJWngACfGV4SWrdG4nx7HxePAQ"
+  },
+  {
+    "id": "cengage-math-grade-5-te",
+    "isbn": "9781647278120",
+    "order": 20,
+    "title": {
+      "en": "USA Math Grade 5 Teacher's Edition",
+      "uz": "AQSh Matematika 5-sinf O'qituvchi kitobi",
+      "ru": "Математика США 5 класс Книга для учителя"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Formal Science",
+    "field": {
+      "en": "Mathematics",
+      "uz": "Matematika",
+      "ru": "Математика"
+    },
+    "schoolType": {
+      "en": "Middle School",
+      "uz": "O'rta maktab",
+      "ru": "Средняя школа"
+    },
+    "grades": [
+      5
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Teacher's Edition",
+      "uz": "O'qituvchi kitobi",
+      "ru": "Книга для учителя"
+    },
+    "Subject": {
+      "en": "General Math",
+      "uz": "Umumiy matematika",
+      "ru": "Общая математика"
+    },
+    "publishedYear": 2023,
+    "authors": [
+      "Ron Larson",
+      "Laurie Boswell"
+    ],
+    "language": "en",
+    "description": {
+      "en": "5th grade math teacher's edition. Includes lesson plans, answers, and teaching tips. American textbook.",
+      "uz": "5-sinf matematika o'qituvchi kitobi. Dars ishlanmalari, javoblar va o'qitish bo'yicha maslahatlarni o'z ichiga oladi. Amerika darsligi.",
+      "ru": "Книга для учителя математики 5 класс. Включает планы уроков, ответы и советы по обучению. Американский учебник."
+    },
+    "localCoverPath": "./library_covers/usa-math-5-te.png",
+    "telegramLink": "https://t.me/Umidjon0339?text=Assalomu+alaykum!+Menga+shu+kitob+kerak:%0A%0A📘+Kitob:+USA+Math+Grade+5+Teacher's+Edition%0A🆔+ID:+cengage-math-grade-5-te",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANRajRm2kKrxsNKqdjejJXd1AU3ZCEAAmsXaxv1MqlJgklofm9zuKYBAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIDcWo0uoB61UaEYAmioy3QxWrZxCdrAAJangACfGV4SSVzSLrQvND-PAQ"
+  },
+  {
+    "id": "cengage-math-grade-6-te",
+    "isbn": "9781647278311",
+    "order": 21,
+    "title": {
+      "en": "USA Math Grade 6 Teacher's Edition",
+      "uz": "AQSh Matematika 6-sinf O'qituvchi kitobi",
+      "ru": "Математика США 6 класс Книга для учителя"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Formal Science",
+    "field": {
+      "en": "Mathematics",
+      "uz": "Matematika",
+      "ru": "Математика"
+    },
+    "schoolType": {
+      "en": "Middle School",
+      "uz": "O'rta maktab",
+      "ru": "Средняя школа"
+    },
+    "grades": [
+      6
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Teacher's Edition",
+      "uz": "O'qituvchi kitobi",
+      "ru": "Книга для учителя"
+    },
+    "Subject": {
+      "en": "General Math",
+      "uz": "Umumiy matematika",
+      "ru": "Общая математика"
+    },
+    "publishedYear": 2023,
+    "authors": [
+      "Ron Larson",
+      "Laurie Boswell"
+    ],
+    "language": "en",
+    "description": {
+      "en": "6th grade math teacher's edition. Includes lesson plans, answers, and teaching tips. American textbook.",
+      "uz": "6-sinf matematika o'qituvchi kitobi. Dars ishlanmalari, javoblar va o'qitish bo'yicha maslahatlarni o'z ichiga oladi. Amerika darsligi.",
+      "ru": "Книга для учителя математики 6 класс. Включает планы уроков, ответы и советы по обучению. Американский учебник."
+    },
+    "localCoverPath": "./library_covers/usa-math-6-te.png",
+    "telegramLink": "https://t.me/Umidjon0339?text=Assalomu+alaykum!+Menga+shu+kitob+kerak:%0A%0A📘+Kitob:+USA+Math+Grade+6+Teacher's+Edition%0A🆔+ID:+cengage-math-grade-6-te",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANSajRm3uq5M_5I_Ua8H6oQPm0upI8AAmwXaxv1MqlJS280fCkDr80BAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIDeWo0upfoxBoJSNa1FKMTUU_SM063AAKYngACfGV4Sdv0rQHNHdY5PAQ"
+  },
+  {
+    "id": "cengage-math-grade-6-accelerated-te",
+    "isbn": "9781637361870",
+    "order": 22,
+    "title": {
+      "en": "USA Math Grade 6 Accelerated Teacher's Edition",
+      "uz": "AQSh Matematika 6-sinf (Tezlashtirilgan) O'qituvchi kitobi",
+      "ru": "Математика США 6 класс (Ускоренный) Книга для учителя"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Formal Science",
+    "field": {
+      "en": "Mathematics",
+      "uz": "Matematika",
+      "ru": "Математика"
+    },
+    "schoolType": {
+      "en": "Middle School",
+      "uz": "O'rta maktab",
+      "ru": "Средняя школа"
+    },
+    "grades": [
+      6
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Teacher's Edition",
+      "uz": "O'qituvchi kitobi",
+      "ru": "Книга для учителя"
+    },
+    "Subject": {
+      "en": "General Math",
+      "uz": "Umumiy matematika",
+      "ru": "Общая математика"
+    },
+    "publishedYear": 2023,
+    "authors": [
+      "Ron Larson",
+      "Laurie Boswell"
+    ],
+    "language": "en",
+    "description": {
+      "en": "6th grade accelerated math teacher's edition. Includes lesson plans, answers, and teaching tips. American textbook.",
+      "uz": "6-sinf tezlashtirilgan matematika o'qituvchi kitobi. Dars ishlanmalari, javoblar va o'qitish bo'yicha maslahatlarni o'z ichiga oladi. Amerika darsligi.",
+      "ru": "Книга для учителя ускоренной математики 6 класс. Включает планы уроков, ответы и советы по обучению. Американский учебник."
+    },
+    "localCoverPath": "./library_covers/usa-math-6-acc-te.png",
+    "telegramLink": "https://t.me/Umidjon0339?text=Assalomu+alaykum!+Menga+shu+kitob+kerak:%0A%0A📘+Kitob:+USA+Math+Grade+6+Accelerated+Teacher's+Edition%0A🆔+ID:+cengage-math-grade-6-accelerated-te",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANTajRm4XIlaNZd3-DcpAeDm3aUs64AAm0Xaxv1MqlJYjoCDnVXGuIBAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIDgWo0uqYsAAGfLeRUYEBgAfh4F1u8JgAClZ4AAnxleElhRQSxoZHIyjwE"
+  },
+  {
+    "id": "cengage-math-grade-7-te",
+    "isbn": "9781647278458",
+    "order": 23,
+    "title": {
+      "en": "USA Math Grade 7 Teacher's Edition",
+      "uz": "AQSh Matematika 7-sinf O'qituvchi kitobi",
+      "ru": "Математика США 7 класс Книга для учителя"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Formal Science",
+    "field": {
+      "en": "Mathematics",
+      "uz": "Matematika",
+      "ru": "Математика"
+    },
+    "schoolType": {
+      "en": "Middle School",
+      "uz": "O'rta maktab",
+      "ru": "Средняя школа"
+    },
+    "grades": [
+      7
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Teacher's Edition",
+      "uz": "O'qituvchi kitobi",
+      "ru": "Книга для учителя"
+    },
+    "Subject": {
+      "en": "General Math",
+      "uz": "Umumiy matematika",
+      "ru": "Общая математика"
+    },
+    "publishedYear": 2023,
+    "authors": [
+      "Ron Larson",
+      "Laurie Boswell"
+    ],
+    "language": "en",
+    "description": {
+      "en": "7th grade math teacher's edition. Includes lesson plans, answers, and teaching tips. American textbook.",
+      "uz": "7-sinf matematika o'qituvchi kitobi. Dars ishlanmalari, javoblar va o'qitish bo'yicha maslahatlarni o'z ichiga oladi. Amerika darsligi.",
+      "ru": "Книга для учителя математики 7 класс. Включает планы уроков, ответы и советы по обучению. Американский учебник."
+    },
+    "localCoverPath": "./library_covers/usa-math-7-te.png",
+    "telegramLink": "https://t.me/Umidjon0339?text=Assalomu+alaykum!+Menga+shu+kitob+kerak:%0A%0A📘+Kitob:+USA+Math+Grade+7+Teacher's+Edition%0A🆔+ID:+cengage-math-grade-7-te",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANUajRm5XbkKFAhoiVtaqoMycs8hsMAAm4Xaxv1MqlJkUF5J2I07dcBAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIDiWo0ureUHmI319_ICV29l9-Q5-aoAAKengACfGV4SexvP9C--4COPAQ"
+  },
+  {
+    "id": "cengage-math-grade-7-accelerated-te",
+    "isbn": "9781637362037",
+    "order": 24,
+    "title": {
+      "en": "USA Math Grade 7 Accelerated Teacher's Edition",
+      "uz": "AQSh Matematika 7-sinf (Tezlashtirilgan) O'qituvchi kitobi",
+      "ru": "Математика США 7 класс (Ускоренный) Книга для учителя"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Formal Science",
+    "field": {
+      "en": "Mathematics",
+      "uz": "Matematika",
+      "ru": "Математика"
+    },
+    "schoolType": {
+      "en": "Middle School",
+      "uz": "O'rta maktab",
+      "ru": "Средняя школа"
+    },
+    "grades": [
+      7
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Teacher's Edition",
+      "uz": "O'qituvchi kitobi",
+      "ru": "Книга для учителя"
+    },
+    "Subject": {
+      "en": "General Math",
+      "uz": "Umumiy matematika",
+      "ru": "Общая математика"
+    },
+    "publishedYear": 2023,
+    "authors": [
+      "Ron Larson",
+      "Laurie Boswell"
+    ],
+    "language": "en",
+    "description": {
+      "en": "7th grade accelerated math teacher's edition. Includes lesson plans, answers, and teaching tips. American textbook.",
+      "uz": "7-sinf tezlashtirilgan matematika o'qituvchi kitobi. Dars ishlanmalari, javoblar va o'qitish bo'yicha maslahatlarni o'z ichiga oladi. Amerika darsligi.",
+      "ru": "Книга для учителя ускоренной математики 7 класс. Включает планы уроков, ответы и советы по обучению. Американский учебник."
+    },
+    "localCoverPath": "./library_covers/usa-math-7-acc-te.png",
+    "telegramLink": "https://t.me/Umidjon0339?text=Assalomu+alaykum!+Menga+shu+kitob+kerak:%0A%0A📘+Kitob:+USA+Math+Grade+7+Accelerated+Teacher's+Edition%0A🆔+ID:+cengage-math-grade-7-accelerated-te",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANVajRm6Ml05X4s8UY9Iw3F7vop_QUAAm8Xaxv1MqlJmvxbRza2V4oBAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIDkmo0us-SEu9YUMkrSgPG8Kj6M7jHAAKbngACfGV4SQmNNW4AAfAPrTwE"
+  },
+  {
+    "id": "cengage-math-grade-8-te",
+    "isbn": "9781647278595",
+    "order": 25,
+    "title": {
+      "en": "USA Math Grade 8 Teacher's Edition",
+      "uz": "AQSh Matematika 8-sinf O'qituvchi kitobi",
+      "ru": "Математика США 8 класс Книга для учителя"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Formal Science",
+    "field": {
+      "en": "Mathematics",
+      "uz": "Matematika",
+      "ru": "Математика"
+    },
+    "schoolType": {
+      "en": "Middle School",
+      "uz": "O'rta maktab",
+      "ru": "Средняя школа"
+    },
+    "grades": [
+      8
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Teacher's Edition",
+      "uz": "O'qituvchi kitobi",
+      "ru": "Книга для учителя"
+    },
+    "Subject": {
+      "en": "General Math",
+      "uz": "Umumiy matematika",
+      "ru": "Общая математика"
+    },
+    "publishedYear": 2023,
+    "authors": [
+      "Ron Larson",
+      "Laurie Boswell"
+    ],
+    "language": "en",
+    "description": {
+      "en": "8th grade math teacher's edition. Includes lesson plans, answers, and teaching tips. American textbook.",
+      "uz": "8-sinf matematika o'qituvchi kitobi. Dars ishlanmalari, javoblar va o'qitish bo'yicha maslahatlarni o'z ichiga oladi. Amerika darsligi.",
+      "ru": "Книга для учителя математики 8 класс. Включает планы уроков, ответы и советы по обучению. Американский учебник."
+    },
+    "localCoverPath": "./library_covers/usa-math-8-te.png",
+    "telegramLink": "https://t.me/Umidjon0339?text=Assalomu+alaykum!+Menga+shu+kitob+kerak:%0A%0A📘+Kitob:+USA+Math+Grade+8+Teacher's+Edition%0A🆔+ID:+cengage-math-grade-8-te",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANWajRm7JFmedBA9R6sqjwKzpOx2CMAAnAXaxv1MqlJYQY2mhM66AUBAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIDmmo0ut98Ird-AcXSHlKExtsOhT5uAAKhngACfGV4SWAsqamNoNWiPAQ"
+  },
+  {
+    "id": "cengage-math-algebra-1-te",
+    "isbn": "9781637362198",
+    "order": 26,
+    "title": {
+      "en": "USA Math Algebra 1 Teacher's Edition",
+      "uz": "AQSh Algebra 1 O'qituvchi kitobi",
+      "ru": "Алгебра США 1 Книга для учителя"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Formal Science",
+    "field": {
+      "en": "Mathematics",
+      "uz": "Matematika",
+      "ru": "Математика"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Teacher's Edition",
+      "uz": "O'qituvchi kitobi",
+      "ru": "Книга для учителя"
+    },
+    "Subject": {
+      "en": "Algebra",
+      "uz": "Algebra",
+      "ru": "Алгебра"
+    },
+    "publishedYear": 2023,
+    "authors": [
+      "Ron Larson",
+      "Laurie Boswell"
+    ],
+    "language": "en",
+    "description": {
+      "en": "9th grade algebra teacher's edition. Includes lesson plans, answers, and teaching tips. American textbook.",
+      "uz": "9-sinf algebra o'qituvchi kitobi. Dars ishlanmalari, javoblar va o'qitish bo'yicha maslahatlarni o'z ichiga oladi. Amerika darsligi.",
+      "ru": "Книга для учителя алгебры 9 класс. Включает планы уроков, ответы и советы по обучению. Американский учебник."
+    },
+    "localCoverPath": "./library_covers/usa-math-alg1-te.png",
+    "telegramLink": "https://t.me/Umidjon0339?text=Assalomu+alaykum!+Menga+shu+kitob+kerak:%0A%0A📘+Kitob:+USA+Math+Algebra+1+Teacher's+Edition%0A🆔+ID:+cengage-math-algebra-1-te",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANXajRm8CU6dKNpfwVkZJogNte0oB4AAnEXaxv1MqlJThiGiwS4jioBAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIDomo0uvBWalSCvTupijJFAAFDmtlOJwACuZ4AAnxleEmvUp2dggdjTjwE"
+  },
+  {
+    "id": "cengage-math-geometry-te",
+    "isbn": "9781637362358",
+    "order": 27,
+    "title": {
+      "en": "USA Math Geometry Teacher's Edition",
+      "uz": "AQSh Geometriya O'qituvchi kitobi",
+      "ru": "Геометрия США Книга для учителя"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Formal Science",
+    "field": {
+      "en": "Mathematics",
+      "uz": "Matematika",
+      "ru": "Математика"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      10
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Teacher's Edition",
+      "uz": "O'qituvchi kitobi",
+      "ru": "Книга для учителя"
+    },
+    "Subject": {
+      "en": "Geometry",
+      "uz": "Geometriya",
+      "ru": "Геометрия"
+    },
+    "publishedYear": 2023,
+    "authors": [
+      "Ron Larson",
+      "Laurie Boswell"
+    ],
+    "language": "en",
+    "description": {
+      "en": "10th grade geometry teacher's edition. Includes lesson plans, answers, and teaching tips. American textbook.",
+      "uz": "10-sinf geometriya o'qituvchi kitobi. Dars ishlanmalari, javoblar va o'qitish bo'yicha maslahatlarni o'z ichiga oladi. Amerika darsligi.",
+      "ru": "Книга для учителя геометрии 10 класс. Включает планы уроков, ответы и советы по обучению. Американский учебник."
+    },
+    "localCoverPath": "./library_covers/usa-math-geo-te.png",
+    "telegramLink": "https://t.me/Umidjon0339?text=Assalomu+alaykum!+Menga+shu+kitob+kerak:%0A%0A📘+Kitob:+USA+Math+Geometry+Teacher's+Edition%0A🆔+ID:+cengage-math-geometry-te",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANYajRm819wTI9Pn6CeXgRMoKNa_o4AAnIXaxv1MqlJ4x2ho_MwrRgBAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIDs2o0uw_tcngRERBMfNhzOLw_gwLCAAK7ngACfGV4SV1XT7uivS7nPAQ"
+  },
+  {
+    "id": "cengage-math-algebra-2-te",
+    "isbn": "9781637362518",
+    "order": 28,
+    "title": {
+      "en": "USA Math Algebra 2 Teacher's Edition",
+      "uz": "AQSh Algebra 2 O'qituvchi kitobi",
+      "ru": "Алгебра США 2 Книга для учителя"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Formal Science",
+    "field": {
+      "en": "Mathematics",
+      "uz": "Matematika",
+      "ru": "Математика"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      11
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Teacher's Edition",
+      "uz": "O'qituvchi kitobi",
+      "ru": "Книга для учителя"
+    },
+    "Subject": {
+      "en": "Algebra",
+      "uz": "Algebra",
+      "ru": "Алгебра"
+    },
+    "publishedYear": 2023,
+    "authors": [
+      "Ron Larson",
+      "Laurie Boswell"
+    ],
+    "language": "en",
+    "description": {
+      "en": "11th grade algebra teacher's edition. Includes lesson plans, answers, and teaching tips. American textbook.",
+      "uz": "11-sinf algebra o'qituvchi kitobi. Dars ishlanmalari, javoblar va o'qitish bo'yicha maslahatlarni o'z ichiga oladi. Amerika darsligi.",
+      "ru": "Книга для учителя алгебры 11 класс. Включает планы уроков, ответы и советы по обучению. Американский учебник."
+    },
+    "localCoverPath": "./library_covers/usa-math-alg2-te.png",
+    "telegramLink": "https://t.me/Umidjon0339?text=Assalomu+alaykum!+Menga+shu+kitob+kerak:%0A%0A📘+Kitob:+USA+Math+Algebra+2+Teacher's+Edition%0A🆔+ID:+cengage-math-algebra-2-te",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANZajRm9xe0uKSOxXz3ROOPfRVoRmsAAnMXaxv1MqlJZuq15grrsPwBAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIDu2o0uyzepuuTBg9EF5OwTRFWDJKcAAK9ngACfGV4ScOHvc9VdGfBPAQ"
+  },
+  {
+    "id": "cengage-physical-science-15e",
+    "isbn": "9781337616416",
+    "order": 29,
+    "title": {
+      "en": "An Introduction to Physical Science",
+      "uz": "Fizika faniga kirish",
+      "ru": "Введение в физическую науку"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Natural Science",
+    "field": {
+      "en": "Physical Science",
+      "uz": "Fizikaviy fanlar",
+      "ru": "Физические науки"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 15,
+    "Subject": {
+      "en": "Physics",
+      "uz": "Fizika",
+      "ru": "Физика"
+    },
+    "publishedYear": 2021,
+    "authors": [
+      "James T. Shipman",
+      "Jerry D. Wilson",
+      "Charles A. Higgins",
+      "Bo Lou"
+    ],
+    "language": "en",
+    "description": {
+      "en": "An Introduction to Physical Science, 15th Edition. Covers physics, chemistry, astronomy, and earth science for grades 9-12.",
+      "uz": "Fizika faniga kirish, 15-nashr. 9-12 sinflar uchun fizika, kimyo, astronomiya va yer fanlarini qamrab oladi.",
+      "ru": "Введение в физическую науку, 15-е издание. Охватывает физику, химию, астрономию и науки о Земле для 9-12 классов."
+    },
+    "localCoverPath": "./library_covers/physical-science-15e.jpg",
+    "telegramLink": "https://www.cengage.com/c/an-introduction-to-physical-science-15e-shipman-wilson-higgins-lou/9781337616416/",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANaajRm-7riEOnonoG0jcyf8eDiCAsAAnQXaxv1MqlJEtOmOR_SQ40BAAMCAAN5AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAID9mo0vnXb7vnm_aR7E7VWtrLRa6e6AALJnQAC9TKpSSITHpCiW7DCPAQ"
+  },
+  {
+    "id": "cengage-invitation-health-19e",
+    "isbn": "9780357136799",
+    "order": 30,
+    "title": {
+      "en": "An Invitation to Health: Taking Charge of Your Health",
+      "uz": "Salomatlikka taklif: Sog'lig'ingizni boshqaring",
+      "ru": "Приглашение к здоровью: Возьмите на себя ответственность за своё здоровье"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Natural Science",
+    "field": {
+      "en": "Life Science",
+      "uz": "Hayot fanlari",
+      "ru": "Науки о жизни"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 19,
+    "Subject": {
+      "en": "Biology",
+      "uz": "Biologiya",
+      "ru": "Биология"
+    },
+    "publishedYear": 2021,
+    "authors": [
+      "Dianne Hales"
+    ],
+    "language": "en",
+    "description": {
+      "en": "An Invitation to Health, 19th Edition. A comprehensive health textbook covering physical, mental, and social well-being for grades 9-12.",
+      "uz": "Salomatlikka taklif, 19-nashr. 9-12 sinflar uchun jismoniy, ruhiy va ijtimoiy farovonlikni qamrab oluvchi keng qamrovli sog'liqni saqlash darsligi.",
+      "ru": "Приглашение к здоровью, 19-е издание. Комплексный учебник по здоровью, охватывающий физическое, психическое и социальное благополучие для 9-12 классов."
+    },
+    "localCoverPath": "./library_covers/invitation-health-19e.jpg",
+    "telegramLink": "https://www.cengage.com/c/an-invitation-to-health-taking-charge-of-your-health-19e-hales/9780357136799/",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANbajRm_3GGqwd9vDC76ZauHitS87AAAnUXaxv1MqlJSFXzE4NYaBsBAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIEAWo0vradoT8IYVarCo2QZN0xVU77AALKnQAC9TKpSVKcZmjHJzBFPAQ"
+  },
+  {
+    "id": "cengage-biology-concepts-applications-10e",
+    "isbn": "9781305967335",
+    "order": 31,
+    "title": {
+      "en": "Biology: Concepts & Applications",
+      "uz": "Biologiya: Tushunchalar va amaliyotlar",
+      "ru": "Биология: Концепции и применение"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Natural Science",
+    "field": {
+      "en": "Life Science",
+      "uz": "Hayot fanlari",
+      "ru": "Науки о жизни"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 10,
+    "Subject": {
+      "en": "Biology",
+      "uz": "Biologiya",
+      "ru": "Биология"
+    },
+    "publishedYear": 2018,
+    "authors": [
+      "Cecie Starr",
+      "Christine A. Evers",
+      "Lisa Starr"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Biology: Concepts & Applications, 10th Edition. A comprehensive biology textbook covering fundamental concepts and real-world applications.",
+      "uz": "Biologiya: Tushunchalar va amaliyotlar, 10-nashr. Asosiy tushunchalar va real hayotdagi amaliyotlarni qamrab oluvchi keng qamrovli biologiya darsligi.",
+      "ru": "Биология: Концепции и применение, 10-е издание. Комплексный учебник по биологии, охватывающий фундаментальные концепции и их практическое применение."
+    },
+    "localCoverPath": "./library_covers/biology-concepts-applications-10e.jpg",
+    "telegramLink": "https://www.cengage.com/c/biology-concepts-and-applications-10e-starr-evers-starr/9781305967335/",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANcajRnAj3iljTb8JG5HQuZ9aEM97gAAnYXaxv1MqlJwsvFOdEE1eMBAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIECWo0vvTDXoXwZq3bD-SF7qH5sxRSAALMnQAC9TKpSVMIWpfmxpikPAQ"
+  },
+  {
+    "id": "cengage-biology-unity-diversity-15e",
+    "isbn": "9781337408332",
+    "order": 32,
+    "title": {
+      "en": "Biology: The Unity and Diversity of Life",
+      "uz": "Biologiya: Hayotning birligi va xilma-xilligi",
+      "ru": "Биология: Единство и многообразие жизни"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Natural Science",
+    "field": {
+      "en": "Life Science",
+      "uz": "Hayot fanlari",
+      "ru": "Науки о жизни"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 15,
+    "Subject": {
+      "en": "Biology",
+      "uz": "Biologiya",
+      "ru": "Биология"
+    },
+    "publishedYear": 2019,
+    "authors": [
+      "Cecie Starr",
+      "Ralph Taggart",
+      "Christine Evers",
+      "Lisa Starr"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Biology: The Unity and Diversity of Life, 15th Edition. A comprehensive textbook exploring the fundamental concepts of biology and the diversity of life on Earth.",
+      "uz": "Biologiya: Hayotning birligi va xilma-xilligi, 15-nashr. Biologiyaning asosiy tushunchalari va Yerdagi hayot xilma-xilligini o'rganuvchi keng qamrovli darslik.",
+      "ru": "Биология: Единство и многообразие жизни, 15-е издание. Комплексный учебник, исследующий фундаментальные концепции биологии и разнообразие жизни на Земле."
+    },
+    "localCoverPath": "./library_covers/biology-unity-diversity-15e.jpg",
+    "telegramLink": "https://www.cengage.com/c/biology-the-unity-and-diversity-of-life-15e-starr-taggart-evers-starr/9781337408332/",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANdajRnBlK0SPGimku7rdHdmVRC7b0AAncXaxv1MqlJetbTMEfrGyUBAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIEEWo0vzqqVOfxJDXojf3s3AMPERZ-AALOnQAC9TKpSUTijdhGMdyjPAQ"
+  },
+  {
+    "id": "cengage-body-structures-functions-13e",
+    "isbn": "9781305511361",
+    "order": 33,
+    "title": {
+      "en": "Body Structures and Functions",
+      "uz": "Tana tuzilishi va funksiyalari",
+      "ru": "Структура и функции тела"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Natural Science",
+    "field": {
+      "en": "Life Science",
+      "uz": "Hayot fanlari",
+      "ru": "Науки о жизни"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 13,
+    "Subject": {
+      "en": "Anatomy & Physiology",
+      "uz": "Anatomiya va fiziologiya",
+      "ru": "Анатомия и физиология"
+    },
+    "publishedYear": 2017,
+    "authors": [
+      "Ann Senisi Scott",
+      "Elizabeth Fong"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Body Structures and Functions, 13th Edition. A comprehensive guide to human anatomy and physiology.",
+      "uz": "Tana tuzilishi va funksiyalari, 13-nashr. Inson anatomiyasi va fiziologiyasi bo'yicha keng qamrovli qo'llanma.",
+      "ru": "Структура и функции тела, 13-е издание. Подробное руководство по анатомии и физиологии человека."
+    },
+    "localCoverPath": "./library_covers/body-structures-functions-13e.jpg",
+    "telegramLink": "https://www.cengage.com/c/body-structures-and-functions-13e-scott-fong/9781305511361/",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANeajRnCUMJbzKuEHRyv51F7gKsn3sAAngXaxv1MqlJE1c-WaitG5kBAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIEGmo0v3dYt77IDhQK_nE9vIIluE2iAALQnQAC9TKpSeoiAVzXPFegPAQ"
+  },
+  {
+    "id": "cengage-chemistry-11e",
+    "isbn": "9780357850671",
+    "order": 34,
+    "title": {
+      "en": "Chemistry",
+      "uz": "Kimyo",
+      "ru": "Химия"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Natural Science",
+    "field": {
+      "en": "Physical Science",
+      "uz": "Fizikaviy fanlar",
+      "ru": "Физические науки"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 11,
+    "Subject": {
+      "en": "Chemistry",
+      "uz": "Kimyo",
+      "ru": "Химия"
+    },
+    "publishedYear": 2024,
+    "authors": [
+      "Steven S. Zumdahl",
+      "Susan A. Zumdahl",
+      "Donald J. DeCoste"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Chemistry, 11th Edition. A comprehensive chemistry textbook.",
+      "uz": "Kimyo, 11-nashr. Keng qamrovli kimyo darsligi.",
+      "ru": "Химия, 11-е издание. Комплексный учебник по химии."
+    },
+    "localCoverPath": "./library_covers/chemistry-11e.jpg",
+    "telegramLink": "https://www.cengage.com/c/chemistry-11e-zumdahl-zumdahl-decoste/9780357850671/",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANfajRnDUa01p8vSeWWnBuesgy69rkAAnkXaxv1MqlJriUCVbEDrJYBAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIEImo0v5Vbfx4AAXF9MwTcLGDFDs3powAC0p0AAvUyqUnAWJuuDXttLjwE"
+  },
+  {
+    "id": "cengage-chemistry-ap-11e",
+    "isbn": "9798214071657",
+    "order": 35,
+    "title": {
+      "en": "Chemistry, AP® Edition",
+      "uz": "Kimyo, AP® nashri",
+      "ru": "Химия, издание AP®"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Natural Science",
+    "field": {
+      "en": "Physical Science",
+      "uz": "Fizikaviy fanlar",
+      "ru": "Физические науки"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 11,
+    "Subject": {
+      "en": "Chemistry",
+      "uz": "Kimyo",
+      "ru": "Химия"
+    },
+    "publishedYear": 2024,
+    "authors": [
+      "Steven S. Zumdahl",
+      "Susan A. Zumdahl",
+      "Donald J. DeCoste"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Chemistry, 11th AP® Edition. A comprehensive chemistry textbook designed specifically for Advanced Placement students.",
+      "uz": "Kimyo, 11-AP® nashri. Advanced Placement o'quvchilari uchun maxsus mo'ljallangan keng qamrovli kimyo darsligi.",
+      "ru": "Химия, 11-е издание AP®. Комплексный учебник по химии, разработанный специально для учащихся программы Advanced Placement."
+    },
+    "localCoverPath": "./library_covers/chemistry-ap-11e.jpg",
+    "telegramLink": "https://www.cengageasia.com/title/default/detail?isbn=9798214071657",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANgajRnELJoOQbfePo3zO7g-MqCbWwAAnoXaxv1MqlJN7QIHw6zn7QBAAMCAAN5AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIEKmo0v7UzRyk-SXiBFUh7h3XlaEbcAALTnQAC9TKpSRUbdbmn-x38PAQ"
+  },
+  {
+    "id": "cengage-college-physics-global-12e",
+    "isbn": "9798214046679",
+    "order": 36,
+    "title": {
+      "en": "College Physics, Global Edition",
+      "uz": "Kollej fizikasi, Global nashr",
+      "ru": "Физика для колледжей, Глобальное издание"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Natural Science",
+    "field": {
+      "en": "Physical Science",
+      "uz": "Fizikaviy fanlar",
+      "ru": "Физические науки"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 12,
+    "Subject": {
+      "en": "Physics",
+      "uz": "Fizika",
+      "ru": "Физика"
+    },
+    "publishedYear": 2025,
+    "authors": [
+      "Raymond A. Serway",
+      "Chris Vuille",
+      "John Hughes"
+    ],
+    "language": "en",
+    "description": {
+      "en": "College Physics, Global Edition, 12th Edition. A comprehensive physics textbook covering fundamental concepts and principles.",
+      "uz": "Kollej fizikasi, Global nashr, 12-nashr. Asosiy tushunchalar va tamoyillarni qamrab oluvchi keng qamrovli fizika darsligi.",
+      "ru": "Физика для колледжей, Глобальное издание, 12-е издание. Комплексный учебник физики, охватывающий фундаментальные концепции и принципы."
+    },
+    "localCoverPath": "./library_covers/college-physics-global-12e.jpg",
+    "telegramLink": "https://au.cengage.com/c/college-physics-global-edition-12e-serway-vuille-hughes/9798214046679/",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANhajRnFG_jKJmYScHC5Ax0pR6HYvEAAnsXaxv1MqlJfNvswJo_mHkBAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIEMmo0wAABTaUlwQVmakfU_mdUsXJpZwAC1p0AAvUyqUkuuslSe7BDbjwE"
+  },
+  {
+    "id": "cengage-college-physics-ap-12e",
+    "isbn": "9798214067490",
+    "order": 37,
+    "title": {
+      "en": "College Physics, AP® Edition",
+      "uz": "Kollej fizikasi, AP® nashri",
+      "ru": "Физика для колледжей, издание AP®"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Natural Science",
+    "field": {
+      "en": "Physical Science",
+      "uz": "Fizikaviy fanlar",
+      "ru": "Физические науки"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 12,
+    "Subject": {
+      "en": "Physics",
+      "uz": "Fizika",
+      "ru": "Физика"
+    },
+    "publishedYear": 2025,
+    "authors": [
+      "Raymond A. Serway",
+      "Chris Vuille",
+      "John Hughes"
+    ],
+    "language": "en",
+    "description": {
+      "en": "College Physics, AP® Edition, 12th Edition. A comprehensive physics textbook designed specifically for Advanced Placement students.",
+      "uz": "Kollej fizikasi, AP® nashri, 12-nashr. Advanced Placement o'quvchilari uchun maxsus mo'ljallangan keng qamrovli fizika darsligi.",
+      "ru": "Физика для колледжей, 12-е издание AP®. Комплексный учебник физики, разработанный специально для учащихся программы Advanced Placement."
+    },
+    "localCoverPath": "./library_covers/college-physics-ap-12e.jpg",
+    "telegramLink": "https://www.cengageasia.com/title/default/detail?isbn=9798214067490",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANiajRnGBfuYeeWf-w9hlULA214RhcAAnwXaxv1MqlJW1GVeMncFwMBAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIEOmo0wBwxEQPRWVaxGvIWIErkM5bPAALXnQAC9TKpSZF2-js4R2zoPAQ"
+  },
+  {
+    "id": "cengage-earth-science-intro-3e",
+    "isbn": "9780357116562",
+    "order": 38,
+    "title": {
+      "en": "Earth Science: An Introduction",
+      "uz": "Yer haqidagi fan: Kirish",
+      "ru": "Наука о Земле: Введение"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Natural Science",
+    "field": {
+      "en": "Earth & Space Science",
+      "uz": "Yer va koinot fanlari",
+      "ru": "Науки о Земле и космосе"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 3,
+    "Subject": {
+      "en": "Earth Science",
+      "uz": "Yer haqidagi fan",
+      "ru": "Наука о Земле"
+    },
+    "publishedYear": 2021,
+    "authors": [
+      "Marc Hendrix",
+      "Graham R. Thompson",
+      "Jonathan Turk"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Earth Science: An Introduction, 3rd Edition. A comprehensive textbook covering fundamental concepts in earth science.",
+      "uz": "Yer haqidagi fan: Kirish, 3-nashr. Yer haqidagi fanning asosiy tushunchalarini qamrab oluvchi keng qamrovli darslik.",
+      "ru": "Наука о Земле: Введение, 3-е издание. Комплексный учебник, охватывающий фундаментальные концепции науки о Земле."
+    },
+    "localCoverPath": "./library_covers/earth-science-intro-3e.jpg",
+    "telegramLink": "https://www.cengage.com/c/earth-science-an-introduction-3e-hendrix-thompson-turk/9780357116562/",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANjajRnG0BsRPQLJK47A8zV1gcboZkAAn0Xaxv1MqlJ-AHHFbxOuCMBAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIEQmo0wGOUIilb6JFFUutLTeat4AFkAALZnQAC9TKpSRRQe1Z8aglhPAQ"
+  },
+  {
+    "id": "cengage-environmental-science-16e",
+    "isbn": "9781337569613",
+    "order": 39,
+    "title": {
+      "en": "Environmental Science",
+      "uz": "Atrof-muhit fani",
+      "ru": "Наука об окружающей среде"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Natural Science",
+    "field": {
+      "en": "Earth & Space Science",
+      "uz": "Yer va koinot fanlari",
+      "ru": "Науки о Земле и космосе"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 16,
+    "Subject": {
+      "en": "Environmental Science",
+      "uz": "Atrof-muhit fani",
+      "ru": "Наука об окружающей среде"
+    },
+    "publishedYear": 2019,
+    "authors": [
+      "G. Tyler Miller",
+      "Scott E. Spoolman"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Environmental Science, 16th Edition. A comprehensive textbook covering fundamental concepts in environmental science.",
+      "uz": "Atrof-muhit fani, 16-nashr. Atrof-muhit fanining asosiy tushunchalarini qamrab oluvchi keng qamrovli darslik.",
+      "ru": "Наука об окружающей среде, 16-е издание. Комплексный учебник, охватывающий фундаментальные концепции науки об окружающей среде."
+    },
+    "localCoverPath": "./library_covers/environmental-science-16e.jpg",
+    "telegramLink": "https://www.cengage.com/c/environmental-science-16e-miller-spoolman/9781337569613/",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANkajRnH2E9gHNqmNsJ_H1VRiEUwKEAAn4Xaxv1MqlJafl-3uj09uoBAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIESmo0wIFHdbJJDxioRmMtcLLILthIAALanQAC9TKpSVveaJupT2NRPAQ"
+  },
+  {
+    "id": "cengage-forensic-science-4e",
+    "isbn": "9798214390994",
+    "order": 40,
+    "title": {
+      "en": "Forensic Science: Fundamentals & Investigations",
+      "uz": "Sud-tibbiyot ekspertizasi: Asoslar va tekshiruvlar",
+      "ru": "Криминалистика: Основы и расследования"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Natural Science",
+    "field": {
+      "en": "Life Science",
+      "uz": "Hayot fanlari",
+      "ru": "Науки о жизни"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 4,
+    "Subject": {
+      "en": "Forensic Science",
+      "uz": "Sud-tibbiyot ekspertizasi",
+      "ru": "Криминалистика"
+    },
+    "publishedYear": 2027,
+    "authors": [
+      "Anthony J. Bertino",
+      "Patricia Nolan Bertino"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Forensic Science: Fundamentals & Investigations, 4th Edition. A comprehensive forensic science textbook.",
+      "uz": "Sud-tibbiyot ekspertizasi: Asoslar va tekshiruvlar, 4-nashr. Keng qamrovli sud-tibbiyot ekspertizasi darsligi.",
+      "ru": "Криминалистика: Основы и расследования, 4-е издание. Комплексный учебник по криминалистике."
+    },
+    "localCoverPath": "./library_covers/forensic-science-4e.jpg",
+    "telegramLink": "https://faculty.cengage.com/works/9798214390994",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANlajRnIts9g1dokBjiUyDKLUHeCuYAAn8Xaxv1MqlJaQZM_G8gMrkBAAMCAAN4AAM8BA",
+    "telegramFileId": "BQACAgIAAxkBAAIEUmo0wKkvsEJiMmeJH7fn7vBe0yhGAALbnQAC9TKpSbwoWPCBtubHPAQ"
+  },
+  {
+    "id": "cengage-forensic-science-2012",
+    "isbn": "9780538731553",
+    "order": 41,
+    "title": {
+      "en": "Forensic Science: Fundamentals and Investigations, 2012 Copyright Update",
+      "uz": "Sud-tibbiyot ekspertizasi: Asoslar va tekshiruvlar, 2012 yilgi nashr",
+      "ru": "Криминалистика: Основы и расследования, Обновление 2012 года"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Natural Science",
+    "field": {
+      "en": "Life Science",
+      "uz": "Hayot fanlari",
+      "ru": "Науки о жизни"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 1,
+    "Subject": {
+      "en": "Forensic Science",
+      "uz": "Sud-tibbiyot ekspertizasi",
+      "ru": "Криминалистика"
+    },
+    "publishedYear": 2012,
+    "authors": [
+      "Anthony J. Bertino",
+      "Patricia Nolan Bertino"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Forensic Science: Fundamentals and Investigations, 2012 Copyright Update. Guides students through the fascinating world of forensic science.",
+      "uz": "Sud-tibbiyot ekspertizasi: Asoslar va tekshiruvlar, 2012 yilgi nashr. O'quvchilarni sud-tibbiyot ekspertizasining qiziqarli dunyosi bilan tanishtiradi.",
+      "ru": "Криминалистика: Основы и расследования, Обновление 2012 года. Знакомит учащихся с увлекательным миром криминалистики."
+    },
+    "localCoverPath": "./library_covers/forensic-science-2012.jpg",
+    "telegramLink": "https://www.amazon.com/Forensic-Science-Fundamentals-Investigations-Update/dp/0538731559",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANmajRnJmsxnl9SQNZDVmsvYM43m2cAAoAXaxv1MqlJR7FrH0rvTk4BAAMCAAN4AAM8BA"
+  },
+  {
+    "id": "cengage-foundations-of-astronomy-14e",
+    "isbn": "9781337399920",
+    "order": 42,
+    "title": {
+      "en": "Foundations of Astronomy",
+      "uz": "Astronomiya asoslari",
+      "ru": "Основы астрономии"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Natural Science",
+    "field": {
+      "en": "Earth & Space Science",
+      "uz": "Yer va koinot fanlari",
+      "ru": "Науки о Земле и космосе"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 14,
+    "Subject": {
+      "en": "Astronomy",
+      "uz": "Astronomiya",
+      "ru": "Астрономия"
+    },
+    "publishedYear": 2019,
+    "authors": [
+      "Michael A. Seeds",
+      "Dana E. Backman"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Foundations of Astronomy, 14th Edition. A comprehensive textbook covering fundamental concepts in astronomy.",
+      "uz": "Astronomiya asoslari, 14-nashr. Astronomiyaning asosiy tushunchalarini qamrab oluvchi keng qamrovli darslik.",
+      "ru": "Основы астрономии, 14-е издание. Комплексный учебник, охватывающий фундаментальные концепции астрономии."
+    },
+    "localCoverPath": "./library_covers/foundations-of-astronomy-14e.jpg",
+    "telegramLink": "https://www.cengage.com/c/foundations-of-astronomy-14e-seeds-backman/9781337399920/",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANnajRnKddh9QbdVVPqfZGJBKL8xSkAAoEXaxv1MqlJ5X2sRQFXAbgBAAMCAAN4AAM8BA"
+  },
+  {
+    "id": "cengage-fundamentals-anatomy-physiology-4e",
+    "isbn": "9781285174150",
+    "order": 43,
+    "title": {
+      "en": "Fundamentals of Anatomy and Physiology",
+      "uz": "Anatomiya va fiziologiya asoslari",
+      "ru": "Основы анатомии и физиологии"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Natural Science",
+    "field": {
+      "en": "Life Science",
+      "uz": "Hayot fanlari",
+      "ru": "Науки о жизни"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 4,
+    "Subject": {
+      "en": "Anatomy & Physiology",
+      "uz": "Anatomiya va fiziologiya",
+      "ru": "Анатомия и физиология"
+    },
+    "publishedYear": 2016,
+    "authors": [
+      "Donald C. Rizzo"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Fundamentals of Anatomy and Physiology, 4th Edition. A comprehensive textbook covering the basics of human anatomy and physiology.",
+      "uz": "Anatomiya va fiziologiya asoslari, 4-nashr. Inson anatomiyasi va fiziologiyasi asoslarini qamrab oluvchi keng qamrovli darslik.",
+      "ru": "Основы анатомии и физиологии, 4-е издание. Комплексный учебник, охватывающий основы анатомии и физиологии человека."
+    },
+    "localCoverPath": "./library_covers/fundamentals-anatomy-physiology-4e.jpg",
+    "telegramLink": "https://www.cengage.com/c/fundamentals-of-anatomy-and-physiology-4e-rizzo/9781285174150/",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANoajRnLbvcuqyp1HNvyBSnphyd3qIAAoIXaxv1MqlJ2X_szxz8E9sBAAMCAAN4AAM8BA"
+  },
+  {
+    "id": "cengage-horizons-exploring-universe-14e",
+    "isbn": "9781305960961",
+    "order": 44,
+    "title": {
+      "en": "Horizons: Exploring the Universe",
+      "uz": "Ufqlar: Koinotni o'rganish",
+      "ru": "Горизонты: Исследование Вселенной"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Natural Science",
+    "field": {
+      "en": "Earth & Space Science",
+      "uz": "Yer va koinot fanlari",
+      "ru": "Науки о Земле и космосе"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 14,
+    "Subject": {
+      "en": "Astronomy",
+      "uz": "Astronomiya",
+      "ru": "Астрономия"
+    },
+    "publishedYear": 2018,
+    "authors": [
+      "Michael Seeds",
+      "Dana Backman"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Horizons: Exploring the Universe, 14th Edition. A comprehensive textbook covering fundamental concepts in astronomy and exploring the universe.",
+      "uz": "Ufqlar: Koinotni o'rganish, 14-nashr. Astronomiya va koinotning asosiy tushunchalarini qamrab oluvchi keng qamrovli darslik.",
+      "ru": "Горизонты: Исследование Вселенной, 14-е издание. Комплексный учебник, охватывающий фундаментальные концепции астрономии и исследование Вселенной."
+    },
+    "localCoverPath": "./library_covers/horizons-exploring-universe-14e.jpg",
+    "telegramLink": "https://www.cengage.com/c/horizons-exploring-the-universe-14e-seeds-backman/9781305960961/",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANpajRnMUeMaaaTv8Y0KpsYbwE5uzkAAoMXaxv1MqlJZpcMqM0qIosBAAMCAAN4AAM8BA"
+  },
+  {
+    "id": "cengage-human-heredity-10e",
+    "isbn": "9781133106876",
+    "order": 45,
+    "title": {
+      "en": "Human Heredity: Principles and Issues",
+      "uz": "Inson irsiyati: Tamoyillar va masalalar",
+      "ru": "Наследственность человека: Принципы и проблемы"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Natural Science",
+    "field": {
+      "en": "Life Science",
+      "uz": "Hayot fanlari",
+      "ru": "Науки о жизни"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 10,
+    "Subject": {
+      "en": "Biology",
+      "uz": "Biologiya",
+      "ru": "Биология"
+    },
+    "publishedYear": 2014,
+    "authors": [
+      "Michael R. Cummings"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Human Heredity: Principles and Issues, 10th Edition. A comprehensive textbook covering the principles of human genetics and heredity.",
+      "uz": "Inson irsiyati: Tamoyillar va masalalar, 10-nashr. Inson genetikasi va irsiyatining tamoyillarini qamrab oluvchi keng qamrovli darslik.",
+      "ru": "Наследственность человека: Принципы и проблемы, 10-е издание. Комплексный учебник, охватывающий принципы генетики и наследственности человека."
+    },
+    "localCoverPath": "./library_covers/human-heredity-10e.jpg",
+    "telegramLink": "https://www.cengage.com/c/human-heredity-principles-and-issues-10e-cummings/9781133106876/",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANqajRnNPFKLYFFuoA9SbBqxqSr2qYAAoQXaxv1MqlJCzFJ2OhZnQ4BAAMCAAN4AAM8BA"
+  },
+  {
+    "id": "cengage-intro-gen-org-biochem-12e",
+    "isbn": "9781337571357",
+    "order": 46,
+    "title": {
+      "en": "Introduction to General, Organic, and Biochemistry",
+      "uz": "Umumiy, organik va biokimyoga kirish",
+      "ru": "Введение в общую, органическую и биохимию"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Natural Science",
+    "field": {
+      "en": "Physical Science",
+      "uz": "Fizikaviy fanlar",
+      "ru": "Физические науки"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 12,
+    "Subject": {
+      "en": "Chemistry",
+      "uz": "Kimyo",
+      "ru": "Химия"
+    },
+    "publishedYear": 2020,
+    "authors": [
+      "Frederick A. Bettelheim",
+      "William H. Brown",
+      "Mary K. Campbell",
+      "Shawn O. Farrell",
+      "Omar J. Torres",
+      "Sara K. Madsen"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Introduction to General, Organic, and Biochemistry, 12th Edition. A comprehensive textbook covering general, organic, and biological chemistry.",
+      "uz": "Umumiy, organik va biokimyoga kirish, 12-nashr. Umumiy, organik va biologik kimyoni qamrab oluvchi keng qamrovli darslik.",
+      "ru": "Введение в общую, органическую и биохимию, 12-е издание. Комплексный учебник, охватывающий общую, органическую и биологическую химию."
+    },
+    "localCoverPath": "./library_covers/intro-gen-org-biochem-12e.jpg",
+    "telegramLink": "https://www.cengage.com/c/introduction-to-general-organic-and-biochemistry-12e-bettelheim/9781337571357/",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANrajRnONTSdeDxdGq7pvizva-Kfl0AAoUXaxv1MqlJ3BfReGK-7J0BAAMCAAN4AAM8BA"
+  },
+  {
+    "id": "cengage-intro-marine-biology-3e",
+    "isbn": "9780495561972",
+    "order": 47,
+    "title": {
+      "en": "Introduction to Marine Biology",
+      "uz": "Dengiz biologiyasiga kirish",
+      "ru": "Введение в морскую биологию"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Natural Science",
+    "field": {
+      "en": "Life Science",
+      "uz": "Hayot fanlari",
+      "ru": "Науки о жизни"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 3,
+    "Subject": {
+      "en": "Biology",
+      "uz": "Biologiya",
+      "ru": "Биология"
+    },
+    "publishedYear": 2010,
+    "authors": [
+      "George Karleskint, Jr.",
+      "Richard Turner",
+      "James W. Small, Jr."
+    ],
+    "language": "en",
+    "description": {
+      "en": "Introduction to Marine Biology, 3rd Edition. A comprehensive textbook covering the fundamental concepts of marine biology and ocean ecosystems.",
+      "uz": "Dengiz biologiyasiga kirish, 3-nashr. Dengiz biologiyasi va okean ekotizimlarining asosiy tushunchalarini qamrab oluvchi keng qamrovli darslik.",
+      "ru": "Введение в морскую биологию, 3-е издание. Комплексный учебник, охватывающий фундаментальные концепции морской биологии и океанических экосистем."
+    },
+    "localCoverPath": "./library_covers/intro-marine-biology-3e.jpg",
+    "telegramLink": "https://www.amazon.com/Introduction-Marine-Biology-George-Karleskint/dp/0495561975",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANsajRnOxTQ1GjSLOt_TyQS8j7xOjoAAoYXaxv1MqlJK-40pCHvpZgBAAMCAAN4AAM8BA"
+  },
+  {
+    "id": "cengage-introductory-chemistry-10e-intl",
+    "isbn": "9798214446172",
+    "order": 48,
+    "title": {
+      "en": "Introductory Chemistry: A Foundation",
+      "uz": "Kirish kimyosi: Asos",
+      "ru": "Введение в химию: Основы"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Natural Science",
+    "field": {
+      "en": "Physical Science",
+      "uz": "Fizikaviy fanlar",
+      "ru": "Физические науки"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 10,
+    "Subject": {
+      "en": "Chemistry",
+      "uz": "Kimyo",
+      "ru": "Химия"
+    },
+    "publishedYear": 2026,
+    "authors": [
+      "Steven S. Zumdahl",
+      "Donald J. DeCoste"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Introductory Chemistry: A Foundation, 10th International Edition. A comprehensive foundation in chemistry concepts.",
+      "uz": "Kirish kimyosi: Asos, 10-xalqaro nashr. Kimyo tushunchalarining keng qamrovli asosi.",
+      "ru": "Введение в химию: Основы, 10-е международное издание. Комплексная основа концепций химии."
+    },
+    "localCoverPath": "./library_covers/introductory-chemistry-10e-intl.jpg",
+    "telegramLink": "https://au.cengage.com/c/introductory-chemistry-foundation-cengage-international-edition-10e-zumdahl-decoste/9798214446172/",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANtajRnPonUN3RxHWJoL3t4IU1igQIAAocXaxv1MqlJWJhTscyWnhwBAAMCAAN4AAM8BA"
+  },
+  {
+    "id": "cengage-meteorology-today-13e",
+    "isbn": "9780357452073",
+    "order": 49,
+    "title": {
+      "en": "Meteorology Today: An Introduction to Weather, Climate, and the Environment",
+      "uz": "Bugungi meteorologiya: Ob-havo, iqlim va atrof-muhitga kirish",
+      "ru": "Метеорология сегодня: Введение в погоду, климат и окружающую среду"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Natural Science",
+    "field": {
+      "en": "Earth & Space Science",
+      "uz": "Yer va koinot fanlari",
+      "ru": "Науки о Земле и космосе"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 13,
+    "Subject": {
+      "en": "Meteorology",
+      "uz": "Meteorologiya",
+      "ru": "Метеорология"
+    },
+    "publishedYear": 2022,
+    "authors": [
+      "C. Donald Ahrens",
+      "Robert Henson"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Meteorology Today: An Introduction to Weather, Climate, and the Environment, 13th Edition. A comprehensive introductory textbook on meteorology.",
+      "uz": "Bugungi meteorologiya: Ob-havo, iqlim va atrof-muhitga kirish, 13-nashr. Meteorologiya bo'yicha keng qamrovli kirish darsligi.",
+      "ru": "Метеорология сегодня: Введение в погоду, климат и окружающую среду, 13-е издание. Комплексный вводный учебник по метеорологии."
+    },
+    "localCoverPath": "./library_covers/meteorology-today-13e.jpg",
+    "telegramLink": "https://www.cengage.com/c/meteorology-today-an-introduction-to-weather-climate-and-the-environment-13e-ahrens-henson/9780357452073/",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANuajRnQlOr39jTHnvy7d2jPyfBK-EAAogXaxv1MqlJhKbPxRq8-S8BAAMCAAN4AAM8BA"
+  },
+  {
+    "id": "cengage-essentials-of-oceanography-8e",
+    "isbn": "9781337098649",
+    "order": 50,
+    "title": {
+      "en": "Essentials of Oceanography",
+      "uz": "Okeanografiya asoslari",
+      "ru": "Основы океанографии"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Natural Science",
+    "field": {
+      "en": "Earth & Space Science",
+      "uz": "Yer va koinot fanlari",
+      "ru": "Науки о Земле и космосе"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 8,
+    "Subject": {
+      "en": "Oceanography",
+      "uz": "Okeanografiya",
+      "ru": "Океанография"
+    },
+    "publishedYear": 2018,
+    "authors": [
+      "Tom Garrison",
+      "Robert Ellis"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Essentials of Oceanography, 8th Edition. A comprehensive introductory textbook on oceanography.",
+      "uz": "Okeanografiya asoslari, 8-nashr. Okeanografiya bo'yicha keng qamrovli kirish darsligi.",
+      "ru": "Основы океанографии, 8-е издание. Комплексный вводный учебник по океанографии."
+    },
+    "localCoverPath": "./library_covers/essentials-of-oceanography-8e.jpg",
+    "telegramLink": "https://www.cengage.com/c/essentials-of-oceanography-8e-garrison-ellis/9781337098649/",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANvajRnRq9ph7fL7kZt2c7H2GioxPYAAokXaxv1MqlJEp6bfmGVJpEBAAMCAAN4AAM8BA"
+  },
+  {
+    "id": "cengage-oceanography-invitation-9e",
+    "isbn": "9781305105164",
+    "order": 51,
+    "title": {
+      "en": "Oceanography: An Invitation to Marine Science",
+      "uz": "Okeanografiya: Dengiz faniga taklif",
+      "ru": "Океанография: Введение в морскую науку"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Natural Science",
+    "field": {
+      "en": "Earth & Space Science",
+      "uz": "Yer va koinot fanlari",
+      "ru": "Науки о Земле и космосе"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 9,
+    "Subject": {
+      "en": "Oceanography",
+      "uz": "Okeanografiya",
+      "ru": "Океанография"
+    },
+    "publishedYear": 2016,
+    "authors": [
+      "Tom Garrison",
+      "Robert Ellis"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Oceanography: An Invitation to Marine Science, 9th Edition. A comprehensive textbook introducing the fundamental concepts of oceanography and marine science.",
+      "uz": "Okeanografiya: Dengiz faniga taklif, 9-nashr. Okeanografiya va dengiz fanining asosiy tushunchalari bilan tanishtiruvchi keng qamrovli darslik.",
+      "ru": "Океанография: Введение в морскую науку, 9-е издание. Комплексный учебник, знакомящий с фундаментальными концепциями океанографии и морской науки."
+    },
+    "localCoverPath": "./library_covers/oceanography-invitation-9e.jpg",
+    "telegramLink": "https://www.cengage.com/c/oceanography-an-invitation-to-marine-science-9e-garrison/9781305105164/",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANwajRnSTtJpH6ABxe7tx72UQWOl8IAAooXaxv1MqlJU-g2c9uOn5kBAAMCAAN4AAM8BA"
+  },
+  {
+    "id": "cengage-oceanography-invitation-10e-hs",
+    "isbn": "9798214066844",
+    "order": 52,
+    "title": {
+      "en": "Oceanography: An Invitation to Marine Science",
+      "uz": "Okeanografiya: Dengiz faniga taklif",
+      "ru": "Океанография: Введение в морскую науку"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Natural Science",
+    "field": {
+      "en": "Earth & Space Science",
+      "uz": "Yer va koinot fanlari",
+      "ru": "Науки о Земле и космосе"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 10,
+    "Subject": {
+      "en": "Oceanography",
+      "uz": "Okeanografiya",
+      "ru": "Океанография"
+    },
+    "publishedYear": 2024,
+    "authors": [
+      "Tom Garrison",
+      "Robert Ellis"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Oceanography: An Invitation to Marine Science, 10th High School Edition. A comprehensive textbook introducing the fundamental concepts of oceanography and marine science.",
+      "uz": "Okeanografiya: Dengiz faniga taklif, 10-nashr (Yuqori maktab). Okeanografiya va dengiz fanining asosiy tushunchalari bilan tanishtiruvchi keng qamrovli darslik.",
+      "ru": "Океанография: Введение в морскую науку, 10-е издание для старшей школы. Комплексный учебник, знакомящий с фундаментальными концепциями океанографии и морской науки."
+    },
+    "localCoverPath": "./library_covers/oceanography-invitation-10e-hs.jpg",
+    "telegramLink": "https://www.cengageasia.com/title/default/detail?isbn=9798214066844",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANxajRnTcIa-I9NMf1FYE7LxeSVTXkAAosXaxv1MqlJ0z9UuaSRWCgBAAMCAAN5AAM8BA"
+  },
+  {
+    "id": "cengage-physics-scientists-engineers-10e",
+    "isbn": "9781337553292",
+    "order": 53,
+    "title": {
+      "en": "Physics for Scientists and Engineers with Modern Physics",
+      "uz": "Olimlar va muhandislar uchun fizika (Zamonaviy fizika bilan)",
+      "ru": "Физика для ученых и инженеров с современной физикой"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Natural Science",
+    "field": {
+      "en": "Physical Science",
+      "uz": "Fizikaviy fanlar",
+      "ru": "Физические науки"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 10,
+    "Subject": {
+      "en": "Physics",
+      "uz": "Fizika",
+      "ru": "Физика"
+    },
+    "publishedYear": 2019,
+    "authors": [
+      "Raymond A. Serway",
+      "John W. Jewett, Jr"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Physics for Scientists and Engineers with Modern Physics, 10th Edition. A comprehensive physics textbook.",
+      "uz": "Olimlar va muhandislar uchun fizika (Zamonaviy fizika bilan), 10-nashr. Keng qamrovli fizika darsligi.",
+      "ru": "Физика для ученых и инженеров с современной физикой, 10-е издание. Комплексный учебник по физике."
+    },
+    "localCoverPath": "./library_covers/physics-scientists-engineers-10e.jpg",
+    "telegramLink": "https://www.cengage.com/c/physics-for-scientists-and-engineers-with-modern-physics-10e-serway-jewett/9781337553292/",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANyajRnUMq6_tZt3x5xHZ5VQQgJWWYAAowXaxv1MqlJ1d4ubJXZVtYBAAMCAAN4AAM8BA"
+  },
+  {
+    "id": "cengage-understanding-nutrition-5e",
+    "isbn": "9780170457972",
+    "order": 54,
+    "title": {
+      "en": "Understanding Nutrition",
+      "uz": "Oziqlanishni tushunish",
+      "ru": "Понимание питания"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Natural Science",
+    "field": {
+      "en": "Life Science",
+      "uz": "Hayot fanlari",
+      "ru": "Науки о жизни"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "australia",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 5,
+    "Subject": {
+      "en": "Nutrition",
+      "uz": "Oziqlanish",
+      "ru": "Питание"
+    },
+    "publishedYear": 2023,
+    "authors": [
+      "Eleanor Whitney",
+      "Sharon Rady Rolfes",
+      "Tim Crowe",
+      "Adam Walsh"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Understanding Nutrition, 5th Edition. A comprehensive textbook covering the principles and science of nutrition.",
+      "uz": "Oziqlanishni tushunish, 5-nashr. Oziqlanish tamoyillari va fanini qamrab oluvchi keng qamrovli darslik.",
+      "ru": "Понимание питания, 5-е издание. Комплексный учебник, охватывающий принципы и науку о питании."
+    },
+    "localCoverPath": "./library_covers/understanding-nutrition-5e.jpg",
+    "telegramLink": "https://au.cengage.com/c/understanding-nutrition-5e-whitney-rolfes-crowe-walsh/9780170457972/",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAANzajRnVBlo3hNIoy_mRp2GxBYycykAAo0Xaxv1MqlJ1-I4Rh4OmHYBAAMCAAN4AAM8BA"
+  },
+  {
+    "id": "cengage-understanding-nutrition-16e",
+    "isbn": "9780357447512",
+    "order": 55,
+    "title": {
+      "en": "Understanding Nutrition",
+      "uz": "Oziqlanishni tushunish",
+      "ru": "Понимание питания"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Natural Science",
+    "field": {
+      "en": "Life Science",
+      "uz": "Hayot fanlari",
+      "ru": "Науки о жизни"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 16,
+    "Subject": {
+      "en": "Nutrition",
+      "uz": "Oziqlanish",
+      "ru": "Питание"
+    },
+    "publishedYear": 2022,
+    "authors": [
+      "Ellie Whitney",
+      "Sharon Rady Rolfes"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Understanding Nutrition, 16th Edition. A comprehensive textbook covering the principles and science of nutrition.",
+      "uz": "Oziqlanishni tushunish, 16-nashr. Oziqlanish tamoyillari va fanini qamrab oluvchi keng qamrovli darslik.",
+      "ru": "Понимание питания, 16-е издание. Комплексный учебник, охватывающий принципы и науку о питании."
+    },
+    "localCoverPath": "./library_covers/understanding-nutrition-16e.jpg",
+    "telegramLink": "https://www.cengage.com/c/understanding-nutrition-16e-whitney-rolfes/9780357447512/",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAAN0ajRnWP75QVTe09Y0KIrOuxT3M54AAo4Xaxv1MqlJYV7NsBpq91MBAAMCAAN4AAM8BA"
+  },
+  {
+    "id": "mcgraw-hill-civics-today-alabama-2005",
+    "isbn": "9780078662577",
+    "order": 56,
+    "title": {
+      "en": "Civics Today: Citizenship, Economics, & You (Alabama Edition)",
+      "uz": "Bugungi fuqarolik: Fuqarolik, iqtisodiyot va siz (Alabama nashri)",
+      "ru": "Граждановедение сегодня: Гражданство, экономика и вы (Издание для Алабамы)"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Social Science",
+    "field": {
+      "en": "Political & Economic Science",
+      "uz": "Siyosiy va iqtisodiy fanlar",
+      "ru": "Политические и экономические науки"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "Subject": {
+      "en": "Civics & Economics",
+      "uz": "Fuqarolik va iqtisodiyot",
+      "ru": "Граждановедение и экономика"
+    },
+    "publishedYear": 2005,
+    "authors": [
+      "Richard C. Remy",
+      "John J. Patrick",
+      "David C. Saffell",
+      "Gary E. Clayton"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Civics Today: Citizenship, Economics, and You meets the content standards for civics and government. This Alabama edition teaches the knowledge and skills needed to be an effective, active citizen.",
+      "uz": "Bugungi fuqarolik: Fuqarolik, iqtisodiyot va siz darsligi fuqarolik va davlat boshqaruvi standartlariga javob beradi. Ushbu Alabama nashri samarali va faol fuqaro bo'lish uchun zarur bo'lgan bilim va ko'nikmalarni o'rgatadi.",
+      "ru": "Граждановедение сегодня: Гражданство, экономика и вы соответствует стандартам содержания по граждановедению и правительству. Это издание для Алабамы обучает знаниям и навыкам, необходимым для того, чтобы стать эффективным, активным гражданином."
+    },
+    "localCoverPath": "./library_covers/civics-today-alabama-2005.jpg",
+    "telegramLink": "https://www.amazon.com.au/Civics-Today-Citizenship-Economics-Alabama/dp/0078662575",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAAN1ajRnWyfXAAHRC4PEC4e_kPvY0iyoAAKPF2sb9TKpSaPtD6H_ERZsAQADAgADbQADPAQ"
+  },
+  {
+    "id": "cengage-american-government-politics-today-brief-2022",
+    "isbn": "9780357459065",
+    "order": 58,
+    "title": {
+      "en": "American Government and Politics Today 2021–2022 (Brief Edition)",
+      "uz": "Bugungi Amerika hukumati va siyosati 2021–2022 (Qisqacha nashr)",
+      "ru": "Американское правительство и политика сегодня 2021–2022 (Краткое издание)"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Social Science",
+    "field": {
+      "en": "Political & Economic Science",
+      "uz": "Siyosiy va iqtisodiy fanlar",
+      "ru": "Политические и экономические науки"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "Subject": {
+      "en": "Government & Politics",
+      "uz": "Davlat boshqaruvi va siyosat",
+      "ru": "Правительство и политика"
+    },
+    "publishedYear": 2022,
+    "authors": [
+      "Steffen W. Schmidt",
+      "Mack C. Shelley II",
+      "Barbara A. Bardes"
+    ],
+    "language": "en",
+    "description": {
+      "en": "American Government and Politics Today 2021–2022, Brief Edition. A comprehensive textbook covering the structure and dynamics of the U.S. government.",
+      "uz": "Bugungi Amerika hukumati va siyosati 2021–2022, Qisqacha nashr. AQSh hukumati tarkibi va dinamikasini qamrab oluvchi keng qamrovli darslik.",
+      "ru": "Американское правительство и политика сегодня 2021–2022, Краткое издание. Комплексный учебник, охватывающий структуру и динамику правительства США."
+    },
+    "localCoverPath": "./library_covers/american-government-politics-today-brief-2022.jpg",
+    "telegramLink": "https://faculty.cengage.com/works/9780357459065",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAAN2ajRnX4ibU38ajiBuQ_aeyo-pi-sAApAXaxv1MqlJGQfJqkUvV4cBAAMCAAN4AAM8BA"
+  },
+  {
+    "id": "cengage-american-government-institutions-policies-16e",
+    "isbn": "9781337568395",
+    "order": 59,
+    "title": {
+      "en": "American Government: Institutions and Policies",
+      "uz": "Amerika hukumati: Institutlar va siyosatlar",
+      "ru": "Американское правительство: Институты и политика"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Social Science",
+    "field": {
+      "en": "Political & Economic Science",
+      "uz": "Siyosiy va iqtisodiy fanlar",
+      "ru": "Политические и экономические науки"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 16,
+    "Subject": {
+      "en": "Government & Politics",
+      "uz": "Davlat boshqaruvi va siyosat",
+      "ru": "Правительство и политика"
+    },
+    "publishedYear": 2019,
+    "authors": [
+      "James Q. Wilson",
+      "John J. DiIulio, Jr.",
+      "Meena Bose",
+      "Matthew Levendusky"
+    ],
+    "language": "en",
+    "description": {
+      "en": "American Government: Institutions and Policies, 16th Edition. A comprehensive textbook on American government.",
+      "uz": "Amerika hukumati: Institutlar va siyosatlar, 16-nashr. Amerika hukumati bo'yicha keng qamrovli darslik.",
+      "ru": "Американское правительство: Институты и политика, 16-е издание. Комплексный учебник по американскому правительству."
+    },
+    "localCoverPath": "./library_covers/american-government-institutions-policies-16e.jpg",
+    "telegramLink": "https://www.vitalsource.com/products/american-government-institutions-and-policies-james-q-wilson-john-j-v9798214337326",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAAN3ajRnYhZd7_1kJ6wR61hmWSoBAbMAApEXaxv1MqlJVj8bTrwGR8YBAAMCAAN4AAM8BA"
+  },
+  {
+    "id": "cengage-contemporary-economics-4e",
+    "isbn": "9781337283021",
+    "order": 60,
+    "title": {
+      "en": "Contemporary Economics",
+      "uz": "Zamonaviy iqtisodiyot",
+      "ru": "Современная экономика"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Social Science",
+    "field": {
+      "en": "Political & Economic Science",
+      "uz": "Siyosiy va iqtisodiy fanlar",
+      "ru": "Политические и экономические науки"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 4,
+    "Subject": {
+      "en": "Economics",
+      "uz": "Iqtisodiyot",
+      "ru": "Экономика"
+    },
+    "publishedYear": 2018,
+    "authors": [
+      "William A. McEachern"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Contemporary Economics, 4th Edition. A comprehensive textbook covering fundamental economic principles.",
+      "uz": "Zamonaviy iqtisodiyot, 4-nashr. Iqtisodiyotning asosiy tamoyillarini qamrab oluvchi keng qamrovli darslik.",
+      "ru": "Современная экономика, 4-е издание. Комплексный учебник, охватывающий фундаментальные экономические принципы."
+    },
+    "localCoverPath": "./library_covers/contemporary-economics-4e.jpg",
+    "telegramLink": "https://faculty.cengage.com/works/9781337283021?q=pricing-formats",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAAN4ajRnZl2v4GEoS7leWWmMo-i1LnEAApIXaxv1MqlJet7OiSz0ugQBAAMCAAN4AAM8BA"
+  },
+  {
+    "id": "cengage-discovering-psychology-science-mind-4e",
+    "isbn": "9780357363232",
+    "order": 61,
+    "title": {
+      "en": "Discovering Psychology: The Science of Mind",
+      "uz": "Psixologiyani kashf qilish: Aql fani",
+      "ru": "Открывая психологию: Наука о разуме"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Social Science",
+    "field": {
+      "en": "Behavioral Science",
+      "uz": "Xulq-atvor fanlari",
+      "ru": "Поведенческие науки"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 4,
+    "Subject": {
+      "en": "Psychology",
+      "uz": "Psixologiya",
+      "ru": "Психология"
+    },
+    "publishedYear": 2022,
+    "authors": [
+      "John T. Cacioppo",
+      "Laura A. Freberg",
+      "Stephanie J. Cacioppo"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Discovering Psychology: The Science of Mind, 4th Edition. A comprehensive textbook covering the fundamental principles of psychology.",
+      "uz": "Psixologiyani kashf qilish: Aql fani, 4-nashr. Psixologiyaning asosiy tamoyillarini qamrab oluvchi keng qamrovli darslik.",
+      "ru": "Открывая психологию: Наука о разуме, 4-е издание. Комплексный учебник, охватывающий фундаментальные принципы психологии."
+    },
+    "localCoverPath": "./library_covers/discovering-psychology-science-mind-4e.jpg",
+    "telegramLink": "https://faculty.cengage.com/works/9780357363232?q=pricing-formats",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAAN5ajRnahPvT_39Y-boObGXtAdrcaMAApMXaxv1MqlJpVeiYJK6e1QBAAMCAAN4AAM8BA"
+  },
+  {
+    "id": "cengage-essentials-psychology-concepts-applications-5e",
+    "isbn": "9781305964150",
+    "order": 62,
+    "title": {
+      "en": "Essentials of Psychology: Concepts and Applications",
+      "uz": "Psixologiya asoslari: Tushunchalar va amaliyotlar",
+      "ru": "Основы психологии: Концепции и применение"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Social Science",
+    "field": {
+      "en": "Behavioral Science",
+      "uz": "Xulq-atvor fanlari",
+      "ru": "Поведенческие науки"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 5,
+    "Subject": {
+      "en": "Psychology",
+      "uz": "Psixologiya",
+      "ru": "Психология"
+    },
+    "publishedYear": 2018,
+    "authors": [
+      "Jeffrey S. Nevid"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Essentials of Psychology: Concepts and Applications, 5th Edition. A comprehensive textbook covering fundamental psychological concepts.",
+      "uz": "Psixologiya asoslari: Tushunchalar va amaliyotlar, 5-nashr. Asosiy psixologik tushunchalarni qamrab oluvchi keng qamrovli darslik.",
+      "ru": "Основы психологии: Концепции и применение, 5-е издание. Комплексный учебник, охватывающий фундаментальные психологические концепции."
+    },
+    "localCoverPath": "./library_covers/essentials-psychology-concepts-applications-5e.jpg",
+    "telegramLink": "https://www.amazon.com/Essentials-Psychology-Applications-Jeffrey-Nevid/dp/1305964152",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAAN6ajRnbZWe0axUiRepO2B54q1KNGcAApQXaxv1MqlJe15HQ_2G8AkBAAMCAAN4AAM8BA"
+  },
+  {
+    "id": "cengage-intro-comparative-politics-8e",
+    "isbn": "9781337560443",
+    "order": 63,
+    "title": {
+      "en": "Introduction to Comparative Politics: Political Challenges and Changing Agendas",
+      "uz": "Qiyosiy siyosatga kirish: Siyosiy muammolar va o'zgaruvchan kun tartibi",
+      "ru": "Введение в сравнительную политологию: Политические вызовы и меняющаяся повестка дня"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Social Science",
+    "field": {
+      "en": "Political & Economic Science",
+      "uz": "Siyosiy va iqtisodiy fanlar",
+      "ru": "Политические и экономические науки"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 8,
+    "Subject": {
+      "en": "Political Science",
+      "uz": "Siyosatshunoslik",
+      "ru": "Политология"
+    },
+    "publishedYear": 2019,
+    "authors": [
+      "Mark Kesselman",
+      "Joel Krieger",
+      "William A. Joseph"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Introduction to Comparative Politics: Political Challenges and Changing Agendas, 8th Edition. A comprehensive textbook covering comparative political systems.",
+      "uz": "Qiyosiy siyosatga kirish: Siyosiy muammolar va o'zgaruvchan kun tartibi, 8-nashr. Qiyosiy siyosiy tizimlar bo'yicha keng qamrovli darslik.",
+      "ru": "Введение в сравнительную политологию: Политические вызовы и меняющаяся повестка дня, 8-е издание. Комплексный учебник, охватывающий сравнительные политические системы."
+    },
+    "localCoverPath": "./library_covers/intro-comparative-politics-8e.jpg",
+    "telegramLink": "https://faculty.cengage.com/works/9781337560443?q=pricing-formats",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAAN7ajRncchFH5LnP48u9xLg31XKHw8AApUXaxv1MqlJoZrBxiPOs6wBAAMCAAN4AAM8BA"
+  },
+  {
+    "id": "cengage-principles-economics-10e",
+    "isbn": "9780357722718",
+    "order": 64,
+    "title": {
+      "en": "Principles of Economics",
+      "uz": "Iqtisodiyot tamoyillari",
+      "ru": "Принципы экономики"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Social Science",
+    "field": {
+      "en": "Political & Economic Science",
+      "uz": "Siyosiy va iqtisodiy fanlar",
+      "ru": "Политические и экономические науки"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 10,
+    "Subject": {
+      "en": "Economics",
+      "uz": "Iqtisodiyot",
+      "ru": "Экономика"
+    },
+    "publishedYear": 2024,
+    "authors": [
+      "N. Gregory Mankiw"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Principles of Economics, 10th Edition. A comprehensive textbook covering fundamental economic principles and theories.",
+      "uz": "Iqtisodiyot tamoyillari, 10-nashr. Iqtisodiyotning asosiy tamoyillari va nazariyalarini qamrab oluvchi keng qamrovli darslik.",
+      "ru": "Принципы экономики, 10-е издание. Комплексный учебник, охватывающий фундаментальные экономические принципы и теории."
+    },
+    "localCoverPath": "./library_covers/principles-economics-10e.jpg",
+    "telegramLink": "https://faculty.cengage.com/works/9780357722718?q=pricing-formats",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAAN8ajRndLbXq-NEbE228jXeNeblkhoAApcXaxv1MqlJjpbmRVe6BqkBAAMCAAN4AAM8BA"
+  },
+  {
+    "id": "cengage-psychology-themes-variations-11e",
+    "isbn": "9780357374825",
+    "order": 65,
+    "title": {
+      "en": "Psychology: Themes and Variations",
+      "uz": "Psixologiya: Mavzular va variatsiyalar",
+      "ru": "Психология: Темы и вариации"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Social Science",
+    "field": {
+      "en": "Behavioral Science",
+      "uz": "Xulq-atvor fanlari",
+      "ru": "Поведенческие науки"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 11,
+    "Subject": {
+      "en": "Psychology",
+      "uz": "Psixologiya",
+      "ru": "Психология"
+    },
+    "publishedYear": 2022,
+    "authors": [
+      "Wayne Weiten"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Psychology: Themes and Variations, 11th Edition. A comprehensive textbook covering fundamental psychological themes and concepts.",
+      "uz": "Psixologiya: Mavzular va variatsiyalar, 11-nashr. Asosiy psixologik mavzular va tushunchalarni qamrab oluvchi keng qamrovli darslik.",
+      "ru": "Психология: Темы и вариации, 11-е издание. Комплексный учебник, охватывающий фундаментальные психологические темы и концепции."
+    },
+    "localCoverPath": "./library_covers/psychology-themes-variations-11e.jpg",
+    "telegramLink": "https://faculty.cengage.com/works/9780357374825?q=pricing-formats",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAAN9ajRneEAlgu0UvBTQY5ScOBMQzMEAApgXaxv1MqlJaZAJz3d5YNsBAAMCAAN4AAM8BA"
+  },
+  {
+    "id": "cengage-sociology-in-our-times-essentials-12e",
+    "isbn": "9780357368633",
+    "order": 67,
+    "title": {
+      "en": "Sociology in Our Times: The Essentials",
+      "uz": "Zamonamiz sotsiologiyasi: Asoslar",
+      "ru": "Социология в наше время: Основы"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Social Science",
+    "field": {
+      "en": "Behavioral Science",
+      "uz": "Xulq-atvor fanlari",
+      "ru": "Поведенческие науки"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 12,
+    "Subject": {
+      "en": "Sociology",
+      "uz": "Sotsiologiya",
+      "ru": "Социология"
+    },
+    "publishedYear": 2021,
+    "authors": [
+      "Diana Kendall"
+    ],
+    "language": "en",
+    "description": {
+      "en": "Sociology in Our Times: The Essentials, 12th Edition. A comprehensive textbook covering fundamental sociological concepts and current social issues.",
+      "uz": "Zamonamiz sotsiologiyasi: Asoslar, 12-nashr. Asosiy sotsiologik tushunchalar va joriy ijtimoiy muammolarni qamrab oluvchi keng qamrovli darslik.",
+      "ru": "Социология в наше время: Основы, 12-е издание. Комплексный учебник, охватывающий фундаментальные социологические концепции и текущие социальные проблемы."
+    },
+    "localCoverPath": "./library_covers/sociology-in-our-times-essentials-12e.jpg",
+    "telegramLink": "https://faculty.cengage.com/works/9780357368633?q=pricing-formats",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAAN-ajRne_x1qQAB3h7ZzKiyoqbfa0h2AAKZF2sb9TKpSYmbK5pYJLbBAQADAgADeAADPAQ"
+  },
+  {
+    "id": "cengage-american-pageant-ap-17e",
+    "isbn": "9781337915571",
+    "order": 68,
+    "title": {
+      "en": "The American Pageant: A History of the American People, AP® Edition",
+      "uz": "Amerika sahnasi: Amerika xalqi tarixi, AP® nashri",
+      "ru": "Американское зрелище: История американского народа, издание AP®"
+    },
+    "lifePath": {
+      "en": "School Books",
+      "uz": "Maktab kitoblari",
+      "ru": "Школьные книги"
+    },
+    "publisher": "Cengage Learning",
+    "scienceField": "Social Science",
+    "field": {
+      "en": "Political & Economic Science",
+      "uz": "Siyosiy va iqtisodiy fanlar",
+      "ru": "Политические и экономические науки"
+    },
+    "schoolType": {
+      "en": "High School",
+      "uz": "Yuqori maktab",
+      "ru": "Старшая школа"
+    },
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "country": "usa",
+    "bookType": "darslik",
+    "editionType": {
+      "en": "Student Book",
+      "uz": "O'quvchi kitobi",
+      "ru": "Учебник для учащихся"
+    },
+    "edition": 17,
+    "Subject": {
+      "en": "History",
+      "uz": "Tarix",
+      "ru": "История"
+    },
+    "publishedYear": 2020,
+    "authors": [
+      "David M. Kennedy",
+      "Lizabeth Cohen"
+    ],
+    "language": "en",
+    "description": {
+      "en": "The American Pageant: A History of the American People, AP® Edition, 17th Edition. A comprehensive textbook covering American history designed for Advanced Placement students.",
+      "uz": "Amerika sahnasi: Amerika xalqi tarixi, AP® nashri, 17-nashr. Advanced Placement o'quvchilari uchun mo'ljallangan, Amerika tarixini qamrab oluvchi keng qamrovli darslik.",
+      "ru": "Американское зрелище: История американского народа, 17-е издание AP®. Комплексный учебник по американской истории, разработанный для учащихся программы Advanced Placement."
+    },
+    "localCoverPath": "./library_covers/american-pageant-ap-17e.jpg",
+    "telegramLink": "https://faculty.cengage.com/works/9781337915571?q=pricing-formats",
+    "downloadscount": 0,
+    "viewscount": 0,
+    "telegramPhotoId": "AgACAgIAAxkDAAN_ajRnf6gaf0hAjUtoqRFK4WWnAuUAApoXaxv1MqlJNLmnVHjLGPsBAAMCAAN4AAM8BA"
+  }
+]

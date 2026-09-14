@@ -1,0 +1,612 @@
+{
+  "_readme": [
+    "THE CHEMISTRY SAMPLE PAPER — edit this file to change what the Milliy sertifikat",
+    "chemistry builder's \"Namunaviy variant\" button loads. Contract: docs/MILLIY_QUIZ.md.",
+    "",
+    "WHY 40 QUESTIONS AND NOT THE PROGRAMME'S 43. The DTM chemistry paper is two",
+    "parts: #1-40 (closed + short typed) in 100 minutes, then #41-43 EXTENDED",
+    "WRITTEN work in 80 more. Those last three are marked by a human against",
+    "per-step criteria (M = method, A = arithmetic), 25 balls each, and score 0 if",
+    "the candidate writes only a final answer. This subsystem auto-grades a slot as",
+    "right or wrong, so it cannot mark them and does not pretend to: the sample",
+    "paper is part 1 in full. A teacher who wants #41-43 sets them as homework or",
+    "marks them on paper.",
+    "",
+    "THE OFFICIAL PART-1 DISTRIBUTION, which this file follows:",
+    "  Y1 (one correct answer, 32): umumiy 13 - anorganik 6 - organik 10 - tahlil 3",
+    "  Y2 (matching, 3):            umumiy / anorganik / organik, one each",
+    "  O1 (short typed answer, 5):  umumiy 2 - anorganik 1 - organik 2",
+    "⚠️ NOTHING ENFORCES THAT. There is no chemistry blueprint in this repo (unlike",
+    "maths' EXAM_BLUEPRINT) and the builder has no per-section quotas, so the counts",
+    "above are this file's own discipline. Recount them if you add or remove an entry.",
+    "",
+    "⚠️ Y2 MATCHING IS AUTHORED AS A CLOSED A-D QUESTION whose options are whole",
+    "pairings (\"1-b, 2-c, 3-a\"), which is how a matching item is printed on the",
+    "paper anyway. There is no matching QUESTION TYPE in this repo, and a real",
+    "drag-to-match widget would need a new qType in the runner, the review screen",
+    "and the grader.",
+    "",
+    "Per entry:",
+    "  topicId     a `kimyo` TOPIC slug. It becomes the item's sectionId, which is",
+    "              what the teacher's results page groups by. The taxonomy keeps the",
+    "              programme's four numbered sections and nothing finer:",
+    "                umumiy-kimyo",
+    "                anorganik-kimyo",
+    "                organik-kimyo",
+    "                kimyoviy-tahlil",
+    "  subtopicId  optional, for a more precise label. Must belong to its topic.",
+    "              Chemistry's subtopics carry a \"Group — Leaf\" prefix, so they read",
+    "              e.g. `atom-tuzilishi-izotoplar`.",
+    "  question    a string, or {uz, ru, en}. A bare string is used for all three.",
+    "  options     A-D (OptionKey is A..D). PRESENT => closed item; ABSENT => typed",
+    "              item. There is no separate flag, so the two cannot contradict.",
+    "  answer      closed -> the correct option key; typed -> the literal answer.",
+    "  acceptedAnswers  typed only: other spellings graded correct.",
+    "  numeric     typed only, default FALSE. ⚠️ SET IT TRUE on every calculation",
+    "              answer — most chemistry short answers are numbers, the opposite",
+    "              of biology. It grades with the numeric comparison, so a student",
+    "              typing \"5,6\" or \"5.60\" is not marked wrong for formatting.",
+    "  difficultyId  1 easy | 2 medium | 3 hard. Default 2.",
+    "",
+    "FORMULAS: written as plain text with digits (H2SO4, Fe(OH)3, C2H5OH) rather",
+    "than LaTeX subscripts, because the runner renders these strings through the",
+    "same LatexRenderer as every other question and unescaped $ or _ would be read",
+    "as math. Wrap real maths in $...$ if an entry needs it.",
+    "",
+    "MARKING: none of the values here set what a question is WORTH. Every question",
+    "is priced from the share of the cohort that solved it (lib/RASCHmarks.ts) — the",
+    "more of the class that gets it right, the less it is worth. `difficultyId` is a",
+    "label for the teacher, not a mark.",
+    "",
+    "KNOWN LIMITATION: the questions are authored UZBEK-ONLY. A bare string fills",
+    "ru and en with the same Uzbek text (toSampleText), so a student who picked",
+    "Russian or English sees Uzbek rather than a blank. Add {uz, ru, en} objects",
+    "per entry as translations are made."
+  ],
+  "title": {
+    "uz": "Kimyo — namunaviy variant",
+    "ru": "Химия — образцовый вариант",
+    "en": "Chemistry — sample paper"
+  },
+  "durationMinutes": 100,
+  "questions": [
+    {
+      "topicId": "umumiy-kimyo",
+      "subtopicId": "asosiy-tushunchalar-va-qonunlar-mol-va-molyar-massa",
+      "question": "44 g karbonat angidrid (CO2) necha mol moddani tashkil etadi?",
+      "options": {
+        "A": "0,5 mol",
+        "B": "1 mol",
+        "C": "2 mol",
+        "D": "4 mol"
+      },
+      "answer": "B",
+      "explanation": "M(CO2) = 12 + 16·2 = 44 g/mol. n = m/M = 44/44 = 1 mol.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "umumiy-kimyo",
+      "subtopicId": "asosiy-tushunchalar-va-qonunlar-avogadro-qonuni-va-molyar-hajm",
+      "question": "Normal sharoitda 11,2 l kislorod (O2) gazining massasi qancha?",
+      "options": {
+        "A": "8 g",
+        "B": "16 g",
+        "C": "22,4 g",
+        "D": "32 g"
+      },
+      "answer": "B",
+      "explanation": "n = 11,2/22,4 = 0,5 mol. m = 0,5 · 32 = 16 g.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "umumiy-kimyo",
+      "subtopicId": "atom-tuzilishi-izotoplar",
+      "question": "Izotoplar bir-biridan nima bilan farq qiladi?",
+      "options": {
+        "A": "Protonlar soni bilan",
+        "B": "Elektronlar soni bilan",
+        "C": "Neytronlar soni bilan",
+        "D": "Zaryadi bilan"
+      },
+      "answer": "C",
+      "explanation": "Izotoplarda protonlar (demak zaryad va element) bir xil, massa soni esa neytronlar soni bilan farq qiladi.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "umumiy-kimyo",
+      "subtopicId": "atom-tuzilishi-elektron-konfiguratsiya",
+      "question": "Tashqi qobig'ida 3s2 3p4 elektronlari bo'lgan element qaysi?",
+      "options": {
+        "A": "Kremniy",
+        "B": "Fosfor",
+        "C": "Oltingugurt",
+        "D": "Xlor"
+      },
+      "answer": "C",
+      "explanation": "1s2 2s2 2p6 3s2 3p4 — jami 16 elektron, ya'ni 16-element oltingugurt.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "umumiy-kimyo",
+      "subtopicId": "atom-tuzilishi-davriy-sistema-tuzilishi",
+      "question": "Davriy sistemada guruh bo'yicha yuqoridan pastga tushganda atom radiusi va metallik xossa qanday o'zgaradi?",
+      "options": {
+        "A": "Radius kamayadi, metallik ortadi",
+        "B": "Radius ortadi, metallik ortadi",
+        "C": "Radius ortadi, metallik kamayadi",
+        "D": "Ikkisi ham kamayadi"
+      },
+      "answer": "B",
+      "explanation": "Yangi qobiqlar qo'shiladi — radius ortadi, tashqi elektron yadrodan uzoqlashib osonroq beriladi, demak metallik xossa kuchayadi.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "umumiy-kimyo",
+      "subtopicId": "kimyoviy-boglanish-gibridlanish",
+      "question": "Etilen (C2H4) molekulasidagi uglerod atomlarining gibridlanish turi va valent burchagi qanday?",
+      "options": {
+        "A": "sp3, 109,5°",
+        "B": "sp2, 120°",
+        "C": "sp, 180°",
+        "D": "sp2, 90°"
+      },
+      "answer": "B",
+      "explanation": "Qo'shbog'li uglerod sp2-gibridlangan, uchta sigma bog' bir tekislikda 120° burchak ostida joylashadi.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "umumiy-kimyo",
+      "subtopicId": "kimyoviy-boglanish-kristall-panjara-turlari",
+      "question": "Quyidagi moddalardan qaysi biri atom kristall panjaraga ega?",
+      "options": {
+        "A": "Natriy xlorid",
+        "B": "Quruq muz (CO2)",
+        "C": "Olmos",
+        "D": "Mis"
+      },
+      "answer": "C",
+      "explanation": "Olmosda har bir uglerod to'rtta kovalent bog' bilan bog'langan — atom panjara, shuning uchun juda qattiq va yuqori haroratda suyuqlanadi.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "umumiy-kimyo",
+      "subtopicId": "kimyoviy-boglanish-vodorod-boglanish",
+      "question": "Suvning shunga o'xshash molekulyar massali H2S dan ancha yuqori haroratda qaynashi sababi nima?",
+      "options": {
+        "A": "Ion bog'lanish",
+        "B": "Molekulalar orasidagi vodorod bog'lanish",
+        "C": "Kovalent bog'ning qutbsizligi",
+        "D": "Metall bog'lanish"
+      },
+      "answer": "B",
+      "explanation": "Kislorodning elektromanfiyligi katta — molekulalar orasida vodorod bog'lanish hosil bo'ladi va uni uzish uchun qo'shimcha energiya kerak.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "umumiy-kimyo",
+      "subtopicId": "kinetika-va-muvozanat-le-shatelye-prinsipi",
+      "question": "N2 + 3H2 ⇌ 2NH3 + Q muvozanat sistemasida bosim oshirilsa va harorat pasaytirilsa muvozanat qayerga siljiydi?",
+      "options": {
+        "A": "Ikkisida ham chapga",
+        "B": "Ikkisida ham o'ngga",
+        "C": "Bosimda o'ngga, haroratda chapga",
+        "D": "Muvozanat siljimaydi"
+      },
+      "answer": "B",
+      "explanation": "Mol soni kamayadi (4 → 2), shuning uchun bosim ortishi o'ngga siljitadi; reaksiya ekzotermik, harorat pasayishi ham o'ngga siljitadi.",
+      "difficultyId": 3
+    },
+    {
+      "topicId": "umumiy-kimyo",
+      "subtopicId": "kinetika-va-muvozanat-tezlikka-tasir-etuvchi-omillar",
+      "question": "Reaksiya tezligining harorat koeffitsienti 3 ga teng. Harorat 20 °C dan 50 °C ga oshirilsa tezlik necha marta ortadi?",
+      "options": {
+        "A": "3 marta",
+        "B": "9 marta",
+        "C": "27 marta",
+        "D": "30 marta"
+      },
+      "answer": "C",
+      "explanation": "Van't-Hoff qoidasi: har 10 °C ga 3 marta, 30 °C ga esa 3³ = 27 marta.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "umumiy-kimyo",
+      "subtopicId": "eritmalar-massa-ulushi",
+      "question": "40 g suvda 10 g tuz eritilgan. Eritmadagi tuzning massa ulushi qancha?",
+      "options": {
+        "A": "10 %",
+        "B": "20 %",
+        "C": "25 %",
+        "D": "40 %"
+      },
+      "answer": "B",
+      "explanation": "Eritma massasi 40 + 10 = 50 g. w = 10/50 · 100 % = 20 %. ⚠️ Erituvchi massasiga bo'lish tipik xato.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "umumiy-kimyo",
+      "subtopicId": "eritmalar-tuzlar-gidrolizi",
+      "question": "Quyidagi tuzlardan qaysi birining eritmasi ishqoriy muhitga ega?",
+      "options": {
+        "A": "NH4Cl",
+        "B": "Na2CO3",
+        "C": "NaCl",
+        "D": "CuSO4"
+      },
+      "answer": "B",
+      "explanation": "Na2CO3 — kuchli asos va kuchsiz kislota tuzi, anion bo'yicha gidrolizlanadi va muhit ishqoriy (pH > 7) bo'ladi.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "umumiy-kimyo",
+      "subtopicId": "oksidlanish-qaytarilish-va-elektroliz-metallarning-kuchlanish-qatori",
+      "question": "Quyidagi metallardan qaysi biri mis (II) sulfat eritmasidan misni siqib chiqara olmaydi?",
+      "options": {
+        "A": "Sink",
+        "B": "Temir",
+        "C": "Kumush",
+        "D": "Alyuminiy"
+      },
+      "answer": "C",
+      "explanation": "Kumush kuchlanish qatorida misdan keyin turadi, shuning uchun uni tuz eritmasidan siqib chiqarmaydi.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "anorganik-kimyo",
+      "subtopicId": "birikmalar-sinflari-amfoter-birikmalar",
+      "question": "Quyidagi oksidlardan qaysi biri amfoter?",
+      "options": {
+        "A": "CaO",
+        "B": "Al2O3",
+        "C": "SO3",
+        "D": "Na2O"
+      },
+      "answer": "B",
+      "explanation": "Al2O3 kislota bilan ham, ishqor bilan ham reaksiyaga kirishadi — amfoter oksid.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "anorganik-kimyo",
+      "subtopicId": "birikmalar-sinflari-birikmalar-orasidagi-genetik-aloqa",
+      "question": "Ca → CaO → Ca(OH)2 → CaCO3 zanjirining uchinchi bosqichini amalga oshirish uchun qaysi modda kerak?",
+      "options": {
+        "A": "H2O",
+        "B": "O2",
+        "C": "CO2",
+        "D": "HCl"
+      },
+      "answer": "C",
+      "explanation": "Ca(OH)2 + CO2 → CaCO3 + H2O — ishqorning karbonat angidrid bilan reaksiyasi (ohakli suvning loyqalanishi).",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "anorganik-kimyo",
+      "subtopicId": "metallar-suvning-qattiqligi",
+      "question": "Suvning karbonat (vaqtinchalik) qattiqligini qaysi usul bilan yo'qotish mumkin?",
+      "options": {
+        "A": "Filtrlash",
+        "B": "Qaynatish",
+        "C": "Magnitlash",
+        "D": "Xlorlash"
+      },
+      "answer": "B",
+      "explanation": "Qaynatishda Ca(HCO3)2 parchalanadi: CaCO3 cho'kmaga tushadi, CO2 ajralib chiqadi.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "anorganik-kimyo",
+      "subtopicId": "metallmaslar-viia-guruh-galogenlar",
+      "question": "Galogenlarning oksidlovchilik xossasi qatorda qanday o'zgaradi: F2 → Cl2 → Br2 → I2?",
+      "options": {
+        "A": "Ortadi",
+        "B": "Kamayadi",
+        "C": "O'zgarmaydi",
+        "D": "Avval ortadi, keyin kamayadi"
+      },
+      "answer": "B",
+      "explanation": "Guruh bo'yicha pastga tushganda radius ortib elektromanfiylik kamayadi, demak oksidlovchilik susayadi. Ftor eng kuchli oksidlovchi.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "anorganik-kimyo",
+      "subtopicId": "metallmaslar-mineral-ogitlar",
+      "question": "Quyidagi o'g'itlardan qaysi biri kaliyli o'g'it hisoblanadi?",
+      "options": {
+        "A": "Ammiakli selitra",
+        "B": "Superfosfat",
+        "C": "Kaliy xlorid",
+        "D": "Karbamid"
+      },
+      "answer": "C",
+      "explanation": "KCl — kaliyli o'g'it. Ammiakli selitra va karbamid azotli, superfosfat esa fosforli o'g'it.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "anorganik-kimyo",
+      "subtopicId": "metallmaslar-via-guruh-kislorod-va-oltingugurt",
+      "question": "Konsentrlangan sulfat kislotaning mis bilan reaksiyasida qanday gaz ajralib chiqadi?",
+      "options": {
+        "A": "H2",
+        "B": "SO2",
+        "C": "H2S",
+        "D": "O2"
+      },
+      "answer": "B",
+      "explanation": "Konsentrlangan H2SO4 oksidlovchi sifatida ishlaydi: Cu + 2H2SO4 → CuSO4 + SO2 + 2H2O. Vodorod ajralmaydi.",
+      "difficultyId": 3
+    },
+    {
+      "topicId": "organik-kimyo",
+      "subtopicId": "uglevodorodlar-izomeriya",
+      "question": "Pentan (C5H12) necha xil tuzilish izomeriga ega?",
+      "options": {
+        "A": "2",
+        "B": "3",
+        "C": "4",
+        "D": "5"
+      },
+      "answer": "B",
+      "explanation": "n-pentan, izopentan (2-metilbutan) va neopentan (2,2-dimetilpropan) — jami 3 ta.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "organik-kimyo",
+      "subtopicId": "uglevodorodlar-alkanlar",
+      "question": "Alkanlar uchun eng xarakterli reaksiya turi qaysi?",
+      "options": {
+        "A": "Birikish",
+        "B": "O'rin olish",
+        "C": "Polimerlanish",
+        "D": "Gidratlanish"
+      },
+      "answer": "B",
+      "explanation": "Alkanlarda faqat to'yingan sigma bog'lar bor, shuning uchun ular galogenlash kabi o'rin olish (substitutsiya) reaksiyalariga kirishadi.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "organik-kimyo",
+      "subtopicId": "uglevodorodlar-alkenlar",
+      "question": "Propenning HBr bilan reaksiyasida asosiy mahsulot qaysi (Markovnikov qoidasi)?",
+      "options": {
+        "A": "1-bromopropan",
+        "B": "2-bromopropan",
+        "C": "1,2-dibromopropan",
+        "D": "Propan"
+      },
+      "answer": "B",
+      "explanation": "Markovnikov qoidasi: vodorod ko'p vodorodli uglerodga birikadi, brom esa o'rta uglerodga — 2-bromopropan.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "organik-kimyo",
+      "subtopicId": "uglevodorodlar-alkinlar",
+      "question": "Atsetilenni laboratoriyada olishning asosiy usuli qaysi?",
+      "options": {
+        "A": "Metanni kraking qilish",
+        "B": "Kalsiy karbidga suv ta'sir ettirish",
+        "C": "Etanolni suvsizlantirish",
+        "D": "Etilenni gidrogenlash"
+      },
+      "answer": "B",
+      "explanation": "CaC2 + 2H2O → C2H2 + Ca(OH)2 — laboratoriyadagi standart usul.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "organik-kimyo",
+      "subtopicId": "uglevodorodlar-aromatik-uglevodorodlar",
+      "question": "Benzolning nitrolash reaksiyasi uchun qanday aralashma ishlatiladi?",
+      "options": {
+        "A": "HNO3 va H2SO4 (konsentrlangan)",
+        "B": "HCl va NaOH",
+        "C": "H2O va H2SO4",
+        "D": "HNO3 va NaOH"
+      },
+      "answer": "A",
+      "explanation": "Nitrolash aralashmasi — konsentrlangan nitrat va sulfat kislotalar; H2SO4 suvni tortib olib nitroniy ionini hosil qiladi.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "organik-kimyo",
+      "subtopicId": "kislorodli-birikmalar-fenollar",
+      "question": "Fenolning spirtlardan farqli ravishda ishqorlar bilan reaksiyaga kirishishi sababi nima?",
+      "options": {
+        "A": "Molekulyar massasi katta",
+        "B": "Benzol halqasi OH guruhning kislotaligini kuchaytiradi",
+        "C": "Suvda yaxshi eriydi",
+        "D": "Ikkita OH guruhi bor"
+      },
+      "answer": "B",
+      "explanation": "Aromatik halqa kislorodning elektron juftini o'ziga tortadi, O–H bog' qutblanadi va fenol kuchsiz kislota sifatida ishqor bilan fenolyat hosil qiladi.",
+      "difficultyId": 3
+    },
+    {
+      "topicId": "organik-kimyo",
+      "subtopicId": "kislorodli-birikmalar-aldegidlar",
+      "question": "\"Kumush ko'zgu\" reaksiyasi qaysi sinf moddalarini aniqlashga xizmat qiladi?",
+      "options": {
+        "A": "Spirtlar",
+        "B": "Aldegidlar",
+        "C": "Ketonlar",
+        "D": "Karbon kislotalar"
+      },
+      "answer": "B",
+      "explanation": "Aldegidlar Tollens reaktivi (ammiakli kumush oksid eritmasi) bilan oksidlanadi va idish devorida metall kumush qatlami hosil bo'ladi.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "organik-kimyo",
+      "subtopicId": "kislorodli-birikmalar-murakkab-efirlar",
+      "question": "Etanol va sirka kislotasining kislotali muhitdagi reaksiyasi nima deb ataladi va qanday mahsulot beradi?",
+      "options": {
+        "A": "Gidroliz — spirt va kislota",
+        "B": "Esterifikatsiya — murakkab efir va suv",
+        "C": "Polimerlanish — polimer",
+        "D": "Neytrallanish — tuz va suv"
+      },
+      "answer": "B",
+      "explanation": "CH3COOH + C2H5OH ⇌ CH3COOC2H5 + H2O — esterifikatsiya, qaytar reaksiya.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "organik-kimyo",
+      "subtopicId": "uglevodlar-disaxaridlar",
+      "question": "Saxarozaning gidrolizida qanday moddalar hosil bo'ladi?",
+      "options": {
+        "A": "Glyukoza va glyukoza",
+        "B": "Glyukoza va fruktoza",
+        "C": "Glyukoza va galaktoza",
+        "D": "Faqat fruktoza"
+      },
+      "answer": "B",
+      "explanation": "Saxaroza — glyukoza va fruktoza qoldiqlaridan tuzilgan disaxarid.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "organik-kimyo",
+      "subtopicId": "azotli-birikmalar-va-polimerlar-aminokislotalar",
+      "question": "Aminokislotalarning amfoter xossasi nima bilan izohlanadi?",
+      "options": {
+        "A": "Faqat karboksil guruh borligi bilan",
+        "B": "Faqat amino guruh borligi bilan",
+        "C": "Amino va karboksil guruhlarning birgalikda borligi bilan",
+        "D": "Benzol halqasi borligi bilan"
+      },
+      "answer": "C",
+      "explanation": "–COOH kislotali, –NH2 esa asosli xossa beradi, shuning uchun aminokislota kislota bilan ham, ishqor bilan ham reaksiyaga kirishadi.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "kimyoviy-tahlil",
+      "subtopicId": "sifat-reaksiyalari-anionlarni-aniqlash",
+      "question": "Sulfat ionini (SO4 2−) aniqlash uchun qaysi reaktiv ishlatiladi?",
+      "options": {
+        "A": "AgNO3",
+        "B": "BaCl2",
+        "C": "NaOH",
+        "D": "Lakmus"
+      },
+      "answer": "B",
+      "explanation": "BaCl2 bilan oq, kislotada erimaydigan BaSO4 cho'kmasi hosil bo'ladi.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "kimyoviy-tahlil",
+      "subtopicId": "moddalarni-ajratish-va-tayyorlash-distillash",
+      "question": "Suv va etanol aralashmasini ajratish uchun qaysi usul qo'llanadi?",
+      "options": {
+        "A": "Filtrlash",
+        "B": "Tindirish",
+        "C": "Distillash",
+        "D": "Magnitlash"
+      },
+      "answer": "C",
+      "explanation": "Ikkisi ham suyuqlik va bir-birida to'liq eriydi, ammo qaynash haroratlari farq qiladi (78 °C va 100 °C) — haydash (distillash) kerak.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "kimyoviy-tahlil",
+      "subtopicId": "laboratoriya-asoslari-xavfsizlik-qoidalari",
+      "question": "Konsentrlangan sulfat kislotani suv bilan suyultirishda qanday tartibga rioya qilinadi?",
+      "options": {
+        "A": "Suvga kislota ozoz quyiladi",
+        "B": "Kislotaga suv tez quyiladi",
+        "C": "Ikkisi bir vaqtda quyiladi",
+        "D": "Tartibi ahamiyatsiz"
+      },
+      "answer": "A",
+      "explanation": "Kislota suvga oz-ozdan, aralashtirib quyiladi: juda ko'p issiqlik ajraladi va teskari tartibda aralashma otilib ketishi mumkin.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "umumiy-kimyo",
+      "subtopicId": "eritmalar-ion-almashinish-reaksiyalari",
+      "question": "Moddalarni ular bilan boradigan reaksiya belgisiga moslashtiring: 1) BaCl2 + Na2SO4  2) HCl + NaOH  3) Na2CO3 + HCl. Belgilar: a) gaz ajralishi  b) cho'kma hosil bo'lishi  c) suv hosil bo'lishi.",
+      "options": {
+        "A": "1-a, 2-b, 3-c",
+        "B": "1-b, 2-c, 3-a",
+        "C": "1-c, 2-a, 3-b",
+        "D": "1-b, 2-a, 3-c"
+      },
+      "answer": "B",
+      "explanation": "BaSO4 — cho'kma; HCl + NaOH — neytrallanib suv beradi; Na2CO3 + HCl — CO2 gazi ajraladi.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "anorganik-kimyo",
+      "subtopicId": "birikmalar-sinflari-oksidlar",
+      "question": "Oksidlarni turiga moslashtiring: 1) CaO  2) SO3  3) ZnO. Turlari: a) kislotali  b) asosli  c) amfoter.",
+      "options": {
+        "A": "1-b, 2-a, 3-c",
+        "B": "1-a, 2-b, 3-c",
+        "C": "1-c, 2-a, 3-b",
+        "D": "1-b, 2-c, 3-a"
+      },
+      "answer": "A",
+      "explanation": "CaO — asosli, SO3 — kislotali (H2SO4 beradi), ZnO — amfoter.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "organik-kimyo",
+      "subtopicId": "kislorodli-birikmalar-karbon-kislotalar",
+      "question": "Moddani sinfiga moslashtiring: 1) C2H5OH  2) CH3COOH  3) CH3CHO. Sinflari: a) aldegid  b) spirt  c) karbon kislota.",
+      "options": {
+        "A": "1-a, 2-c, 3-b",
+        "B": "1-b, 2-a, 3-c",
+        "C": "1-b, 2-c, 3-a",
+        "D": "1-c, 2-b, 3-a"
+      },
+      "answer": "C",
+      "explanation": "C2H5OH — spirt (–OH), CH3COOH — karbon kislota (–COOH), CH3CHO — aldegid (–CHO).",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "umumiy-kimyo",
+      "subtopicId": "asosiy-tushunchalar-va-qonunlar-formula-va-tenglama-boyicha-hisoblashlar",
+      "question": "5,6 g temir yetarli miqdordagi xlor bilan to'liq reaksiyaga kirishdi. Hosil bo'lgan FeCl3 ning massasini hisoblang (g). Javobni son bilan yozing.",
+      "answer": "16,25",
+      "acceptedAnswers": ["16.25", "16,25 g", "16.25 g"],
+      "numeric": true,
+      "explanation": "n(Fe) = 5,6/56 = 0,1 mol. 2Fe + 3Cl2 → 2FeCl3, demak n(FeCl3) = 0,1 mol. M(FeCl3) = 56 + 35,5·3 = 162,5. m = 0,1 · 162,5 = 16,25 g.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "umumiy-kimyo",
+      "subtopicId": "oksidlanish-qaytarilish-va-elektroliz-elektron-balans-usuli",
+      "question": "KMnO4 + HCl → KCl + MnCl2 + Cl2 + H2O reaksiyasida bitta marganets atomi nechta elektron qabul qiladi? Javobni son bilan yozing.",
+      "answer": "5",
+      "acceptedAnswers": ["5 ta", "besh"],
+      "numeric": true,
+      "explanation": "KMnO4 da Mn oksidlanish darajasi +7, MnCl2 da +2. +7 → +2 uchun 5 elektron qabul qilinadi, ya'ni marganets oksidlovchi.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "anorganik-kimyo",
+      "subtopicId": "metallmaslar-va-guruh-azot-va-fosfor",
+      "question": "Ammiak (NH3) molekulasidagi azotning valentligini son bilan yozing.",
+      "answer": "3",
+      "acceptedAnswers": ["III", "uch"],
+      "numeric": true,
+      "explanation": "Azot uchta vodorod atomi bilan uchta kovalent bog' hosil qiladi — valentligi 3 (oksidlanish darajasi esa −3).",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "organik-kimyo",
+      "subtopicId": "uglevodorodlar-nomenklatura",
+      "question": "CH3–CH(CH3)–CH2–CH3 birikmasining IUPAC nomenklaturasi bo'yicha nomini yozing.",
+      "answer": "2-metilbutan",
+      "acceptedAnswers": ["2 metilbutan", "2-metil butan", "izopentan"],
+      "explanation": "Eng uzun zanjir 4 uglerodli (butan), ikkinchi uglerodda metil radikali — 2-metilbutan (izopentan).",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "organik-kimyo",
+      "subtopicId": "azotli-birikmalar-va-polimerlar-polimerlanish-reaksiyalari",
+      "question": "Etilenning polimerlanishidan hosil bo'ladigan polimer nomini yozing.",
+      "answer": "polietilen",
+      "acceptedAnswers": ["Polietilen", "poli etilen", "polyethylene"],
+      "explanation": "nCH2=CH2 → (–CH2–CH2–)n — polietilen, qo'shbog' hisobiga boradigan polimerlanish reaksiyasi.",
+      "difficultyId": 1
+    }
+  ]
+}

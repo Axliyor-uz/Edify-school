@@ -1,0 +1,215 @@
+/**
+ * Generates the Material Design 3 palette blocks in
+ * `components/manager-ui/theme.css` (the MANAGER kit) from the source colors
+ * below.
+ *
+ *   npx tsx scripts/genManagerPalettes.mjs
+ *
+ * Requires `@material/material-color-utilities` (install with --no-save; it is
+ * a generation-time-only dependency, never shipped):
+ *   npm install --no-save @material/material-color-utilities
+ * Run through tsx, not node — the package publishes extensionless ESM imports
+ * that only a bundler-style resolver handles.
+ *
+ * Output is written between the MG-PALETTES markers in
+ * components/manager-ui/theme.css, so the hand-written blocks in that file are
+ * preserved. To add a palette, add a row to SOURCES, re-run, then add its name
+ * to `Color_palette` in design.manager.config.ts.
+ *
+ * Selector scheme (same var NAMES as the teacher kit on purpose — the Tailwind
+ * token utilities in tailwind.config.ts read them; the two kits can never both
+ * be active because each provider stamps its own attributes only while its
+ * layout is mounted and removes them on unmount):
+ *   - `:root { … }`                                      default palette, light —
+ *     the fallback that keeps toasts (portaled to <body>) and the
+ *     pre-hydration first paint resolving before ManagerThemeProvider stamps.
+ *   - `:root[data-mg-palette="x"] { … }`                 light values
+ *   - `:root[data-mg-palette="x"][data-mg-mode="dark"]`  dark values
+ *   - one `@media print` block re-pinning every palette's dark selector back
+ *     to LIGHT values — printed A4 pages must always use light ink.
+ */
+import { readFileSync, writeFileSync } from 'node:fs';
+import {
+  Hct,
+  SchemeTonalSpot,
+  SchemeFidelity,
+  SchemeNeutral,
+  MaterialDynamicColors,
+  hexFromArgb,
+  argbFromHex,
+} from '@material/material-color-utilities';
+
+/**
+ * name → [source color, M3 scheme variant]
+ *
+ * ⚠️ Only HUE-PRESERVING variants belong here (SchemeExpressive rotates the
+ * primary hue by +240° by design). Same professional roster as the teacher
+ * kit — the two panels stay one brand family; only the DEFAULT differs
+ * (manager = emerald, the operations/finance identity):
+ *   SchemeTonalSpot — source hue, disciplined chroma (the calm M3 classic)
+ *   SchemeFidelity  — primary stays essentially the source color (for the
+ *                     low-chroma sources TonalSpot would over-saturate)
+ *   SchemeNeutral   — chroma ~0 (only right for the mono palette)
+ * The script asserts the result stayed in the source hue family.
+ */
+const SOURCES = [
+  ['indigo',   '#4f5bd5', SchemeFidelity],  // deep indigo (the teacher default)
+  ['ocean',    '#0a6dd1', SchemeTonalSpot], // calm blue
+  ['midnight', '#33415c', SchemeFidelity],  // muted navy, near-mono
+  ['emerald',  '#0b7a55', SchemeTonalSpot], // deep green — manager default
+  ['teal',     '#0e7490', SchemeTonalSpot], // blue-green
+  ['plum',     '#7c4d8f', SchemeTonalSpot], // muted purple
+  ['wine',     '#8e2f4e', SchemeTonalSpot], // burgundy
+  ['bronze',   '#8a6534', SchemeTonalSpot], // warm bronze (heir to the amber look)
+  ['steel',    '#5a6b85', SchemeFidelity],  // desaturated blue-grey
+  ['graphite', '#4a5058', SchemeNeutral],   // true mono
+];
+
+/** The palette `:root` falls back to (must exist in SOURCES). */
+const DEFAULT_PALETTE = 'emerald';
+
+/** M3 dynamic-color roles emitted for every palette, as `--m3-<kebab-name>`. */
+const ROLES = [
+  'primary', 'onPrimary', 'primaryContainer', 'onPrimaryContainer',
+  'secondary', 'onSecondary', 'secondaryContainer', 'onSecondaryContainer',
+  'tertiary', 'onTertiary', 'tertiaryContainer', 'onTertiaryContainer',
+  'error', 'onError', 'errorContainer', 'onErrorContainer',
+  'background', 'onBackground',
+  'surface', 'onSurface', 'surfaceVariant', 'onSurfaceVariant',
+  'surfaceDim', 'surfaceBright',
+  'surfaceContainerLowest', 'surfaceContainerLow', 'surfaceContainer',
+  'surfaceContainerHigh', 'surfaceContainerHighest',
+  'outline', 'outlineVariant',
+  'inverseSurface', 'inverseOnSurface', 'inversePrimary',
+  'shadow',
+];
+
+const kebab = (s) => s.replace(/[A-Z]/g, (c) => '-' + c.toLowerCase());
+
+function roleHex(scheme, role) {
+  const dc = MaterialDynamicColors[role];
+  if (!dc) throw new Error(`Unknown M3 role: ${role}`);
+  return hexFromArgb(dc.getArgb(scheme)).toLowerCase();
+}
+
+/**
+ * success / warning are not part of the M3 dynamic scheme, so they are derived
+ * the way M3 derives error: fixed hues held to the scheme's own chroma
+ * discipline. Chroma is clamped — status colors in a professional tool should
+ * read as state, not decoration.
+ */
+function statusTokens(sourceHct, isDark) {
+  const build = (hue, chroma) => {
+    const tone = (t) => hexFromArgb(Hct.from(hue, chroma, t).toInt()).toLowerCase();
+    return isDark
+      ? { main: tone(80), on: tone(20), container: tone(30), onContainer: tone(90) }
+      : { main: tone(40), on: tone(100), container: tone(90), onContainer: tone(10) };
+  };
+  const chroma = Math.max(32, Math.min(sourceHct.chroma, 48));
+  return {
+    success: build(145, chroma),
+    warning: build(75, chroma),
+  };
+}
+
+/** One scheme (light or dark) → the token lines for it. */
+function tokenLines(src, SchemeCtor, isDark) {
+  const scheme = new SchemeCtor(src, isDark, 0);
+  const lines = ROLES.map((r) => `  --m3-${kebab(r)}: ${roleHex(scheme, r)};`);
+
+  // NOT the raw M3 scrim role (solid #000): the kit bakes the overlay alpha
+  // into this var — call sites use bg-scrim directly as a dialog/drawer
+  // backdrop. Keep that contract (same as the teacher kit).
+  lines.push(`  --m3-scrim: rgba(0, 0, 0, ${isDark ? '0.6' : '0.45'});`);
+
+  const st = statusTokens(src, isDark);
+  for (const [key, v] of Object.entries(st)) {
+    lines.push(`  --m3-${key}: ${v.main};`);
+    lines.push(`  --m3-on-${key}: ${v.on};`);
+    lines.push(`  --m3-${key}-container: ${v.container};`);
+    lines.push(`  --m3-on-${key}-container: ${v.onContainer};`);
+  }
+
+  // Accent gradient (primary → tertiary of this same scheme) for gradient
+  // buttons, hero headers and the 'aurora' page background — same-scheme stops
+  // can never clash with the palette they decorate.
+  lines.push(`  --t-grad-a: ${roleHex(scheme, 'primary')};`);
+  lines.push(`  --t-grad-b: ${roleHex(scheme, 'tertiary')};`);
+  return lines;
+}
+
+function paletteCss(name, sourceHex, SchemeCtor) {
+  const src = Hct.fromInt(argbFromHex(sourceHex));
+  const light = tokenLines(src, SchemeCtor, false);
+  const dark = tokenLines(src, SchemeCtor, true);
+  const out = [];
+  if (name === DEFAULT_PALETTE) {
+    out.push(
+      `/* Fallback: default palette, light — keeps toasts (portaled to <body>),\n` +
+      `   first paint and attribute-less consumers resolving before the provider\n` +
+      `   stamps. Only loaded on /manager routes (CSS is imported per-segment). */\n` +
+      `:root {\n${light.join('\n')}\n}`,
+    );
+  }
+  out.push(`:root[data-mg-palette="${name}"] {\n${light.join('\n')}\n}`);
+  out.push(`:root[data-mg-palette="${name}"][data-mg-mode="dark"] {\n${dark.join('\n')}\n}`);
+  return { css: out.join('\n\n'), printOverride: `  :root[data-mg-palette="${name}"][data-mg-mode="dark"] {\n  ${light.join('\n  ')}\n  }` };
+}
+
+const banner = `/* ============================================================================
+ * AUTO-GENERATED by scripts/genManagerPalettes.mjs — DO NOT EDIT BY HAND.
+ * ${SOURCES.length} Material Design 3 palettes, each a full dynamic-color scheme
+ * (light + dark) generated from one source color via the official
+ * @material/material-color-utilities HCT algorithm.
+ *
+ * Sources: ${SOURCES.map(([n, h]) => `${n} ${h}`).join(' · ')}
+ *
+ * To change palettes: edit SOURCES in the script and re-run it.
+ * To SWITCH the active palette: set Color_palette in design.manager.config.ts.
+ * ========================================================================== */`;
+
+/** Guard against hue-rotating scheme variants (greyscale exempt — hue is
+ *  meaningless below ~5 chroma). */
+function assertHuePreserved(name, sourceHex, SchemeCtor) {
+  const src = Hct.fromInt(argbFromHex(sourceHex));
+  const scheme = new SchemeCtor(src, false, 0);
+  const got = Hct.fromInt(MaterialDynamicColors.primary.getArgb(scheme));
+  if (got.chroma < 5) return { name, drift: 0, note: 'greyscale' };
+  const drift = Math.min(
+    Math.abs(got.hue - src.hue),
+    360 - Math.abs(got.hue - src.hue),
+  );
+  if (drift > 45) {
+    throw new Error(
+      `${name}: ${SchemeCtor.name} rotated the primary hue ${drift.toFixed(0)}° ` +
+        `(${sourceHex} → ${hexFromArgb(got.toInt())}). Use a hue-preserving variant.`,
+    );
+  }
+  return { name, drift: +drift.toFixed(1), primary: hexFromArgb(got.toInt()) };
+}
+
+console.table(SOURCES.map(([n, h, S]) => assertHuePreserved(n, h, S)));
+
+const generated = SOURCES.map(([n, h, S]) => paletteCss(n, h, S));
+const printBlock =
+  `/* Printed pages always use light ink, whatever mode the screen is in.\n` +
+  `   (On-screen capture routes — /manager/print — are additionally pinned to\n` +
+  `   light by ManagerThemeProvider, since html-to-image snapshots the screen.) */\n` +
+  `@media print {\n${generated.map((g) => g.printOverride).join('\n')}\n}`;
+
+const css = [banner, ...generated.map((g) => g.css), printBlock].join('\n\n');
+
+const FILE = new URL('../components/manager-ui/theme.css', import.meta.url);
+const START = '/* <<< MG-PALETTES:START >>> */';
+const END = '/* <<< MG-PALETTES:END >>> */';
+
+const existing = readFileSync(FILE, 'utf8');
+const a = existing.indexOf(START);
+const b = existing.indexOf(END);
+if (a === -1 || b === -1) {
+  throw new Error(`Markers ${START} / ${END} not found in components/manager-ui/theme.css`);
+}
+const next = existing.slice(0, a + START.length) + '\n' + css + '\n' + existing.slice(b);
+writeFileSync(FILE, next);
+
+console.log(`✓ Wrote ${SOURCES.length} palettes (${SOURCES.length * 2} schemes) to components/manager-ui/theme.css`);

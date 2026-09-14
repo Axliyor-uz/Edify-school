@@ -1,0 +1,772 @@
+{
+  "_readme": [
+    "THE DEFAULT RASCH PAPER — edit this file to change what the builder's",
+    "\"Namunaviy variant\" (Fill default) button loads. Contract: docs/RASCH_QUIZ.md.",
+    "",
+    "One entry per question, and the entries must add up to the blueprint EXACTLY:",
+    "  numbers-y1 2 | algebraic-y1 11 | equations-y1 6 | functions-y1 2 |",
+    "  geometry-y1 7 | analysis-y1 2 | probability-y1 2      (32 closed, Y-1)",
+    "  geometry-y2 3                                          (3 closed, Y-2)",
+    "  equations-o 2 | functions-o 1 | analysis-o 2 |",
+    "  geometry-o 4 | probability-o 1                         (10 typed, O)",
+    "= 45. lib/RASCHdefaultPaper.ts checks it and the builder refuses to load a",
+    "paper that does not balance, naming the row that is off — it never ships a",
+    "silently wrong variant.",
+    "",
+    "Per entry:",
+    "  sectionId   a blueprint row id from lib/Examblueprint.ts (the list above).",
+    "  chapterId   a chapter that row DRAWS FROM ('01'..'18' Algebra, '01'..'11'",
+    "              Geometriya) — the topicId is derived from the row's pools, so a",
+    "              chapter the row does not draw from is rejected.",
+    "  question    a string, or {uz, ru, en}. A bare string is used for all three.",
+    "  options     A-D, closed rows ONLY. An O row must NOT have them.",
+    "  answer      Y-1/Y-2 -> the correct option key ('A'..'D').",
+    "              O       -> the literal answer text the student types.",
+    "  acceptedAnswers  O only, optional: other spellings graded correct.",
+    "  numeric     O only, default true — grades with the numeric comparison",
+    "              (',' = '.', spaces ignored). Set false for a worded answer.",
+    "  explanation optional, string or {uz, ru, en}.",
+    "  difficultyId optional; defaults to the row's band (Y-1 -> 2, Y-2/O -> 3).",
+    "",
+    "Images are not supported here on purpose: a picture belongs to a real",
+    "teacher_questions document with a storage URL, not to a bundled JSON file."
+  ],
+
+  "title": {
+    "uz": "Milliy sertifikat — namunaviy variant",
+    "ru": "Национальный сертификат — образцовый вариант",
+    "en": "National certificate — sample paper"
+  },
+  "durationMinutes": 150,
+
+  "questions": [
+    {
+      "sectionId": "numbers-y1",
+      "chapterId": "01",
+      "question": {
+        "uz": "$24$ va $36$ sonlarining eng katta umumiy bo'luvchisini toping.",
+        "ru": "Найдите наибольший общий делитель чисел $24$ и $36$.",
+        "en": "Find the greatest common divisor of $24$ and $36$."
+      },
+      "options": { "A": "$6$", "B": "$12$", "C": "$18$", "D": "$72$" },
+      "answer": "B",
+      "explanation": {
+        "uz": "$24=2^3\\cdot 3$, $36=2^2\\cdot 3^2$. Umumiy ko'paytuvchilar: $2^2\\cdot 3=12$.",
+        "ru": "$24=2^3\\cdot 3$, $36=2^2\\cdot 3^2$. Общие множители: $2^2\\cdot 3=12$.",
+        "en": "$24=2^3\\cdot 3$, $36=2^2\\cdot 3^2$, so the common part is $2^2\\cdot 3=12$."
+      }
+    },
+    {
+      "sectionId": "numbers-y1",
+      "chapterId": "04",
+      "question": {
+        "uz": "$\\sqrt{50}-\\sqrt{18}$ ifodaning qiymatini toping.",
+        "ru": "Найдите значение выражения $\\sqrt{50}-\\sqrt{18}$.",
+        "en": "Evaluate $\\sqrt{50}-\\sqrt{18}$."
+      },
+      "options": { "A": "$2\\sqrt{2}$", "B": "$\\sqrt{32}$", "C": "$8\\sqrt{2}$", "D": "$\\sqrt{2}$" },
+      "answer": "A",
+      "explanation": {
+        "uz": "$\\sqrt{50}=5\\sqrt2$, $\\sqrt{18}=3\\sqrt2$, ayirma $2\\sqrt2$.",
+        "ru": "$\\sqrt{50}=5\\sqrt2$, $\\sqrt{18}=3\\sqrt2$, разность равна $2\\sqrt2$.",
+        "en": "$\\sqrt{50}=5\\sqrt2$ and $\\sqrt{18}=3\\sqrt2$, so the difference is $2\\sqrt2$."
+      }
+    },
+
+    {
+      "sectionId": "algebraic-y1",
+      "chapterId": "03",
+      "question": {
+        "uz": "$a\\ne b$ bo'lsa, $\\dfrac{a^2-b^2}{a-b}$ ifodani soddalashtiring.",
+        "ru": "Упростите выражение $\\dfrac{a^2-b^2}{a-b}$ при $a\\ne b$.",
+        "en": "Simplify $\\dfrac{a^2-b^2}{a-b}$ for $a\\ne b$."
+      },
+      "options": { "A": "$a+b$", "B": "$a-b$", "C": "$ab$", "D": "$a^2+b^2$" },
+      "answer": "A",
+      "explanation": {
+        "uz": "$a^2-b^2=(a-b)(a+b)$, $(a-b)$ qisqaradi.",
+        "ru": "$a^2-b^2=(a-b)(a+b)$, множитель $(a-b)$ сокращается.",
+        "en": "$a^2-b^2=(a-b)(a+b)$ and the $(a-b)$ cancels."
+      }
+    },
+    {
+      "sectionId": "algebraic-y1",
+      "chapterId": "03",
+      "question": {
+        "uz": "$(x+3)^2-(x-3)^2$ ifodaning qiymatini toping.",
+        "ru": "Найдите значение выражения $(x+3)^2-(x-3)^2$.",
+        "en": "Evaluate $(x+3)^2-(x-3)^2$."
+      },
+      "options": { "A": "$12x$", "B": "$6x$", "C": "$18$", "D": "$2x^2+18$" },
+      "answer": "A",
+      "explanation": {
+        "uz": "Ayirmaning kvadratlari: $(x+3+x-3)(x+3-x+3)=2x\\cdot 6=12x$.",
+        "ru": "Разность квадратов: $(x+3+x-3)(x+3-x+3)=2x\\cdot 6=12x$.",
+        "en": "Difference of squares: $(2x)(6)=12x$."
+      }
+    },
+    {
+      "sectionId": "algebraic-y1",
+      "chapterId": "03",
+      "question": {
+        "uz": "$x\\ne 2$ bo'lsa, $\\dfrac{x^2-5x+6}{x-2}$ ifodani soddalashtiring.",
+        "ru": "Упростите $\\dfrac{x^2-5x+6}{x-2}$ при $x\\ne 2$.",
+        "en": "Simplify $\\dfrac{x^2-5x+6}{x-2}$ for $x\\ne 2$."
+      },
+      "options": { "A": "$x-3$", "B": "$x+3$", "C": "$x-2$", "D": "$x+2$" },
+      "answer": "A",
+      "explanation": {
+        "uz": "$x^2-5x+6=(x-2)(x-3)$.",
+        "ru": "$x^2-5x+6=(x-2)(x-3)$.",
+        "en": "$x^2-5x+6=(x-2)(x-3)$."
+      }
+    },
+    {
+      "sectionId": "algebraic-y1",
+      "chapterId": "03",
+      "question": {
+        "uz": "$x^3-8$ ifodani ko'paytuvchilarga ajrating.",
+        "ru": "Разложите на множители $x^3-8$.",
+        "en": "Factorise $x^3-8$."
+      },
+      "options": {
+        "A": "$(x-2)(x^2+2x+4)$",
+        "B": "$(x-2)(x^2-2x+4)$",
+        "C": "$(x+2)(x^2-2x+4)$",
+        "D": "$(x-2)^3$"
+      },
+      "answer": "A",
+      "explanation": {
+        "uz": "$a^3-b^3=(a-b)(a^2+ab+b^2)$, bu yerda $b=2$.",
+        "ru": "$a^3-b^3=(a-b)(a^2+ab+b^2)$, где $b=2$.",
+        "en": "$a^3-b^3=(a-b)(a^2+ab+b^2)$ with $b=2$."
+      }
+    },
+    {
+      "sectionId": "algebraic-y1",
+      "chapterId": "12",
+      "question": {
+        "uz": "$\\log_2 32$ ni hisoblang.",
+        "ru": "Вычислите $\\log_2 32$.",
+        "en": "Evaluate $\\log_2 32$."
+      },
+      "options": { "A": "$4$", "B": "$5$", "C": "$6$", "D": "$16$" },
+      "answer": "B",
+      "explanation": {
+        "uz": "$32=2^5$.",
+        "ru": "$32=2^5$.",
+        "en": "$32=2^5$."
+      }
+    },
+    {
+      "sectionId": "algebraic-y1",
+      "chapterId": "12",
+      "question": {
+        "uz": "$9^{x}=27$ tenglamani yeching.",
+        "ru": "Решите уравнение $9^{x}=27$.",
+        "en": "Solve $9^{x}=27$."
+      },
+      "options": { "A": "$\\dfrac{3}{2}$", "B": "$\\dfrac{2}{3}$", "C": "$3$", "D": "$\\dfrac{1}{3}$" },
+      "answer": "A",
+      "explanation": {
+        "uz": "$3^{2x}=3^3\\Rightarrow 2x=3$.",
+        "ru": "$3^{2x}=3^3\\Rightarrow 2x=3$.",
+        "en": "$3^{2x}=3^3$, so $2x=3$."
+      }
+    },
+    {
+      "sectionId": "algebraic-y1",
+      "chapterId": "12",
+      "question": {
+        "uz": "$\\log_3 45-\\log_3 5$ ni hisoblang.",
+        "ru": "Вычислите $\\log_3 45-\\log_3 5$.",
+        "en": "Evaluate $\\log_3 45-\\log_3 5$."
+      },
+      "options": { "A": "$2$", "B": "$3$", "C": "$9$", "D": "$40$" },
+      "answer": "A",
+      "explanation": {
+        "uz": "$\\log_3\\frac{45}{5}=\\log_3 9=2$.",
+        "ru": "$\\log_3\\frac{45}{5}=\\log_3 9=2$.",
+        "en": "$\\log_3\\frac{45}{5}=\\log_3 9=2$."
+      }
+    },
+    {
+      "sectionId": "algebraic-y1",
+      "chapterId": "13",
+      "question": {
+        "uz": "$\\sin^2 40^\\circ+\\cos^2 40^\\circ$ ifodaning qiymatini toping.",
+        "ru": "Найдите значение $\\sin^2 40^\\circ+\\cos^2 40^\\circ$.",
+        "en": "Evaluate $\\sin^2 40^\\circ+\\cos^2 40^\\circ$."
+      },
+      "options": { "A": "$0$", "B": "$1$", "C": "$2$", "D": "$\\sin 80^\\circ$" },
+      "answer": "B",
+      "explanation": {
+        "uz": "Asosiy trigonometrik ayniyat.",
+        "ru": "Основное тригонометрическое тождество.",
+        "en": "The Pythagorean identity."
+      }
+    },
+    {
+      "sectionId": "algebraic-y1",
+      "chapterId": "13",
+      "question": {
+        "uz": "$\\sin x=\\dfrac{3}{5}$ bo'lsa, $\\cos 2x$ ni toping.",
+        "ru": "Найдите $\\cos 2x$, если $\\sin x=\\dfrac{3}{5}$.",
+        "en": "Given $\\sin x=\\dfrac{3}{5}$, find $\\cos 2x$."
+      },
+      "options": { "A": "$\\dfrac{7}{25}$", "B": "$\\dfrac{16}{25}$", "C": "$\\dfrac{24}{25}$", "D": "$-\\dfrac{7}{25}$" },
+      "answer": "A",
+      "explanation": {
+        "uz": "$\\cos 2x=1-2\\sin^2x=1-\\frac{18}{25}=\\frac{7}{25}$.",
+        "ru": "$\\cos 2x=1-2\\sin^2x=1-\\frac{18}{25}=\\frac{7}{25}$.",
+        "en": "$\\cos 2x=1-2\\sin^2x=1-\\frac{18}{25}=\\frac{7}{25}$."
+      }
+    },
+    {
+      "sectionId": "algebraic-y1",
+      "chapterId": "14",
+      "question": {
+        "uz": "$|2x-6|=10$ tenglama ildizlarining yig'indisini toping.",
+        "ru": "Найдите сумму корней уравнения $|2x-6|=10$.",
+        "en": "Find the sum of the roots of $|2x-6|=10$."
+      },
+      "options": { "A": "$6$", "B": "$8$", "C": "$10$", "D": "$-2$" },
+      "answer": "A",
+      "explanation": {
+        "uz": "$2x-6=\\pm 10\\Rightarrow x=8$ yoki $x=-2$; yig'indi $6$.",
+        "ru": "$2x-6=\\pm 10\\Rightarrow x=8$ или $x=-2$; сумма $6$.",
+        "en": "$2x-6=\\pm 10$ gives $x=8$ or $x=-2$; the sum is $6$."
+      }
+    },
+    {
+      "sectionId": "algebraic-y1",
+      "chapterId": "14",
+      "question": {
+        "uz": "$|x-3|<5$ tengsizlikning yechimini toping.",
+        "ru": "Решите неравенство $|x-3|<5$.",
+        "en": "Solve $|x-3|<5$."
+      },
+      "options": { "A": "$-2<x<8$", "B": "$x<8$", "C": "$2<x<8$", "D": "$-8<x<2$" },
+      "answer": "A",
+      "explanation": {
+        "uz": "$-5<x-3<5$.",
+        "ru": "$-5<x-3<5$.",
+        "en": "$-5<x-3<5$."
+      }
+    },
+
+    {
+      "sectionId": "equations-y1",
+      "chapterId": "05",
+      "question": {
+        "uz": "$3x-7=2x+5$ tenglamani yeching.",
+        "ru": "Решите уравнение $3x-7=2x+5$.",
+        "en": "Solve $3x-7=2x+5$."
+      },
+      "options": { "A": "$12$", "B": "$2$", "C": "$-12$", "D": "$5$" },
+      "answer": "A",
+      "explanation": {
+        "uz": "$3x-2x=5+7$.",
+        "ru": "$3x-2x=5+7$.",
+        "en": "$3x-2x=5+7$."
+      }
+    },
+    {
+      "sectionId": "equations-y1",
+      "chapterId": "05",
+      "question": {
+        "uz": "$x^2-7x+12=0$ tenglama ildizlarining yig'indisini toping.",
+        "ru": "Найдите сумму корней уравнения $x^2-7x+12=0$.",
+        "en": "Find the sum of the roots of $x^2-7x+12=0$."
+      },
+      "options": { "A": "$7$", "B": "$12$", "C": "$-7$", "D": "$5$" },
+      "answer": "A",
+      "explanation": {
+        "uz": "Viet teoremasi: $x_1+x_2=7$.",
+        "ru": "По теореме Виета: $x_1+x_2=7$.",
+        "en": "By Vieta, $x_1+x_2=7$."
+      }
+    },
+    {
+      "sectionId": "equations-y1",
+      "chapterId": "06",
+      "question": {
+        "uz": "$\\begin{cases}x+y=10\\\\x-y=4\\end{cases}$ sistemani yeching va $xy$ ni toping.",
+        "ru": "Решите систему $\\begin{cases}x+y=10\\\\x-y=4\\end{cases}$ и найдите $xy$.",
+        "en": "Solve $\\begin{cases}x+y=10\\\\x-y=4\\end{cases}$ and find $xy$."
+      },
+      "options": { "A": "$21$", "B": "$24$", "C": "$30$", "D": "$12$" },
+      "answer": "A",
+      "explanation": {
+        "uz": "$x=7$, $y=3$, $xy=21$.",
+        "ru": "$x=7$, $y=3$, $xy=21$.",
+        "en": "$x=7$, $y=3$, so $xy=21$."
+      }
+    },
+    {
+      "sectionId": "equations-y1",
+      "chapterId": "07",
+      "question": {
+        "uz": "$2x-5>7$ tengsizlikni yeching.",
+        "ru": "Решите неравенство $2x-5>7$.",
+        "en": "Solve $2x-5>7$."
+      },
+      "options": { "A": "$x>6$", "B": "$x>1$", "C": "$x<6$", "D": "$x>12$" },
+      "answer": "A",
+      "explanation": {
+        "uz": "$2x>12$.",
+        "ru": "$2x>12$.",
+        "en": "$2x>12$."
+      }
+    },
+    {
+      "sectionId": "equations-y1",
+      "chapterId": "08",
+      "question": {
+        "uz": "$\\sqrt{2x+7}=5$ tenglamani yeching.",
+        "ru": "Решите уравнение $\\sqrt{2x+7}=5$.",
+        "en": "Solve $\\sqrt{2x+7}=5$."
+      },
+      "options": { "A": "$9$", "B": "$16$", "C": "$4$", "D": "$12$" },
+      "answer": "A",
+      "explanation": {
+        "uz": "$2x+7=25\\Rightarrow x=9$.",
+        "ru": "$2x+7=25\\Rightarrow x=9$.",
+        "en": "$2x+7=25$, so $x=9$."
+      }
+    },
+    {
+      "sectionId": "equations-y1",
+      "chapterId": "10",
+      "question": {
+        "uz": "Ikki shahar orasidagi $240$ km masofani avtomobil $3$ soatda bosib o'tdi. Uning o'rtacha tezligini (km/soat) toping.",
+        "ru": "Автомобиль проехал $240$ км между двумя городами за $3$ часа. Найдите его среднюю скорость (км/ч).",
+        "en": "A car covers the $240$ km between two cities in $3$ hours. Find its average speed (km/h)."
+      },
+      "options": { "A": "$60$", "B": "$70$", "C": "$80$", "D": "$90$" },
+      "answer": "C",
+      "explanation": {
+        "uz": "$v=\\frac{240}{3}=80$.",
+        "ru": "$v=\\frac{240}{3}=80$.",
+        "en": "$v=\\frac{240}{3}=80$."
+      }
+    },
+
+    {
+      "sectionId": "functions-y1",
+      "chapterId": "11",
+      "question": {
+        "uz": "$f(x)=2x^2-3x+1$ bo'lsa, $f(-2)$ ni toping.",
+        "ru": "Найдите $f(-2)$, если $f(x)=2x^2-3x+1$.",
+        "en": "Given $f(x)=2x^2-3x+1$, find $f(-2)$."
+      },
+      "options": { "A": "$15$", "B": "$3$", "C": "$-1$", "D": "$11$" },
+      "answer": "A",
+      "explanation": {
+        "uz": "$2\\cdot4+6+1=15$.",
+        "ru": "$2\\cdot4+6+1=15$.",
+        "en": "$2\\cdot4+6+1=15$."
+      }
+    },
+    {
+      "sectionId": "functions-y1",
+      "chapterId": "11",
+      "question": {
+        "uz": "$y=\\sqrt{x-4}$ funksiyaning aniqlanish sohasini toping.",
+        "ru": "Найдите область определения функции $y=\\sqrt{x-4}$.",
+        "en": "Find the domain of $y=\\sqrt{x-4}$."
+      },
+      "options": { "A": "$x\\ge 4$", "B": "$x>4$", "C": "$x\\le 4$", "D": "$x\\in\\mathbb{R}$" },
+      "answer": "A",
+      "explanation": {
+        "uz": "Ildiz ostidagi ifoda manfiy bo'lmasligi kerak.",
+        "ru": "Подкоренное выражение неотрицательно.",
+        "en": "The radicand must be non-negative."
+      }
+    },
+
+    {
+      "sectionId": "geometry-y1",
+      "chapterId": "01",
+      "question": {
+        "uz": "Burchaklardan biri $130^\\circ$ ga teng. Unga qo'shni burchakni toping.",
+        "ru": "Один из углов равен $130^\\circ$. Найдите смежный с ним угол.",
+        "en": "One angle measures $130^\\circ$. Find its adjacent (supplementary) angle."
+      },
+      "options": { "A": "$50^\\circ$", "B": "$60^\\circ$", "C": "$130^\\circ$", "D": "$230^\\circ$" },
+      "answer": "A",
+      "explanation": {
+        "uz": "Qo'shni burchaklar yig'indisi $180^\\circ$.",
+        "ru": "Сумма смежных углов равна $180^\\circ$.",
+        "en": "Adjacent angles sum to $180^\\circ$."
+      }
+    },
+    {
+      "sectionId": "geometry-y1",
+      "chapterId": "02",
+      "question": {
+        "uz": "To'g'ri burchakli uchburchakning katetlari $6$ va $8$. Gipotenuzasini toping.",
+        "ru": "Катеты прямоугольного треугольника равны $6$ и $8$. Найдите гипотенузу.",
+        "en": "The legs of a right triangle are $6$ and $8$. Find the hypotenuse."
+      },
+      "options": { "A": "$10$", "B": "$12$", "C": "$14$", "D": "$100$" },
+      "answer": "A",
+      "explanation": {
+        "uz": "$\\sqrt{36+64}=10$.",
+        "ru": "$\\sqrt{36+64}=10$.",
+        "en": "$\\sqrt{36+64}=10$."
+      }
+    },
+    {
+      "sectionId": "geometry-y1",
+      "chapterId": "02",
+      "question": {
+        "uz": "Uchburchakning ikki burchagi $50^\\circ$ va $60^\\circ$. Uchinchi burchakni toping.",
+        "ru": "Два угла треугольника равны $50^\\circ$ и $60^\\circ$. Найдите третий угол.",
+        "en": "Two angles of a triangle are $50^\\circ$ and $60^\\circ$. Find the third."
+      },
+      "options": { "A": "$70^\\circ$", "B": "$80^\\circ$", "C": "$60^\\circ$", "D": "$90^\\circ$" },
+      "answer": "A",
+      "explanation": {
+        "uz": "$180^\\circ-110^\\circ=70^\\circ$.",
+        "ru": "$180^\\circ-110^\\circ=70^\\circ$.",
+        "en": "$180^\\circ-110^\\circ=70^\\circ$."
+      }
+    },
+    {
+      "sectionId": "geometry-y1",
+      "chapterId": "03",
+      "question": {
+        "uz": "Parallelogrammning perimetri $36$, bir tomoni $10$ ga teng. Qo'shni tomonini toping.",
+        "ru": "Периметр параллелограмма равен $36$, одна сторона равна $10$. Найдите смежную сторону.",
+        "en": "A parallelogram has perimeter $36$ and one side $10$. Find the adjacent side."
+      },
+      "options": { "A": "$8$", "B": "$13$", "C": "$18$", "D": "$26$" },
+      "answer": "A",
+      "explanation": {
+        "uz": "$2(10+b)=36\\Rightarrow b=8$.",
+        "ru": "$2(10+b)=36\\Rightarrow b=8$.",
+        "en": "$2(10+b)=36$, so $b=8$."
+      }
+    },
+    {
+      "sectionId": "geometry-y1",
+      "chapterId": "04",
+      "question": {
+        "uz": "Radiusi $6$ bo'lgan doiraning yuzini toping.",
+        "ru": "Найдите площадь круга радиуса $6$.",
+        "en": "Find the area of a circle of radius $6$."
+      },
+      "options": { "A": "$36\\pi$", "B": "$12\\pi$", "C": "$6\\pi$", "D": "$18\\pi$" },
+      "answer": "A",
+      "explanation": {
+        "uz": "$S=\\pi r^2$.",
+        "ru": "$S=\\pi r^2$.",
+        "en": "$S=\\pi r^2$."
+      }
+    },
+    {
+      "sectionId": "geometry-y1",
+      "chapterId": "06",
+      "question": {
+        "uz": "$A(1;2)$ va $B(4;6)$ nuqtalar orasidagi masofani toping.",
+        "ru": "Найдите расстояние между точками $A(1;2)$ и $B(4;6)$.",
+        "en": "Find the distance between $A(1;2)$ and $B(4;6)$."
+      },
+      "options": { "A": "$5$", "B": "$7$", "C": "$\\sqrt{7}$", "D": "$25$" },
+      "answer": "A",
+      "explanation": {
+        "uz": "$\\sqrt{3^2+4^2}=5$.",
+        "ru": "$\\sqrt{3^2+4^2}=5$.",
+        "en": "$\\sqrt{3^2+4^2}=5$."
+      }
+    },
+    {
+      "sectionId": "geometry-y1",
+      "chapterId": "09",
+      "question": {
+        "uz": "Qirrasi $4$ ga teng kubning hajmini toping.",
+        "ru": "Найдите объём куба с ребром $4$.",
+        "en": "Find the volume of a cube with edge $4$."
+      },
+      "options": { "A": "$64$", "B": "$16$", "C": "$96$", "D": "$48$" },
+      "answer": "A",
+      "explanation": {
+        "uz": "$V=a^3=64$.",
+        "ru": "$V=a^3=64$.",
+        "en": "$V=a^3=64$."
+      }
+    },
+
+    {
+      "sectionId": "analysis-y1",
+      "chapterId": "09",
+      "question": {
+        "uz": "Arifmetik progressiyada $a_1=3$, $d=4$. $a_{10}$ ni toping.",
+        "ru": "В арифметической прогрессии $a_1=3$, $d=4$. Найдите $a_{10}$.",
+        "en": "In an arithmetic progression $a_1=3$ and $d=4$. Find $a_{10}$."
+      },
+      "options": { "A": "$39$", "B": "$43$", "C": "$40$", "D": "$36$" },
+      "answer": "A",
+      "explanation": {
+        "uz": "$a_{10}=3+9\\cdot4=39$.",
+        "ru": "$a_{10}=3+9\\cdot4=39$.",
+        "en": "$a_{10}=3+9\\cdot4=39$."
+      }
+    },
+    {
+      "sectionId": "analysis-y1",
+      "chapterId": "15",
+      "question": {
+        "uz": "$f(x)=x^3-3x$ funksiyaning $x=2$ nuqtadagi hosilasini toping.",
+        "ru": "Найдите производную функции $f(x)=x^3-3x$ в точке $x=2$.",
+        "en": "Find the derivative of $f(x)=x^3-3x$ at $x=2$."
+      },
+      "options": { "A": "$9$", "B": "$6$", "C": "$12$", "D": "$2$" },
+      "answer": "A",
+      "explanation": {
+        "uz": "$f'(x)=3x^2-3$, $f'(2)=9$.",
+        "ru": "$f'(x)=3x^2-3$, $f'(2)=9$.",
+        "en": "$f'(x)=3x^2-3$, so $f'(2)=9$."
+      }
+    },
+
+    {
+      "sectionId": "probability-y1",
+      "chapterId": "18",
+      "question": {
+        "uz": "O'yin soqqasi tashlandi. Tushgan ochkolar soni $4$ dan katta bo'lish ehtimolini toping.",
+        "ru": "Бросают игральную кость. Найдите вероятность того, что выпало больше $4$ очков.",
+        "en": "A die is rolled. Find the probability that the score is greater than $4$."
+      },
+      "options": { "A": "$\\dfrac{1}{3}$", "B": "$\\dfrac{1}{2}$", "C": "$\\dfrac{1}{6}$", "D": "$\\dfrac{2}{3}$" },
+      "answer": "A",
+      "explanation": {
+        "uz": "Qulay hollar: $5$ va $6$, ya'ni $\\frac{2}{6}=\\frac13$.",
+        "ru": "Благоприятные исходы: $5$ и $6$, т.е. $\\frac{2}{6}=\\frac13$.",
+        "en": "Favourable outcomes $5$ and $6$: $\\frac{2}{6}=\\frac13$."
+      }
+    },
+    {
+      "sectionId": "probability-y1",
+      "chapterId": "18",
+      "question": {
+        "uz": "$5$ ta har xil kitobni javonga necha xil usulda terish mumkin?",
+        "ru": "Сколькими способами можно расставить на полке $5$ различных книг?",
+        "en": "In how many ways can $5$ different books be arranged on a shelf?"
+      },
+      "options": { "A": "$120$", "B": "$25$", "C": "$60$", "D": "$720$" },
+      "answer": "A",
+      "explanation": {
+        "uz": "$5!=120$.",
+        "ru": "$5!=120$.",
+        "en": "$5!=120$."
+      }
+    },
+
+    {
+      "sectionId": "geometry-y2",
+      "chapterId": "02",
+      "question": {
+        "uz": "Uchburchakning tomonlari $13$, $14$ va $15$ ga teng. Uning yuzini toping.",
+        "ru": "Стороны треугольника равны $13$, $14$ и $15$. Найдите его площадь.",
+        "en": "A triangle has sides $13$, $14$ and $15$. Find its area."
+      },
+      "options": { "A": "$84$", "B": "$91$", "C": "$42$", "D": "$168$" },
+      "answer": "A",
+      "explanation": {
+        "uz": "Geron formulasi: $p=21$, $S=\\sqrt{21\\cdot8\\cdot7\\cdot6}=84$.",
+        "ru": "Формула Герона: $p=21$, $S=\\sqrt{21\\cdot8\\cdot7\\cdot6}=84$.",
+        "en": "Heron: $s=21$ and $S=\\sqrt{21\\cdot8\\cdot7\\cdot6}=84$."
+      }
+    },
+    {
+      "sectionId": "geometry-y2",
+      "chapterId": "03",
+      "question": {
+        "uz": "Teng yonli trapetsiyaning asoslari $10$ va $22$, yon tomoni $10$ ga teng. Uning yuzini toping.",
+        "ru": "Основания равнобедренной трапеции равны $10$ и $22$, боковая сторона равна $10$. Найдите её площадь.",
+        "en": "An isosceles trapezium has bases $10$ and $22$ and legs $10$. Find its area."
+      },
+      "options": { "A": "$128$", "B": "$160$", "C": "$96$", "D": "$112$" },
+      "answer": "A",
+      "explanation": {
+        "uz": "Balandlik $\\sqrt{10^2-6^2}=8$, $S=\\frac{10+22}{2}\\cdot8=128$.",
+        "ru": "Высота $\\sqrt{10^2-6^2}=8$, $S=\\frac{10+22}{2}\\cdot8=128$.",
+        "en": "Height $\\sqrt{10^2-6^2}=8$, so $S=\\frac{10+22}{2}\\cdot8=128$."
+      }
+    },
+    {
+      "sectionId": "geometry-y2",
+      "chapterId": "10",
+      "question": {
+        "uz": "Asos radiusi $3$, balandligi $4$ bo'lgan konusning to'la sirtini toping.",
+        "ru": "Найдите полную поверхность конуса с радиусом основания $3$ и высотой $4$.",
+        "en": "Find the total surface area of a cone with base radius $3$ and height $4$."
+      },
+      "options": { "A": "$24\\pi$", "B": "$15\\pi$", "C": "$9\\pi$", "D": "$30\\pi$" },
+      "answer": "A",
+      "explanation": {
+        "uz": "Yasovchi $l=5$, $S=\\pi r(r+l)=\\pi\\cdot3\\cdot8=24\\pi$.",
+        "ru": "Образующая $l=5$, $S=\\pi r(r+l)=\\pi\\cdot3\\cdot8=24\\pi$.",
+        "en": "The slant height is $l=5$, so $S=\\pi r(r+l)=24\\pi$."
+      }
+    },
+
+    {
+      "sectionId": "equations-o",
+      "chapterId": "05",
+      "question": {
+        "uz": "$x^2-6x+5=0$ tenglamaning katta ildizini toping.",
+        "ru": "Найдите больший корень уравнения $x^2-6x+5=0$.",
+        "en": "Find the larger root of $x^2-6x+5=0$."
+      },
+      "answer": "5",
+      "explanation": {
+        "uz": "Ildizlari $1$ va $5$.",
+        "ru": "Корни: $1$ и $5$.",
+        "en": "The roots are $1$ and $5$."
+      }
+    },
+    {
+      "sectionId": "equations-o",
+      "chapterId": "07",
+      "question": {
+        "uz": "$x^2-7x+10\\le 0$ tengsizlikning butun yechimlari yig'indisini toping.",
+        "ru": "Найдите сумму целых решений неравенства $x^2-7x+10\\le 0$.",
+        "en": "Find the sum of the integer solutions of $x^2-7x+10\\le 0$."
+      },
+      "answer": "14",
+      "explanation": {
+        "uz": "$2\\le x\\le 5$, butun yechimlar $2+3+4+5=14$.",
+        "ru": "$2\\le x\\le 5$, сумма целых: $2+3+4+5=14$.",
+        "en": "$2\\le x\\le 5$, so $2+3+4+5=14$."
+      }
+    },
+
+    {
+      "sectionId": "functions-o",
+      "chapterId": "11",
+      "question": {
+        "uz": "$f(x)=x^2-4x+7$ funksiyaning eng kichik qiymatini toping.",
+        "ru": "Найдите наименьшее значение функции $f(x)=x^2-4x+7$.",
+        "en": "Find the minimum value of $f(x)=x^2-4x+7$."
+      },
+      "answer": "3",
+      "explanation": {
+        "uz": "$f(x)=(x-2)^2+3$, minimum $x=2$ da $3$.",
+        "ru": "$f(x)=(x-2)^2+3$, минимум равен $3$ при $x=2$.",
+        "en": "$f(x)=(x-2)^2+3$, so the minimum is $3$."
+      }
+    },
+
+    {
+      "sectionId": "analysis-o",
+      "chapterId": "16",
+      "question": {
+        "uz": "$\\displaystyle\\int_0^3 (2x+1)\\,dx$ integralni hisoblang.",
+        "ru": "Вычислите интеграл $\\displaystyle\\int_0^3 (2x+1)\\,dx$.",
+        "en": "Evaluate $\\displaystyle\\int_0^3 (2x+1)\\,dx$."
+      },
+      "answer": "12",
+      "explanation": {
+        "uz": "$\\left[x^2+x\\right]_0^3=9+3=12$.",
+        "ru": "$\\left[x^2+x\\right]_0^3=9+3=12$.",
+        "en": "$\\left[x^2+x\\right]_0^3=12$."
+      }
+    },
+    {
+      "sectionId": "analysis-o",
+      "chapterId": "09",
+      "question": {
+        "uz": "Arifmetik progressiyaning birinchi hadi $5$, ayirmasi $3$. Dastlabki $10$ ta hadining yig'indisini toping.",
+        "ru": "Первый член арифметической прогрессии равен $5$, разность равна $3$. Найдите сумму первых $10$ членов.",
+        "en": "An arithmetic progression has $a_1=5$ and $d=3$. Find the sum of the first $10$ terms."
+      },
+      "answer": "185",
+      "explanation": {
+        "uz": "$S_{10}=\\frac{10}{2}(2\\cdot5+9\\cdot3)=185$.",
+        "ru": "$S_{10}=\\frac{10}{2}(2\\cdot5+9\\cdot3)=185$.",
+        "en": "$S_{10}=\\frac{10}{2}(2\\cdot5+9\\cdot3)=185$."
+      }
+    },
+
+    {
+      "sectionId": "geometry-o",
+      "chapterId": "02",
+      "question": {
+        "uz": "Uchburchakning tomonlari $5$, $12$ va $13$ ga teng. Uning yuzini toping.",
+        "ru": "Стороны треугольника равны $5$, $12$ и $13$. Найдите его площадь.",
+        "en": "A triangle has sides $5$, $12$ and $13$. Find its area."
+      },
+      "answer": "30",
+      "explanation": {
+        "uz": "$5^2+12^2=13^2$ — to'g'ri burchakli, $S=\\frac{5\\cdot12}{2}=30$.",
+        "ru": "$5^2+12^2=13^2$ — прямоугольный, $S=\\frac{5\\cdot12}{2}=30$.",
+        "en": "It is right-angled, so $S=\\frac{5\\cdot12}{2}=30$."
+      }
+    },
+    {
+      "sectionId": "geometry-o",
+      "chapterId": "03",
+      "question": {
+        "uz": "Rombning diagonallari $16$ va $30$ ga teng. Uning tomonini toping.",
+        "ru": "Диагонали ромба равны $16$ и $30$. Найдите его сторону.",
+        "en": "A rhombus has diagonals $16$ and $30$. Find its side."
+      },
+      "answer": "17",
+      "explanation": {
+        "uz": "Yarim diagonallar $8$ va $15$: $\\sqrt{64+225}=17$.",
+        "ru": "Половины диагоналей $8$ и $15$: $\\sqrt{64+225}=17$.",
+        "en": "Half-diagonals $8$ and $15$ give $\\sqrt{64+225}=17$."
+      }
+    },
+    {
+      "sectionId": "geometry-o",
+      "chapterId": "04",
+      "question": {
+        "uz": "Radiusi $10$ bo'lgan aylanada markazdan $6$ masofada joylashgan vatarning uzunligini toping.",
+        "ru": "В окружности радиуса $10$ найдите длину хорды, удалённой от центра на $6$.",
+        "en": "In a circle of radius $10$, find the length of a chord at distance $6$ from the centre."
+      },
+      "answer": "16",
+      "explanation": {
+        "uz": "Yarim vatar $\\sqrt{100-36}=8$, vatar $16$.",
+        "ru": "Половина хорды $\\sqrt{100-36}=8$, хорда равна $16$.",
+        "en": "Half the chord is $\\sqrt{100-36}=8$, so the chord is $16$."
+      }
+    },
+    {
+      "sectionId": "geometry-o",
+      "chapterId": "09",
+      "question": {
+        "uz": "To'g'ri burchakli parallelepipedning o'lchamlari $3$, $4$ va $12$. Uning diagonalini toping.",
+        "ru": "Измерения прямоугольного параллелепипеда равны $3$, $4$ и $12$. Найдите его диагональ.",
+        "en": "A rectangular box has edges $3$, $4$ and $12$. Find its space diagonal."
+      },
+      "answer": "13",
+      "explanation": {
+        "uz": "$\\sqrt{9+16+144}=13$.",
+        "ru": "$\\sqrt{9+16+144}=13$.",
+        "en": "$\\sqrt{9+16+144}=13$."
+      }
+    },
+
+    {
+      "sectionId": "probability-o",
+      "chapterId": "18",
+      "question": {
+        "uz": "Tanga $3$ marta tashlandi. Kamida bitta gerb tushish ehtimolini oddiy kasr ko'rinishida yozing.",
+        "ru": "Монету бросают $3$ раза. Запишите обыкновенной дробью вероятность того, что герб выпадет хотя бы раз.",
+        "en": "A coin is tossed $3$ times. Write, as a fraction, the probability of at least one head."
+      },
+      "answer": "7/8",
+      "acceptedAnswers": ["0.875", "0,875"],
+      "explanation": {
+        "uz": "$1-\\left(\\frac12\\right)^3=\\frac78$.",
+        "ru": "$1-\\left(\\frac12\\right)^3=\\frac78$.",
+        "en": "$1-\\left(\\frac12\\right)^3=\\frac78$."
+      }
+    }
+  ]
+}

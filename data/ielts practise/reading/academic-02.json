@@ -1,0 +1,496 @@
+{
+  "module": "reading",
+  "test_id": "platform_reading_academic_02",
+  "test_title": "Academic Reading Practice Test 2",
+  "test_category": "academic",
+  "total_time_minutes": 60,
+  "passages": [
+    {
+      "title": "The Most Expensive Spice in the World",
+      "subtitle": "Why saffron costs more per gram than gold has at some points in history",
+      "instruction": "You should spend about 20 minutes on Questions 1–13, which are based on the passage below.",
+      "difficulty": "easy",
+      "blocks": [
+        {
+          "label": "",
+          "content": "Saffron is the dried stigma of Crocus sativus, a small autumn-flowering plant that has been cultivated around the Mediterranean and across Iran for at least three thousand years. Each flower produces exactly three stigmas, thread-like and deep red, and each must be pulled out by hand. That arithmetic is the whole explanation of the price. A kilogram of dried saffron requires something in the region of a hundred and fifty thousand flowers and about forty hours of skilled picking, and the resulting spice has at various times traded above the price of gold by weight."
+        },
+        {
+          "label": "",
+          "content": "The plant itself is peculiar. Crocus sativus is sterile: it sets no viable seed, and every plant in cultivation is therefore a clone, propagated by dividing the underground corms. Genetic studies suggest that the entire world crop descends from a single mutation that occurred somewhere in the eastern Mediterranean in the Bronze Age. Because there is almost no genetic variation to work with, the plant has proved stubbornly resistant to the sort of breeding programme that has transformed wheat or maize. A farmer in Iran today grows essentially the same organism that was harvested in Minoan Crete."
+        },
+        {
+          "label": "",
+          "content": "Harvest is a matter of hours rather than days. The flowers open at dawn and must be gathered before the sun is high, because heat degrades the volatile compounds that carry the aroma. Pickers work in the cold half-light, taking the whole flower and carrying it indoors, where the three red stigmas are separated from the yellow style and the petals. The separation is done seated, by hand, and cannot be mechanised: every attempt to build a machine that distinguishes stigma from style has failed on the simple fact that the two are joined and differ only in colour and texture. The stigmas are then dried, traditionally over a low charcoal fire or in a warm room, until they have lost about four-fifths of their weight."
+        },
+        {
+          "label": "",
+          "content": "Drying is not merely preservation; it is where the flavour is created. The fresh stigma contains a bitter, essentially odourless compound called picrocrocin. Heat and enzyme action break it down to produce safranal, which is responsible for almost all of saffron's characteristic scent. A second compound, crocin, provides the intense yellow-orange colour that saffron gives to rice or milk, and it is unusual among plant pigments in being water-soluble, which is why a few threads steeped in warm water will colour an entire dish. The three compounds are measured separately in the international standard for saffron quality, ISO 3632, which grades the spice by laboratory absorbance rather than by appearance."
+        },
+        {
+          "label": "",
+          "content": "That standard exists because saffron has been adulterated for as long as it has been sold. Medieval Nuremberg operated a inspection office with the power to burn adulterators along with their goods, an indication both of the sums involved and of how routine the fraud must have been. The classic substitutions are safflower and turmeric, which supply colour but no aroma, and the classic dilutions add the yellow styles, which are part of the same flower but contribute almost nothing. Modern testing has moved to genetic methods: a laboratory can now identify the species present in a ground sample, which has made the older forms of substitution easy to detect and has pushed fraud towards subtler forms, such as mixing genuine saffron of low grade with a small quantity of high-grade material."
+        },
+        {
+          "label": "",
+          "content": "Iran produces roughly ninety per cent of the world crop, most of it in Khorasan in the north-east, where the climate delivers precisely what the plant requires: a hot, dry summer during which the corm is dormant, followed by cool, damp autumn weather at flowering. Kashmir, Morocco, Greece and Spain hold the remainder, and Spain's role is largely commercial rather than agricultural, since much of the saffron sold under Spanish labels is imported, graded and repackaged there. Attempts to establish the crop elsewhere have generally foundered not on climate but on labour: in countries where wages are high, the forty hours of picking that a kilogram demands cannot be paid for at any plausible retail price."
+        },
+        {
+          "label": "",
+          "content": "Two developments may unsettle that pattern. The first is water. Khorasan depends on aquifers that are being drawn down faster than they recharge, and saffron, though far less thirsty than the alternatives, is not immune to a regional shortage. The second is laboratory production: crocin and safranal can now be synthesised, and companies in several countries are selling cell-culture saffron compounds for use in food manufacturing. Chefs remain unconvinced, arguing that the spice is a mixture of several hundred volatile compounds rather than two headline molecules. Whether that objection survives contact with a large enough price difference is a question the industry has not yet had to answer."
+        }
+      ],
+      "questions": [
+        {
+          "type": "sentence_completion",
+          "instructions": "Complete the sentences below.\n\nChoose NO MORE THAN TWO WORDS from the passage for each answer.",
+          "word_limit": 2,
+          "options": null,
+          "questions": [
+            {
+              "question_number": 1,
+              "sentence": "Every saffron flower contains three [1], which have to be removed by hand.",
+              "correct_answer": ["stigmas"],
+              "passage_reference": "Each flower produces exactly three stigmas",
+              "explanation": "The harvested part is the stigma."
+            },
+            {
+              "question_number": 2,
+              "sentence": "Because the plant produces no viable seed, growers increase their stock by dividing the [2].",
+              "correct_answer": ["corms", "underground corms"],
+              "passage_reference": "propagated by dividing the underground corms",
+              "explanation": "Propagation is vegetative, from corms."
+            },
+            {
+              "question_number": 3,
+              "sentence": "Flowers must be picked before the sun rises high because [3] damages the aromatic compounds.",
+              "correct_answer": ["heat"],
+              "passage_reference": "because heat degrades the volatile compounds that carry the aroma",
+              "explanation": "Heat is the reason for the dawn harvest."
+            },
+            {
+              "question_number": 4,
+              "sentence": "Machines have never succeeded at harvesting because the stigma and the [4] are attached to each other.",
+              "correct_answer": ["style", "yellow style"],
+              "passage_reference": "the two are joined and differ only in colour and texture",
+              "explanation": "The stigma is joined to the style."
+            },
+            {
+              "question_number": 5,
+              "sentence": "During drying, picrocrocin is converted into [5], the source of saffron's smell.",
+              "correct_answer": ["safranal"],
+              "passage_reference": "break it down to produce safranal, which is responsible for almost all of saffron's characteristic scent",
+              "explanation": "Safranal carries the aroma."
+            },
+            {
+              "question_number": 6,
+              "sentence": "The colour that saffron gives to food comes from [6], which dissolves in water.",
+              "correct_answer": ["crocin"],
+              "passage_reference": "A second compound, crocin, provides the intense yellow-orange colour",
+              "explanation": "Crocin is the water-soluble pigment."
+            }
+          ]
+        },
+        {
+          "type": "true_false_not_given",
+          "instructions": "Do the following statements agree with the information given in the passage?\n\nWrite\nTRUE if the statement agrees with the information\nFALSE if the statement contradicts the information\nNOT GIVEN if there is no information on this",
+          "options": [
+            { "label": "TRUE", "description": "if the statement agrees with the information" },
+            { "label": "FALSE", "description": "if the statement contradicts the information" },
+            { "label": "NOT GIVEN", "description": "if there is no information on this" }
+          ],
+          "questions": [
+            {
+              "question_number": 7,
+              "statement": "All cultivated saffron plants are genetically almost identical.",
+              "correct_answer": "TRUE",
+              "passage_reference": "every plant in cultivation is therefore a clone",
+              "explanation": "Sterility means the crop is clonal and near-identical."
+            },
+            {
+              "question_number": 8,
+              "statement": "Plant breeders have improved saffron yields in the same way they improved wheat.",
+              "correct_answer": "FALSE",
+              "passage_reference": "the plant has proved stubbornly resistant to the sort of breeding programme that has transformed wheat or maize",
+              "explanation": "The passage says breeding has failed, not succeeded."
+            },
+            {
+              "question_number": 9,
+              "statement": "Dried stigmas weigh about one fifth of their fresh weight.",
+              "correct_answer": "TRUE",
+              "passage_reference": "until they have lost about four-fifths of their weight",
+              "explanation": "Losing four-fifths leaves one fifth."
+            },
+            {
+              "question_number": 10,
+              "statement": "The ISO 3632 standard judges saffron mainly by how the threads look.",
+              "correct_answer": "FALSE",
+              "passage_reference": "which grades the spice by laboratory absorbance rather than by appearance",
+              "explanation": "The standard is explicitly not based on appearance."
+            },
+            {
+              "question_number": 11,
+              "statement": "Genetic testing has made every form of saffron fraud impossible.",
+              "correct_answer": "FALSE",
+              "passage_reference": "has pushed fraud towards subtler forms",
+              "explanation": "Fraud has changed form rather than disappeared."
+            },
+            {
+              "question_number": 12,
+              "statement": "Most saffron carrying a Spanish label was grown outside Spain.",
+              "correct_answer": "TRUE",
+              "passage_reference": "much of the saffron sold under Spanish labels is imported, graded and repackaged there",
+              "explanation": "Spain's role is commercial rather than agricultural."
+            },
+            {
+              "question_number": 13,
+              "statement": "Laboratory-produced saffron compounds are cheaper than the natural spice.",
+              "correct_answer": "NOT GIVEN",
+              "passage_reference": "companies in several countries are selling cell-culture saffron compounds",
+              "explanation": "A price difference is hinted at as a future question but never stated."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Building Upwards in Wood",
+      "subtitle": "Engineered timber returns to the city skyline",
+      "instruction": "You should spend about 20 minutes on Questions 14–26, which are based on the passage below.",
+      "difficulty": "medium",
+      "blocks": [
+        {
+          "label": "A",
+          "content": "For most of the twentieth century the tall building was made of steel and concrete, and timber was what you used for a house. That assumption is being revised. Since 2010 wooden buildings of eight, eighteen and now twenty-five storeys have been completed in Norway, Canada, Austria and Australia, and the material making them possible is not timber as a carpenter would recognise it but an engineered product: cross-laminated timber, universally abbreviated to CLT."
+        },
+        {
+          "label": "B",
+          "content": "The idea is old and the execution is new. Softwood boards, typically spruce, are dried, planed and glued into panels in which each layer runs at right angles to the layer beneath, in the same way that plywood is built up but at a far larger scale. The crossing is what matters. Wood is enormously strong along the grain and weak across it, and it swells and shrinks across the grain as it takes up and gives off moisture. By alternating direction, a CLT panel becomes roughly as strong in one direction as the other, stops moving appreciably with humidity, and can be manufactured in pieces up to sixteen metres long and three metres wide — that is, in whole walls and whole floors."
+        },
+        {
+          "label": "C",
+          "content": "Manufacture is precise to a degree that surprises people who associate wood with rough tolerances. Boards arrive at the plant already kiln-dried to a specified moisture content, since gluing wet timber produces a panel that will delaminate. They are graded, mechanically in most modern plants, by passing each board through a machine that measures its stiffness and rejects or downgrades the weak ones. Accepted boards are finger-jointed end to end into continuous lengths, laid up in alternating layers with adhesive applied between them, and pressed — usually hydraulically, increasingly by vacuum — until the glue has cured. The cured panel is then moved to a computer-controlled cutter that machines every window opening, door, service duct and connection detail before the panel leaves the factory. What arrives on site is not material but a component, and it is craned into place.",
+          "type": "text"
+        },
+        {
+          "label": "D",
+          "content": "The consequences for the building site are the strongest part of the commercial case. 'We are assembling, not constructing,' says Anna Berglund, a structural engineer who has worked on three mid-rise timber projects in Scandinavia. 'A concrete frame is manufactured in the open air, in the weather, by a large workforce. A CLT frame is manufactured in a factory by a small one and bolted together by an even smaller one. On our last building the frame went up in nine weeks; the equivalent in concrete was priced at twenty-six.' Fewer deliveries, less site waste, less noise and a much shorter period of disruption follow from the same fact, and on constrained urban sites these can matter more than the cost of the material itself."
+        },
+        {
+          "label": "E",
+          "content": "The objection everyone raises first is fire, and the answer is counter-intuitive. A heavy timber section does not behave like a matchstick; it chars. The charred outer layer insulates the wood beneath it and the section burns inward at a slow and, crucially, predictable rate of roughly forty millimetres an hour. Engineers therefore size a structural member with a deliberate sacrificial thickness, so that after ninety minutes of fire the remaining core still carries the design load. 'Steel is not combustible, but steel loses most of its strength at around 550 degrees and it does so suddenly,' notes Dr Ravi Menon, a fire safety researcher. 'A timber column tells you how much of it is left. The real questions are the connections and the glue lines, not the wood.' Those questions have driven a decade of full-scale compartment testing, and the results have gradually persuaded regulators; several countries have raised or removed the height limits that once confined timber to four storeys."
+        },
+        {
+          "label": "F",
+          "content": "The environmental argument is genuine but frequently overstated. Cement production accounts for something close to eight per cent of global carbon dioxide emissions, and replacing a concrete frame with a timber one avoids a substantial part of that while storing carbon in the building for as long as it stands. The qualifications matter, however. The benefit depends on forests being replanted and on the timber being harvested from managed rather than primary woodland; it depends on transport distances, since shipping panels across an ocean erodes the saving quickly; and it depends on what happens at the end of the building's life, because a panel that is burnt or sent to landfill returns its stored carbon to the atmosphere. 'Timber is not automatically green,' warns Professor Hélène Dupont, an environmental economist. 'It is green if the forest is managed, the transport is short and the building is designed so the panels can be taken apart and used again. Change any of those and the number changes.'"
+        }
+      ],
+      "questions": [
+        {
+          "type": "flowchart_completion",
+          "instructions": "Complete the flow-chart below.\n\nChoose NO MORE THAN TWO WORDS from the passage for each answer.",
+          "word_limit": 2,
+          "options": null,
+          "flowchart_title": "Manufacturing a CLT panel",
+          "steps": [
+            "Softwood boards arrive at the factory, already dried to a set level of [14].",
+            "Each board is passed through a machine that measures its [15]; weak boards are rejected or downgraded.",
+            "Accepted boards are joined end to end using a [16] before being laid up.",
+            "Layers are stacked so that each one runs at [17] to the one below, with adhesive applied between them.",
+            "The stack is pressed, by hydraulic or [18] means, until the adhesive has cured.",
+            "A computer-controlled [19] machines all openings and connections before the panel is delivered."
+          ],
+          "questions": [
+            {
+              "question_number": 14,
+              "correct_answer": ["moisture content", "moisture"],
+              "passage_reference": "already kiln-dried to a specified moisture content",
+              "explanation": "Gluing wet timber causes delamination, so moisture content is specified."
+            },
+            {
+              "question_number": 15,
+              "correct_answer": ["stiffness"],
+              "passage_reference": "a machine that measures its stiffness and rejects or downgrades the weak ones",
+              "explanation": "Machine grading measures stiffness."
+            },
+            {
+              "question_number": 16,
+              "correct_answer": ["finger joint", "finger-joint"],
+              "passage_reference": "finger-jointed end to end into continuous lengths",
+              "explanation": "Boards are finger-jointed into continuous lengths."
+            },
+            {
+              "question_number": 17,
+              "correct_answer": ["right angles"],
+              "passage_reference": "each layer runs at right angles to the layer beneath",
+              "explanation": "Alternating grain direction is the defining feature of CLT."
+            },
+            {
+              "question_number": 18,
+              "correct_answer": ["vacuum"],
+              "passage_reference": "usually hydraulically, increasingly by vacuum",
+              "explanation": "Pressing is hydraulic or by vacuum."
+            },
+            {
+              "question_number": 19,
+              "correct_answer": ["cutter"],
+              "passage_reference": "moved to a computer-controlled cutter that machines every window opening",
+              "explanation": "A CNC cutter machines the panel before dispatch."
+            }
+          ]
+        },
+        {
+          "type": "matching_features",
+          "instructions": "Look at the following statements and the list of people below.\n\nMatch each statement with the correct person, A, B or C.\n\nWrite the correct letter, A, B or C, in boxes 20–23 on your answer sheet.\n\nNB You may use any letter more than once.",
+          "options": [
+            { "id": "A", "text": "Anna Berglund" },
+            { "id": "B", "text": "Ravi Menon" },
+            { "id": "C", "text": "Hélène Dupont" }
+          ],
+          "questions": [
+            {
+              "question_number": 20,
+              "statement": "Timber's environmental advantage disappears if any one of several conditions is not met.",
+              "correct_answer": ["C"],
+              "passage_reference": "Change any of those and the number changes.",
+              "explanation": "Dupont lists management, transport and reuse as conditions."
+            },
+            {
+              "question_number": 21,
+              "statement": "The way a timber member fails can be observed as it happens.",
+              "correct_answer": ["B"],
+              "passage_reference": "A timber column tells you how much of it is left.",
+              "explanation": "Menon contrasts visible charring with steel's sudden loss of strength."
+            },
+            {
+              "question_number": 22,
+              "statement": "A timber frame requires far fewer workers than a concrete one.",
+              "correct_answer": ["A"],
+              "passage_reference": "A CLT frame is manufactured in a factory by a small one",
+              "explanation": "Berglund's comparison of workforces."
+            },
+            {
+              "question_number": 23,
+              "statement": "The greatest technical uncertainty lies in the joints rather than the material itself.",
+              "correct_answer": ["B"],
+              "passage_reference": "The real questions are the connections and the glue lines, not the wood.",
+              "explanation": "Menon locates the risk in connections and glue lines."
+            }
+          ]
+        },
+        {
+          "type": "short_answer",
+          "instructions": "Answer the questions below.\n\nChoose NO MORE THAN THREE WORDS AND/OR A NUMBER from the passage for each answer.",
+          "word_limit": 3,
+          "questions": [
+            {
+              "question_number": 24,
+              "question_text": "Which softwood is typically used to make CLT panels?",
+              "correct_answer": ["spruce"],
+              "passage_reference": "Softwood boards, typically spruce",
+              "explanation": "Spruce is named as the usual species."
+            },
+            {
+              "question_number": 25,
+              "question_text": "Approximately how far into a heavy timber section does fire burn in one hour?",
+              "correct_answer": ["40 millimetres", "forty millimetres", "40mm"],
+              "passage_reference": "at a slow and, crucially, predictable rate of roughly forty millimetres an hour",
+              "explanation": "The charring rate is about 40 mm per hour."
+            },
+            {
+              "question_number": 26,
+              "question_text": "Roughly what proportion of global carbon dioxide emissions is attributed to making cement?",
+              "correct_answer": ["eight per cent", "8 per cent", "8%"],
+              "passage_reference": "close to eight per cent of global carbon dioxide emissions",
+              "explanation": "Cement is responsible for about 8%."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "The Psychology of Waiting",
+      "subtitle": "Why the length of a queue matters less than how it feels",
+      "instruction": "You should spend about 20 minutes on Questions 27–40, which are based on the passage below.",
+      "difficulty": "hard",
+      "blocks": [
+        {
+          "label": "A",
+          "content": "In the late 1950s the management of a New York office block received a stream of complaints about the lifts. Tenants said the wait was intolerable. The building's engineers examined the problem and concluded that nothing could be done: the shafts were full, the machinery was modern, and no reorganisation of the service would produce a meaningful improvement. A consultant then suggested installing full-length mirrors in the lobbies beside the lift doors. The complaints stopped. The waiting time had not changed by a second. What had changed was that people now had something to do — inspect their own appearance, and, discreetly, everyone else's — during the interval."
+        },
+        {
+          "label": "B",
+          "content": "The story is repeated so often in business schools that it has acquired the smoothness of a fable, and its details are not well documented. Its underlying claim, however, has survived a great deal of subsequent testing. In 1985 the operations researcher David Maister set out a series of propositions about the experience of waiting, the first of which is the most important: occupied time feels shorter than unoccupied time. A wait that offers the mind something to attend to is systematically underestimated, and a wait that offers nothing is systematically overestimated, often by a factor of two or more. The queue has not shortened; the perception of it has."
+        },
+        {
+          "label": "C",
+          "content": "A second proposition concerns the period before service begins. Waits that occur before a process starts feel longer than waits of identical length once it is under way. The diner seated at a table, handed a menu and given a glass of water is, objectively, still waiting for food, but reports far less impatience than one standing at the door. Restaurants and clinics exploit this relentlessly, and the exploitation is not merely cosmetic: seating a customer converts an anxious wait into an occupied one and moves them across the psychological threshold that separates being ignored from being served."
+        },
+        {
+          "label": "D",
+          "content": "Anxiety is the third factor, and possibly the strongest. A wait in which the outcome is uncertain is experienced as much longer than one in which it is not. This is why the single most effective intervention available to any organisation is information. Airports that display a realistic estimate of the time to the front of the security queue receive fewer complaints than airports with shorter but unexplained queues. Hospital departments that tell patients where they stand in a triage order reduce hostility towards staff even when nobody is seen any sooner. The unexplained wait is worse than the explained wait, and the wait of unknown duration is worse than the wait of known duration, even when the known duration is the longer of the two."
+        },
+        {
+          "label": "E",
+          "content": "The most bitterly felt aspect of queuing, however, is not duration at all but fairness. Being overtaken by a person who arrived later is experienced as an injury rather than an inconvenience, and the reaction is out of all proportion to the seconds involved. This is the reasoning behind the single serpentine line that has replaced parallel queues in banks, post offices and airport check-in halls. A serpentine queue is, on average, no faster; in some configurations it is fractionally slower, because a single line cannot exploit a momentarily free server as efficiently as several. What it guarantees is order of service. Studies of customer satisfaction consistently find that people prefer the serpentine arrangement even after being told that it will not reduce their wait, and that the strength of the preference tracks how visible the queue is: what people cannot see, they cannot police."
+        },
+        {
+          "label": "F",
+          "content": "One well-documented case shows how far the logic can be pushed. An airport that had received persistent complaints about baggage delivery measured the process and found that passengers walked from the arrival gate to the carousel in about a minute and then waited about seven. The airport moved the arrival gates further from the hall, so that the walk took six minutes and the wait about two. Total time was unchanged. Complaints fell almost to nothing. Walking is occupied time and progress towards a goal; standing at a stationary carousel is neither. The intervention did not improve the service in any measurable respect, and by any reasonable definition it improved the experience."
+        },
+        {
+          "label": "G",
+          "content": "The obvious objection is that all of this is manipulation, and the objection deserves an answer. There is a real distinction between reducing the cost of an unavoidable wait and disguising a wait that should have been eliminated. A mirror by a lift is the first; a mirror by a lift that is broken is the second. Maister's own writing is explicit that perception management is what remains after capacity has been addressed, not a substitute for addressing it, and the research offers a blunt test of good faith. Interventions that give the customer information or control — an accurate estimate, a queue position, a call-back instead of a hold — survive scrutiny because the customer would choose them if asked. Interventions that merely conceal — the unexplained corridor, the recorded voice claiming the call is important — are resented as soon as they are noticed, and the resentment attaches to the organisation rather than to the wait."
+        }
+      ],
+      "questions": [
+        {
+          "type": "matching_headings",
+          "instructions": "The passage has seven paragraphs, A–G.\n\nChoose the correct heading for each paragraph from the list of headings below.\n\nWrite the correct number, i–x, in boxes 27–33 on your answer sheet.",
+          "options": [
+            { "id": "i", "text": "An intervention that lengthened the walk and shortened the complaint" },
+            { "id": "ii", "text": "Why order of service outweighs speed of service" },
+            { "id": "iii", "text": "Training staff to deal with angry customers" },
+            { "id": "iv", "text": "A famous solution that changed nothing measurable" },
+            { "id": "v", "text": "Where honest design ends and concealment begins" },
+            { "id": "vi", "text": "The cost of building additional capacity" },
+            { "id": "vii", "text": "Uncertainty as the greatest source of frustration" },
+            { "id": "viii", "text": "The difference between waiting to start and waiting during" },
+            { "id": "ix", "text": "A principle set out and tested: the empty interval" },
+            { "id": "x", "text": "How queue length is calculated in practice" }
+          ],
+          "questions": [
+            {
+              "question_number": 27,
+              "target_paragraph": "A",
+              "correct_answer": "iv",
+              "passage_reference": "The waiting time had not changed by a second.",
+              "explanation": "The mirrors solved the complaint without changing the wait."
+            },
+            {
+              "question_number": 28,
+              "target_paragraph": "B",
+              "correct_answer": "ix",
+              "passage_reference": "occupied time feels shorter than unoccupied time",
+              "explanation": "Maister's first proposition, and the evidence for it."
+            },
+            {
+              "question_number": 29,
+              "target_paragraph": "C",
+              "correct_answer": "viii",
+              "passage_reference": "Waits that occur before a process starts feel longer than waits of identical length once it is under way.",
+              "explanation": "Pre-process versus in-process waits."
+            },
+            {
+              "question_number": 30,
+              "target_paragraph": "D",
+              "correct_answer": "vii",
+              "passage_reference": "A wait in which the outcome is uncertain is experienced as much longer",
+              "explanation": "Anxiety and uncertainty; information is the remedy."
+            },
+            {
+              "question_number": 31,
+              "target_paragraph": "E",
+              "correct_answer": "ii",
+              "passage_reference": "What it guarantees is order of service.",
+              "explanation": "Fairness beats speed; hence the serpentine queue."
+            },
+            {
+              "question_number": 32,
+              "target_paragraph": "F",
+              "correct_answer": "i",
+              "passage_reference": "The airport moved the arrival gates further from the hall",
+              "explanation": "The baggage-hall case: longer walk, shorter wait."
+            },
+            {
+              "question_number": 33,
+              "target_paragraph": "G",
+              "correct_answer": "v",
+              "passage_reference": "There is a real distinction between reducing the cost of an unavoidable wait and disguising a wait that should have been eliminated.",
+              "explanation": "The ethical line between design and concealment."
+            }
+          ]
+        },
+        {
+          "type": "multiple_choice",
+          "instructions": "Choose the correct letter, A, B, C or D.",
+          "questions": [
+            {
+              "question_number": 34,
+              "question_text": "What does the writer say about the lift-lobby story?",
+              "options": [
+                { "id": "A", "text": "Its details have never been properly recorded." },
+                { "id": "B", "text": "It has been shown to be entirely invented." },
+                { "id": "C", "text": "It applies only to office buildings." },
+                { "id": "D", "text": "It was first reported by David Maister." }
+              ],
+              "correct_answer": ["A"],
+              "passage_reference": "its details are not well documented",
+              "explanation": "The writer questions the documentation, not the underlying principle."
+            },
+            {
+              "question_number": 35,
+              "question_text": "According to paragraph D, what do airports and hospitals have in common?",
+              "options": [
+                { "id": "A", "text": "They have both reduced their average waiting times." },
+                { "id": "B", "text": "They both benefit from telling people what to expect." },
+                { "id": "C", "text": "They both suffer from unusually anxious customers." },
+                { "id": "D", "text": "They have both adopted the serpentine queue." }
+              ],
+              "correct_answer": ["B"],
+              "passage_reference": "reduce hostility towards staff even when nobody is seen any sooner",
+              "explanation": "In both cases, information alone reduces complaints."
+            },
+            {
+              "question_number": 36,
+              "question_text": "Why does the writer mention a call-back option in the final paragraph?",
+              "options": [
+                { "id": "A", "text": "to show that telephone queues are the hardest to manage" },
+                { "id": "B", "text": "to illustrate a measure customers would accept if consulted" },
+                { "id": "C", "text": "to argue that recorded messages should be shortened" },
+                { "id": "D", "text": "to demonstrate that capacity problems can be solved cheaply" }
+              ],
+              "correct_answer": ["B"],
+              "passage_reference": "survive scrutiny because the customer would choose them if asked",
+              "explanation": "The call-back is an example of an intervention that passes the good-faith test."
+            }
+          ]
+        },
+        {
+          "type": "summary_completion",
+          "instructions": "Complete the summary below.\n\nChoose NO MORE THAN TWO WORDS from the passage for each answer.",
+          "word_limit": 2,
+          "options": null,
+          "summary_title": "Managing the experience of waiting",
+          "summary_text": "The research suggests that organisations can improve a wait without shortening it. Time that is [37] passes more quickly than an empty interval, which is why a walk to a baggage hall is tolerated better than standing still. Giving people an accurate estimate reduces the [38] created by not knowing how long a queue will take, even when the stated figure is high. The arrangement that customers most consistently prefer is the [39] line, because it makes the order of service visible and prevents anyone from being overtaken. The writer's final warning is that such measures are legitimate only once [40] has been dealt with, and that anything designed simply to conceal a delay will eventually be resented.",
+          "questions": [
+            {
+              "question_number": 37,
+              "correct_answer": ["occupied"],
+              "passage_reference": "occupied time feels shorter than unoccupied time",
+              "explanation": "Occupied time is underestimated."
+            },
+            {
+              "question_number": 38,
+              "correct_answer": ["anxiety", "uncertainty"],
+              "passage_reference": "A wait in which the outcome is uncertain is experienced as much longer",
+              "explanation": "Information reduces the anxiety of an uncertain wait."
+            },
+            {
+              "question_number": 39,
+              "correct_answer": ["serpentine"],
+              "passage_reference": "the single serpentine line that has replaced parallel queues",
+              "explanation": "The serpentine queue guarantees order of service."
+            },
+            {
+              "question_number": 40,
+              "correct_answer": ["capacity"],
+              "passage_reference": "perception management is what remains after capacity has been addressed",
+              "explanation": "Perception management follows capacity, it does not replace it."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+# 🚀 TestEdify - Signup Flow Architecture & Analysis
+
+The signup flow in TestEdify is a highly polished, multi-step, animated onboarding experience designed for both Teachers and Students. It utilizes Next.js (App Router), Firebase (Auth & Firestore), Framer Motion (animations), and Tailwind CSS.
+
+## 1. 🏗️ Layout & Core Structure (`page.tsx`)
+- **Split Screen Design:** The page uses a two-panel layout.
+  - **Left Panel (55%):** Visible only on desktop. Features a vibrant blue gradient and a complex, custom-built SVG (`EcosystemSVG`) illustrating the platform's digital environment (monitor, tablet, book stack with glowing animations).
+  - **Right Panel (45%):** The interactive form area, centered and scrollable. Includes a mobile logo and an absolute-positioned Language Toggler.
+- **Internationalization (i18n):** Uses a local `SIGNUP_TRANSLATIONS` dictionary and a React `LanguageContext` to seamlessly switch between Uzbek (`uz`), English (`en`), and Russian (`ru`).
+- **State Routing:** The `SignupPage` component acts as a mini-router using the `role` state (`"student" | "teacher" | null`). It wraps the steps in Framer Motion's `<AnimatePresence>` for smooth entry/exit sliding animations.
+
+## 2. 🎭 Step 0: Role Selection (`FormSteps.tsx`)
+- When the user first lands (`role === null`), the `Step0Role` component is rendered.
+- Presents two large, tactile cards with hover effects (translating arrows, glowing borders, scaling icons).
+- Allows the user to choose between:
+  - **Teacher:** Indigo theme, `School` icon.
+  - **Student:** Emerald theme, `GraduationCap` icon.
+- Also provides a prominent "Already have an account? Log in" link.
+
+## 3. 🔄 The Multi-Step Flows (`TeacherSignupFlow.tsx` & `StudentSignupFlow.tsx`)
+Once a role is selected, the respective flow component mounts. Both flows share similar logic but write different payloads to the database.
+
+### State Management
+Each flow maintains its own state:
+- `step`: Tracks the current form step (1 or 2).
+- `formData`: Stores `email`, `password`, `fullName`, `username`, and a role-specific field (`gradeLevel` for students, `schoolSubject` for teachers).
+- Real-time Validation States: `isCheckingUser`, `usernameAvailable`, `usernameError`.
+
+### Step 1: Authentication (`Step1Auth`)
+- Collects `email` and `password`.
+- Features an eye-toggle for password visibility.
+- Validates that the password is at least 8 characters long before allowing the user to proceed to Step 2.
+
+### Step 2: Personal Profile (`Step2Profile`)
+- Collects `fullName` and `username`.
+- **Debounced Username Validation:**
+  - Uses a `useEffect` with an 800ms debounce to prevent spamming the database while typing.
+  - Validates format locally (min 5 chars, starts with a letter, alphanumeric/underscores only).
+  - Calls `checkUsernameUnique` (queries the `usernames` Firestore collection).
+  - Uses a `useRef` map as an in-memory cache to remember already-checked usernames.
+  - Displays real-time UI feedback (Spinning loader, Red X, Amber X, Green Checkmark).
+- **Role-Specific Dropdown:** 
+  - Students select their `gradeLevel` (1-11 or university).
+  - Teachers select their primary `schoolSubject` (Math, Physics, etc.).
+- **Legal Agreements:** A required checkbox for Terms of Service and Privacy Policy. Clicking the links opens a beautifully animated React Portal modal (`PolicyModal`).
+
+## 4. 💾 Database Commit & Rollback Strategy
+When the user submits Step 2, the `handleSignup` function executes a secure, atomic write process:
+
+1. **Auth Creation:** Creates the user in Firebase Auth (`createUserWithEmailAndPassword`) and updates their Auth Profile with their `displayName`.
+2. **Atomic Batch Write:** Prepares a Firestore `writeBatch` to write two documents simultaneously:
+   - **User Document (`users/{uid}`):** Stores the `formData`, role, and sets up "Progressive Profiling" fields (empty strings for phone, gender, etc., ensuring the app doesn't crash on nulls later).
+     - *Student Payload defaults:* Initializes the gamification engine (`totalXP: 0`, `currentStreak: 0`, `level: 1`, `dailyHistory: {}`, and `progress`).
+     - *Teacher Payload defaults:* Initializes professional fields (`grade: "Teacher"`, `verifiedTeacher: false`, `experience: 0`).
+   - **Username Document (`usernames/{lowerUsername}`):** Maps the chosen username to the `uid` to reserve it globally.
+3. **Commit:** Executes `batch.commit()`.
+4. **Rollback 🛡️:** If the Firestore batch write fails (e.g., due to a lost connection or a sudden permissions issue), the `catch` block deletes the newly created Firebase Auth user (`deleteUser(auth.currentUser)`) to prevent orphaned auth accounts that have no database record.
+5. **Redirection:** On success, toasts a welcome message and redirects to `/dashboard` (Student) or `/teacher/dashboard` (Teacher).

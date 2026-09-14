@@ -1,0 +1,459 @@
+{
+  "_readme": [
+    "THE BIOLOGY SAMPLE PAPER — edit this file to change what the Milliy sertifikat",
+    "biology builder's \"Namunaviy variant\" button loads. Contract: docs/MILLIY_QUIZ.md.",
+    "",
+    "Unlike the maths sample paper there is NO blueprint to balance against: the",
+    "biology paper's length is whatever this file holds (the builder sets its",
+    "length target from the count), and there are no per-section quotas. What IS",
+    "checked, by lib/MilliyDefaultPaper.ts, and refused with the entry named:",
+    "  * topicId must be a topic of `biologiya` in data/question_topics.json;",
+    "  * subtopicId, when given, must belong to that topic;",
+    "  * a closed item needs >= 2 options and `answer` must be one of their keys;",
+    "  * `answer` must not be empty.",
+    "",
+    "Per entry:",
+    "  topicId     a `biologiya` TOPIC slug. It becomes the item's sectionId, which",
+    "              is what the teacher's results page groups by:",
+    "                tiriklikning-xilma-xilligi",
+    "                sitologiya-genetika-va-seleksiya-asoslari",
+    "                tirik-organizmlarning-umumiy-sistematikasi",
+    "                osimlik-va-hayvonot-dunyosi",
+    "                odam-organizmi-va-uning-salomatligi",
+    "                hayotning-tur-va-populyatsiya-darajasining-umumbiologik-qonuniyatlari",
+    "                hayotning-ekosistema-va-biosfera-darajasi-umumiy-qonuniyatlari",
+    "                umumbiologik-qonuniyatlar-asosida-masala-misol-va-topshiriqlar",
+    "  subtopicId  optional, for a more precise label on the results page.",
+    "  question    a string, or {uz, ru, en}. A bare string is used for all three.",
+    "  options     A-D (OptionKey is A..D). PRESENT => closed item; ABSENT => typed",
+    "              item. There is no separate flag, so the two cannot contradict.",
+    "  answer      closed -> the correct option key; typed -> the literal answer.",
+    "  acceptedAnswers  typed only: other spellings graded correct.",
+    "  numeric     typed only, default FALSE (most biology answers are words).",
+    "              true => graded with the numeric comparison.",
+    "  difficultyId  1 easy | 2 medium | 3 hard. Default 2.",
+    "",
+    "MARKING: none of the values here set what a question is WORTH. Every question",
+    "is priced from the share of the cohort that solved it (lib/RASCHmarks.ts) —",
+    "the more of the class that gets it right, the less it is worth. `difficultyId`",
+    "is a label for the teacher, not a mark.",
+    "",
+    "KNOWN LIMITATION: the questions are authored UZBEK-ONLY. A bare string fills",
+    "ru and en with the same Uzbek text (toSampleText), so a student who picked",
+    "Russian or English sees Uzbek rather than a blank. Add {uz, ru, en} objects",
+    "per entry as translations are made."
+  ],
+  "title": {
+    "uz": "Biologiya — namunaviy variant",
+    "ru": "Биология — образцовый вариант",
+    "en": "Biology — sample paper"
+  },
+  "durationMinutes": 90,
+  "questions": [
+    {
+      "topicId": "tiriklikning-xilma-xilligi",
+      "subtopicId": "tirik-organizmlarning-umumiy-xususiyatlari",
+      "question": "Quyidagilardan qaysi biri barcha tirik organizmlarga xos EMAS?",
+      "options": {
+        "A": "Modda va energiya almashinuvi",
+        "B": "Ko'payish va irsiyat",
+        "C": "Fotosintez qilish",
+        "D": "Ta'sirlanish va moslashish"
+      },
+      "answer": "C",
+      "explanation": "Fotosintez faqat xlorofillga ega organizmlarga xos. Modda almashinuvi, ko'payish va ta'sirlanish esa tiriklikning umumiy belgilari.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "tiriklikning-xilma-xilligi",
+      "subtopicId": "viruslar",
+      "question": "Viruslarning tirik organizmlardan asosiy farqi nimada?",
+      "options": {
+        "A": "Nuklein kislotasi yo'q",
+        "B": "Faqat boshqa hujayra ichida ko'payadi",
+        "C": "Oqsil qobig'i yo'q",
+        "D": "Mutatsiyaga uchramaydi"
+      },
+      "answer": "B",
+      "explanation": "Virus — hujayrasiz shakl: o'z metabolizmi va ribosomalari yo'q, shuning uchun faqat xo'jayin hujayra ichida ko'payadi (obligat hujayra ichi paraziti).",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "tiriklikning-xilma-xilligi",
+      "subtopicId": "prokariotlar",
+      "question": "Prokariot hujayrada quyidagi organoidlardan qaysi biri BO'LMAYDI?",
+      "options": {
+        "A": "Ribosoma",
+        "B": "Hujayra membranasi",
+        "C": "Mitoxondriya",
+        "D": "Sitoplazma"
+      },
+      "answer": "C",
+      "explanation": "Prokariotlarda membrana bilan o'ralgan organoidlar (mitoxondriya, yadro, EPT) yo'q. Ribosomalari esa bor — 70S tipdagi.",
+      "difficultyId": 2
+    },
+
+    {
+      "topicId": "sitologiya-genetika-va-seleksiya-asoslari",
+      "subtopicId": "sitologiya-hujayra-nazariyasi",
+      "question": "Hujayra nazariyasining asosiy qoidasiga ko'ra yangi hujayra qanday paydo bo'ladi?",
+      "options": {
+        "A": "Jonsiz moddadan o'z-o'zidan",
+        "B": "Faqat mavjud hujayraning bo'linishidan",
+        "C": "Oqsillarning birlashishidan",
+        "D": "Virusning o'zgarishidan"
+      },
+      "answer": "B",
+      "explanation": "Virxov qo'shgan qoida: \"Omnis cellula e cellula\" — har bir hujayra faqat oldingi hujayradan hosil bo'ladi.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "sitologiya-genetika-va-seleksiya-asoslari",
+      "subtopicId": "sitologiya-organoidlar",
+      "question": "Hujayrada oqsil sintezi bevosita qaysi organoidda amalga oshadi?",
+      "options": {
+        "A": "Ribosomada",
+        "B": "Lizosomada",
+        "C": "Golji majmuasida",
+        "D": "Vakuolada"
+      },
+      "answer": "A",
+      "explanation": "Translyatsiya ribosomada boradi: mRNK kodoni tRNK antikodoni bilan mos kelib, aminokislotalar peptid zanjirga birlashadi.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "sitologiya-genetika-va-seleksiya-asoslari",
+      "subtopicId": "sitologiya-meyoz",
+      "question": "Meyoz natijasida bitta diploid (2n) hujayradan nima hosil bo'ladi?",
+      "options": {
+        "A": "2 ta diploid hujayra",
+        "B": "4 ta gaploid hujayra",
+        "C": "4 ta diploid hujayra",
+        "D": "2 ta gaploid hujayra"
+      },
+      "answer": "B",
+      "explanation": "Meyoz ikki bo'linishdan iborat: xromosomalar soni ikki barobar kamayadi va 4 ta gaploid (n) hujayra hosil bo'ladi.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "sitologiya-genetika-va-seleksiya-asoslari",
+      "subtopicId": "sitologiya-hujayra-energetikasi",
+      "question": "Hujayrada energiya to'planadigan universal molekula qaysi? Qisqartmasini yozing.",
+      "answer": "ATF",
+      "acceptedAnswers": ["ATP", "adenozintrifosfat", "adenozin trifosfat"],
+      "explanation": "ATF (adenozintrifosfat) — energiyaning universal saqlovchisi va tashuvchisi. Makroergik bog'lar uzilganda energiya ajraladi.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "sitologiya-genetika-va-seleksiya-asoslari",
+      "subtopicId": "genetika-mendel-qonunlari",
+      "question": "Monogibrid chatishda F1 avlodda barcha duragaylar bir xil bo'lishi Mendelning qaysi qonuni?",
+      "options": {
+        "A": "Bir xillik (birinchi) qonuni",
+        "B": "Ajralish (ikkinchi) qonuni",
+        "C": "Mustaqil taqsimlanish qonuni",
+        "D": "Gomologik qatorlar qonuni"
+      },
+      "answer": "A",
+      "explanation": "Mendelning I qonuni — F1 duragaylarining bir xilligi: barcha avlod dominant belgiga ega va genotipi Aa bo'ladi.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "sitologiya-genetika-va-seleksiya-asoslari",
+      "subtopicId": "genetika-dnk",
+      "question": "DNK molekulasida adenin (A) nukleotidiga komplementar bo'lgan nukleotid qaysi?",
+      "options": {
+        "A": "Guanin",
+        "B": "Sitozin",
+        "C": "Timin",
+        "D": "Uratsil"
+      },
+      "answer": "C",
+      "explanation": "Komplementarlik qoidasi: A–T va G–S. Uratsil DNKda emas, RNKda uchraydi va A bilan juftlashadi.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "sitologiya-genetika-va-seleksiya-asoslari",
+      "subtopicId": "seleksiya-poliploidiya",
+      "question": "Poliploidiya deb nimaga aytiladi?",
+      "options": {
+        "A": "Bitta xromosomaning yo'qolishiga",
+        "B": "Xromosomalar to'plamining butun son marta ko'payishiga",
+        "C": "Gen ichidagi nukleotid o'zgarishiga",
+        "D": "Xromosoma bo'lagining boshqasiga o'tishiga"
+      },
+      "answer": "B",
+      "explanation": "Poliploidiya — gaploid to'plamning butun son marta ortishi (3n, 4n...). O'simlik seleksiyasida hosildorlikni oshirish uchun keng qo'llanadi.",
+      "difficultyId": 3
+    },
+
+    {
+      "topicId": "tirik-organizmlarning-umumiy-sistematikasi",
+      "subtopicId": "binar-nomenklatura",
+      "question": "Binar nomenklaturaga ko'ra turning ilmiy nomi nechta so'zdan iborat bo'ladi? Raqam bilan yozing.",
+      "answer": "2",
+      "acceptedAnswers": ["ikki", "ikkita"],
+      "numeric": true,
+      "explanation": "Karl Linney kiritgan qoida: birinchi so'z — avlod nomi (bosh harf bilan), ikkinchisi — tur epiteti. Masalan Homo sapiens.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "tirik-organizmlarning-umumiy-sistematikasi",
+      "subtopicId": "taksonomik-birliklar",
+      "question": "Hayvonlar sistematikasida taksonlarning kichikdan kattaga to'g'ri ketma-ketligi qaysi?",
+      "options": {
+        "A": "Tur → Avlod → Oila → Turkum → Sinf → Tip",
+        "B": "Tur → Oila → Avlod → Sinf → Turkum → Tip",
+        "C": "Avlod → Tur → Oila → Turkum → Tip → Sinf",
+        "D": "Tur → Avlod → Turkum → Oila → Tip → Sinf"
+      },
+      "answer": "A",
+      "explanation": "Tur eng kichik taksonomik birlik; undan yuqoriga: avlod, oila, turkum, sinf, tip, shohlik.",
+      "difficultyId": 2
+    },
+
+    {
+      "topicId": "osimlik-va-hayvonot-dunyosi",
+      "subtopicId": "botanika-fotosintez",
+      "question": "Fotosintezning yorug'lik fazasida suvning parchalanishi natijasida qanday gaz ajraladi?",
+      "options": {
+        "A": "Karbonat angidrid",
+        "B": "Kislorod",
+        "C": "Azot",
+        "D": "Vodorod sulfid"
+      },
+      "answer": "B",
+      "explanation": "Suvning fotolizi: 2H₂O → 4H⁺ + 4e⁻ + O₂. Atmosferadagi kislorod aynan shu jarayon mahsuli.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "osimlik-va-hayvonot-dunyosi",
+      "subtopicId": "botanika-barg",
+      "question": "Bargda gaz almashinuvi va transpiratsiya asosan qaysi tuzilma orqali boradi?",
+      "options": {
+        "A": "Kutikula",
+        "B": "Og'izcha (stoma)",
+        "C": "Naycha (ksilema)",
+        "D": "Mexanik to'qima"
+      },
+      "answer": "B",
+      "explanation": "Og'izchalar — ikki yon hujayra orasidagi teshik. Ular ochilib-yopilib CO₂ kirishi va suv bug'lanishini boshqaradi.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "osimlik-va-hayvonot-dunyosi",
+      "subtopicId": "botanika-yopiq-uruglilar",
+      "question": "Yopiq urug'li o'simliklarning ochiq urug'lilardan asosiy farqi nimada?",
+      "options": {
+        "A": "Urug'i meva ichida rivojlanadi",
+        "B": "Ildizi yo'q",
+        "C": "Fotosintez qilmaydi",
+        "D": "Faqat sporalar bilan ko'payadi"
+      },
+      "answer": "A",
+      "explanation": "Yopiq urug'lilarda urug'kurtak tugunchada joylashadi va urug' meva ichida rivojlanadi; ochiq urug'lilarda urug'kurtak ochiq turadi.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "osimlik-va-hayvonot-dunyosi",
+      "subtopicId": "zoologiya-bogimoyoqlilar",
+      "question": "Bo'g'imoyoqlilar tipiga xos belgi qaysi?",
+      "options": {
+        "A": "Ichki skelet va umurtqa pog'onasi",
+        "B": "Xitinli tashqi skelet va bo'g'imli oyoqlar",
+        "C": "Nay-nay sistemasi va besh nurli simmetriya",
+        "D": "Yumshoq tana va ohakli chanoq"
+      },
+      "answer": "B",
+      "explanation": "Bo'g'imoyoqlilarning tanasi bo'g'imlarga bo'lingan, tashqi skeleti xitindan; o'sish po'st tashlash (mo'lting) bilan boradi.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "osimlik-va-hayvonot-dunyosi",
+      "subtopicId": "zoologiya-qushlar",
+      "question": "Qushlarda uchishga moslanish sifatida qanday o'zgarish kuzatiladi?",
+      "options": {
+        "A": "Suyaklarning ichi g'ovak (havodor) bo'lishi",
+        "B": "Tishlarning kuchli rivojlanishi",
+        "C": "Teri bezlarining ko'payishi",
+        "D": "Uch kamerali yurak"
+      },
+      "answer": "A",
+      "explanation": "Pnevmatik suyaklar tana massasini kamaytiradi. Qushlar yuragi to'rt kamerali, tishlari esa yo'q — tumshuq bilan almashgan.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "osimlik-va-hayvonot-dunyosi",
+      "subtopicId": "zoologiya-sutemizuvchilar",
+      "question": "Sutemizuvchilarga xos, boshqa sinflarda uchramaydigan belgini yozing (bir-ikki so'z).",
+      "answer": "sut bezlari",
+      "acceptedAnswers": ["sut bezi", "sut bilan boqish", "sut bezlarining borligi", "diafragma"],
+      "explanation": "Sut bezlari bilan bolasini boqish — sinfning nomini bergan asosiy belgi. Diafragma ham faqat sutemizuvchilarda bor.",
+      "difficultyId": 2
+    },
+
+    {
+      "topicId": "odam-organizmi-va-uning-salomatligi",
+      "subtopicId": "qon",
+      "question": "Qonda kislorod tashish vazifasini bajaradigan shaklli element qaysi?",
+      "options": {
+        "A": "Leykotsit",
+        "B": "Eritrotsit",
+        "C": "Trombotsit",
+        "D": "Limfotsit"
+      },
+      "answer": "B",
+      "explanation": "Eritrotsitlar gemoglobinga ega; u kislorod bilan oksigemoglobin hosil qiladi. Leykotsit — himoya, trombotsit — ivish.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "odam-organizmi-va-uning-salomatligi",
+      "subtopicId": "yurak-qon-tomir-tizimi",
+      "question": "Odam yuragi necha kameradan iborat? Raqam bilan yozing.",
+      "answer": "4",
+      "acceptedAnswers": ["to'rt", "turt", "to'rtta"],
+      "numeric": true,
+      "explanation": "Ikki bo'lmacha va ikki qorincha. Bu arterial va venoz qonning to'liq ajralishini ta'minlaydi.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "odam-organizmi-va-uning-salomatligi",
+      "subtopicId": "ovqat-hazm-qilish-tizimi",
+      "question": "Oqsillarni parchalaydigan pepsin fermenti qayerda faol ishlaydi?",
+      "options": {
+        "A": "Og'iz bo'shlig'ida, ishqoriy muhitda",
+        "B": "Oshqozonda, kislotali muhitda",
+        "C": "Yo'g'on ichakda",
+        "D": "Jigarda"
+      },
+      "answer": "B",
+      "explanation": "Pepsin xlorid kislota hisobiga pH ≈ 1,5–2 da faollashadi va oqsillarni peptidlarga parchalaydi.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "odam-organizmi-va-uning-salomatligi",
+      "subtopicId": "nerv-tizimi",
+      "question": "Nerv tizimining tuzilish va faoliyat birligi nima deb ataladi?",
+      "answer": "neyron",
+      "acceptedAnswers": ["nerv hujayrasi", "neyron (nerv hujayrasi)"],
+      "explanation": "Neyron — tana, dendritlar va aksondan iborat. Impulsni qabul qiladi, o'tkazadi va boshqa hujayraga sinaps orqali uzatadi.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "odam-organizmi-va-uning-salomatligi",
+      "subtopicId": "immunitet",
+      "question": "Emlash (vaksinatsiya) natijasida qanday immunitet shakllanadi?",
+      "options": {
+        "A": "Tug'ma immunitet",
+        "B": "Orttirilgan faol immunitet",
+        "C": "Orttirilgan sust immunitet",
+        "D": "Immunitet shakllanmaydi"
+      },
+      "answer": "B",
+      "explanation": "Vaksina antigen kiritadi, organizm o'zi antitana ishlab chiqaradi — bu orttirilgan FAOL immunitet. Tayyor zardob kiritilsa — sust immunitet.",
+      "difficultyId": 3
+    },
+
+    {
+      "topicId": "hayotning-tur-va-populyatsiya-darajasining-umumbiologik-qonuniyatlari",
+      "subtopicId": "tabiiy-tanlanish",
+      "question": "Darvin ta'limotiga ko'ra evolyutsiyaning asosiy harakatlantiruvchi kuchi nima?",
+      "options": {
+        "A": "Tabiiy tanlanish",
+        "B": "Poliploidiya",
+        "C": "Modifikatsion o'zgaruvchanlik",
+        "D": "Organlarning mashq qilishi"
+      },
+      "answer": "A",
+      "explanation": "Darvin bo'yicha: irsiy o'zgaruvchanlik + yashash uchun kurash → tabiiy tanlanish. Organlarning mashqi — Lamark qarashi.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "hayotning-tur-va-populyatsiya-darajasining-umumbiologik-qonuniyatlari",
+      "subtopicId": "populyatsiya",
+      "question": "Populyatsiya deb nimaga aytiladi?",
+      "options": {
+        "A": "Bir hududdagi barcha turlar yig'indisiga",
+        "B": "Bir turga mansub, bir hududda yashab erkin chatishadigan individlar guruhiga",
+        "C": "Ekotizimdagi barcha tirik va jonsiz omillarga",
+        "D": "Bitta oilaga mansub avlodlarga"
+      },
+      "answer": "B",
+      "explanation": "Populyatsiya — turning tuzilma birligi va evolyutsiyaning elementar birligi: aynan populyatsiyada genofond o'zgaradi.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "hayotning-tur-va-populyatsiya-darajasining-umumbiologik-qonuniyatlari",
+      "subtopicId": "genofond",
+      "question": "Populyatsiyaning barcha individlaridagi genlar majmuasi nima deb ataladi?",
+      "answer": "genofond",
+      "acceptedAnswers": ["gen fondi", "genetik fond"],
+      "explanation": "Genofond — populyatsiyadagi barcha allellar yig'indisi. Uning o'zgarishi mikroevolyutsiyaning mohiyati.",
+      "difficultyId": 2
+    },
+
+    {
+      "topicId": "hayotning-ekosistema-va-biosfera-darajasi-umumiy-qonuniyatlari",
+      "subtopicId": "oziq-zanjiri",
+      "question": "Oziq zanjirining birinchi bo'g'inini kim tashkil etadi?",
+      "options": {
+        "A": "Produtsentlar (yashil o'simliklar)",
+        "B": "Konsumentlar (o'txo'rlar)",
+        "C": "Redutsentlar (bakteriyalar va zamburug'lar)",
+        "D": "Yirtqichlar"
+      },
+      "answer": "A",
+      "explanation": "Produtsentlar quyosh energiyasini organik moddaga aylantiradi va zanjirga energiya kirituvchi birinchi bo'g'in bo'ladi.",
+      "difficultyId": 1
+    },
+    {
+      "topicId": "hayotning-ekosistema-va-biosfera-darajasi-umumiy-qonuniyatlari",
+      "subtopicId": "trofik-darajalar",
+      "question": "Ekologik piramida qoidasiga ko'ra bir trofik darajadan keyingisiga energiyaning taxminan qancha qismi o'tadi?",
+      "options": {
+        "A": "1%",
+        "B": "10%",
+        "C": "50%",
+        "D": "90%"
+      },
+      "answer": "B",
+      "explanation": "\"O'ndan bir\" (Lindeman) qoidasi: energiyaning ~10% i keyingi darajaga o'tadi, qolgani nafas olish va issiqlikka ketadi.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "hayotning-ekosistema-va-biosfera-darajasi-umumiy-qonuniyatlari",
+      "subtopicId": "abiotik-omillar",
+      "question": "Quyidagilardan qaysi biri ABIOTIK omilga kiradi?",
+      "options": {
+        "A": "Yirtqichlik",
+        "B": "Raqobat",
+        "C": "Havo harorati",
+        "D": "Simbioz"
+      },
+      "answer": "C",
+      "explanation": "Abiotik omillar — jonsiz tabiat ta'siri (harorat, yorug'lik, namlik, tuproq). Yirtqichlik, raqobat va simbioz — biotik omillar.",
+      "difficultyId": 1
+    },
+
+    {
+      "topicId": "umumbiologik-qonuniyatlar-asosida-masala-misol-va-topshiriqlar",
+      "subtopicId": "genetik-masalalar",
+      "question": "Ikki geterozigota (Aa × Aa) chatishtirildi. F1 da retsessiv belgili individlar ulushi necha foizni tashkil etadi? Faqat sonni yozing.",
+      "answer": "25",
+      "acceptedAnswers": ["25%", "0.25", "0,25"],
+      "numeric": true,
+      "explanation": "Aa × Aa → 1AA : 2Aa : 1aa. Retsessiv fenotip faqat aa, ya'ni 1/4 = 25%.",
+      "difficultyId": 2
+    },
+    {
+      "topicId": "umumbiologik-qonuniyatlar-asosida-masala-misol-va-topshiriqlar",
+      "subtopicId": "sitologik-masalalar",
+      "question": "DNK bo'lagida 300 ta nukleotid bor. Bu bo'lak kodlaydigan oqsildagi aminokislotalar sonini toping (faqat sonni yozing).",
+      "answer": "50",
+      "acceptedAnswers": ["50 ta"],
+      "numeric": true,
+      "explanation": "DNK ikki zanjirli: 300 nukleotid = 150 nukleotid bir zanjirda. Uchlik kod bo'yicha 150 / 3 = 50 aminokislota.",
+      "difficultyId": 3
+    }
+  ]
+}

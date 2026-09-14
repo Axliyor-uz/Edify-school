@@ -1,0 +1,499 @@
+================================================================================
+  TEACHER / CLASSES MODULE — COMPLETE ANALYSIS
+  Written: 2026-07-02
+================================================================================
+
+╔══════════════════════════════════════════════════════════════════════════╗
+║  1. FILE STRUCTURE & OVERVIEW                                          ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+app/teacher/classes/
+├── page.tsx                         ← Classes listing page (grid of ClassCards)
+├── _components/
+│   ├── ClassCard.tsx                ← Individual class card UI component
+│   ├── CreateClassModal.tsx         ← Modal for creating a new class
+│   └── class_info.txt              ← THIS FILE
+└── [classId]/
+    ├── page.tsx                     ← Class detail page (tabs: Students, Assignments, Exams, Materials, Leaderboard, Requests)
+    ├── _components/
+    │   ├── AddStudentModal.tsx      ← Modal to add student by username
+    │   ├── RosterTab.tsx            ← Student roster list with paginated loading
+    │   ├── RequestsTab.tsx          ← Pending join-request queue
+    │   ├── AssignTestModal.tsx      ← 2-step modal to assign a test from library
+    │   ├── AssignExamModal.tsx      ← 2-step modal to assign a BSB/CHSB exam
+    │   ├── AssignmentsTab.tsx       ← List of all assigned tests + grades overview
+    │   ├── ExamsTab.tsx             ← List of all assigned exams + results
+    │   ├── MaterialsTab.tsx         ← Uploaded teaching materials viewer
+    │   ├── UploadMaterialModal.tsx  ← Modal to upload files/materials
+    │   ├── ClassSettingsModal.tsx   ← Edit class name, description, joinCode, lock status
+    │   ├── StudentDetailsModal.tsx  ← Per-student assignment history + answer drill-down
+    │   └── LeaderboardTab.tsx       ← XP/performance ranking for the class
+    └── grade/
+        └── [examId]/               ← (Exam grading sub-route, not analyzed here)
+
+
+╔══════════════════════════════════════════════════════════════════════════╗
+║  2. DATABASE COLLECTIONS & DOCUMENT SCHEMAS                            ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+─────────────────────────────────────────────
+COLLECTION: "classes"
+─────────────────────────────────────────────
+Location: Firestore root → /classes/{classId}
+Purpose:  Top-level class document. One per class created by a teacher.
+
+Document Fields:
+  ├── title: string                  ← Class name (e.g., "Algebra 9-B")
+  ├── description: string            ← Optional description
+  ├── joinCode: string               ← 6-char alphanumeric code (e.g., "A3BX9F")
+  ├── teacherId: string              ← UID of the teacher who owns the class
+  ├── teacherName: string            ← Display name of the teacher
+  ├── studentIds: string[]           ← Array of student UIDs enrolled in the class
+  ├── studentCount: number           ← Initial count (set to 0 on creation)
+  ├── isLocked: boolean              ← If true, new join requests are blocked
+  └── createdAt: Timestamp           ← serverTimestamp()
+
+How it's used:
+  - The main listing page queries: where('teacherId', '==', user.uid), orderBy('createdAt', 'desc')
+  - The detail page listens via onSnapshot(doc(db, 'classes', classId))
+  - Students are tracked via the `studentIds[]` array (NOT a subcollection)
+
+
+─────────────────────────────────────────────
+SUBCOLLECTION: "classes/{classId}/requests"
+─────────────────────────────────────────────
+Location: /classes/{classId}/requests/{requestId}
+Purpose:  Holds pending join requests from students who entered the joinCode.
+
+Document Fields:
+  ├── studentId: string              ← UID of the requesting student
+  ├── studentName: string            ← Display name of the student
+  └── studentUsername: string         ← Username of the student
+
+How it's used:
+  - RequestsTab.tsx listens via onSnapshot on the entire subcollection
+  - On ACCEPT: studentId is added to parent class's `studentIds[]` via arrayUnion(), 
+    then the request doc is deleted.
+  - On REJECT: the request doc is simply deleted.
+
+
+─────────────────────────────────────────────
+SUBCOLLECTION: "classes/{classId}/assignments"
+─────────────────────────────────────────────
+Location: /classes/{classId}/assignments/{assignmentId}
+Purpose:  Links a test from the teacher's library to this specific class.
+
+Document Fields:
+  ├── testId: string                 ← ID of the test in "custom_tests" collection
+  ├── testTitle: string              ← Denormalized title for fast reads
+  ├── questionCount: number          ← Denormalized question count
+  ├── description: string            ← Teacher's instructions for the assignment
+  ├── openAt: Date                   ← When the assignment becomes available
+  ├── dueAt: Date | null             ← Deadline (null = no deadline)
+  ├── assignedTo: "all" | string[]   ← "all" or array of specific student UIDs
+  ├── allowedAttempts: number        ← Max attempts (0 = unlimited)
+  ├── status: string                 ← "active"
+  ├── teacherId: string              ← UID of the assigning teacher
+  └── createdAt: Timestamp           ← serverTimestamp()
+
+How it's used:
+  - Created via AssignTestModal (2-step: select test → configure rules → publish)
+  - Can be edited: the same modal in edit mode calls updateDoc instead of addDoc
+  - On publish, notifications are sent to target students
+
+
+─────────────────────────────────────────────
+SUBCOLLECTION: "classes/{classId}/exams"
+─────────────────────────────────────────────
+Location: /classes/{classId}/exams/{examId}
+Purpose:  Schedules a BSB/CHSB formal examination for the class.
+
+Document Fields:
+  ├── testId: string                 ← ID of exam in "bsb_chsb_tests" collection
+  ├── title: string                  ← Denormalized title
+  ├── assessmentType: string         ← "BSB" or "CHSB"
+  ├── examDate: Date                 ← Scheduled start time
+  ├── durationMinutes: number        ← Time limit in minutes (e.g., 45, 60, 90)
+  ├── hideResults: boolean           ← If true, students cannot see correct answers
+  ├── submittedStudentIds: string[]  ← Array of UIDs who have submitted
+  ├── status: string                 ← "scheduled"
+  ├── teacherId: string              ← UID of the teacher
+  └── createdAt: Timestamp           ← serverTimestamp()
+
+How it's used:
+  - Created via AssignExamModal (2-step: select exam → configure time/duration → save)
+  - Can be edited (date, duration, hideResults only)
+
+
+─────────────────────────────────────────────
+COLLECTION: "attempts"
+─────────────────────────────────────────────
+Location: Firestore root → /attempts/{attemptId}
+Purpose:  Stores individual student test attempt results (global collection).
+
+Document Fields (used in StudentDetailsModal):
+  ├── classId: string                ← Which class the attempt belongs to
+  ├── userId: string                 ← UID of the student who attempted
+  ├── assignmentId: string           ← ID of the assignment in the class
+  ├── testId: string                 ← ID of the original test template
+  ├── testTitle: string              ← Denormalized test name
+  ├── score: number                  ← Number of correct answers
+  ├── totalQuestions: number         ← Total questions in the test
+  ├── answers: Record<string, any>   ← Map of questionId → selected answer key
+  ├── tabSwitches: number            ← Anti-cheat: how many times student left the tab
+  ├── attemptsTaken: number          ← Which attempt number this is
+  ├── submittedAt: Timestamp         ← When the attempt was submitted
+  └── createdAt: Timestamp           ← Fallback timestamp
+
+How it's used:
+  - Queried in StudentDetailsModal: where('classId', '==', classId), where('userId', '==', studentUid)
+  - Results are mapped into attemptsMap[assignmentId] for grade overlay on the assignment list
+
+
+─────────────────────────────────────────────
+COLLECTION: "custom_tests"
+─────────────────────────────────────────────
+Location: Firestore root → /custom_tests/{testId}
+Purpose:  Teacher's test library (templates created via /teacher/create).
+
+Key Fields (used in this module):
+  ├── title: string                  ← Test name
+  ├── teacherId: string              ← Owner teacher's UID
+  ├── questionCount: number          ← Number of questions
+  ├── duration: number | null        ← Time limit in minutes
+  ├── questions: array               ← Full question objects with options
+  └── createdAt: Timestamp           ← For ordering
+
+How it's used:
+  - AssignTestModal fetches from this collection: where('teacherId', '==', user.uid), orderBy('createdAt', 'desc')
+  - StudentDetailsModal reads individual test docs to show question-by-question analysis
+
+
+─────────────────────────────────────────────
+COLLECTION: "bsb_chsb_tests"
+─────────────────────────────────────────────
+Location: Firestore root → /bsb_chsb_tests/{testId}
+Purpose:  Teacher's BSB/CHSB exam library.
+
+Key Fields (used in this module):
+  ├── title: string                  ← Exam name
+  ├── teacherId: string              ← Owner teacher's UID
+  ├── assessmentType: string         ← "BSB" or "CHSB"
+  ├── questionCount: number          ← Number of questions
+  └── createdAt: Timestamp           ← For ordering
+
+How it's used:
+  - AssignExamModal fetches: where('teacherId', '==', user.uid), orderBy('createdAt', 'desc')
+
+
+─────────────────────────────────────────────
+COLLECTION: "users"
+─────────────────────────────────────────────
+Location: Firestore root → /users/{uid}
+Purpose:  Global user profiles (students, teachers, managers).
+
+Key Fields (used in this module):
+  ├── displayName: string
+  ├── username: string
+  ├── email: string
+  ├── role: string                   ← "student" | "teacher" | "manager"
+  ├── photoURL: string | null
+  ├── totalXP: number
+  └── dailyHistory: Record<string, number>
+
+How it's used:
+  - RosterTab reads individual user docs via getDoc(doc(db, 'users', uid)) for each studentId
+  - AddStudentModal reads user docs after looking up by username
+
+
+─────────────────────────────────────────────
+COLLECTION: "usernames"
+─────────────────────────────────────────────
+Location: Firestore root → /usernames/{username}
+Purpose:  Global username reservation (maps username → uid).
+
+Document Fields:
+  └── uid: string                    ← The user's Firebase Auth UID
+
+How it's used:
+  - AddStudentModal looks up: getDoc(doc(db, 'usernames', cleanUsername))
+  - Returns the UID which is then used to fetch the full user profile
+
+
+╔══════════════════════════════════════════════════════════════════════════╗
+║  3. CLASS CREATION FLOW                                                ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+File: CreateClassModal.tsx
+Trigger: "Yangi Sinf" button on the main classes page.
+
+Step-by-step:
+  1. User enters a class name (required) and optional description.
+  2. A 6-character join code is auto-generated on mount:
+       Math.random().toString(36).substring(2, 8).toUpperCase()
+  3. The code is displayed in a glowing gradient box (read-only).
+  4. On submit (handleCreate):
+     └── addDoc(collection(db, 'classes'), {
+           title: title.trim(),
+           description: description.trim(),
+           joinCode,                      // auto-generated
+           teacherId: user.uid,
+           teacherName: user.displayName,
+           studentIds: [],                // empty at creation
+           studentCount: 0,
+           createdAt: serverTimestamp()
+         });
+  5. Success toast → modal closes → page auto-updates via onSnapshot listener.
+
+
+╔══════════════════════════════════════════════════════════════════════════╗
+║  4. STUDENT ENROLLMENT — TWO METHODS                                   ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+──────────────────────────────────────
+METHOD A: Direct Add by Teacher (AddStudentModal.tsx)
+──────────────────────────────────────
+Flow:
+  1. Teacher opens "O'quvchi Qo'shish" modal from the class detail page.
+  2. Teacher types a student's @username into the search input.
+  3. handleSearch():
+     a. Clean the username: remove '@', lowercase.
+     b. Look up in "usernames" collection: getDoc(doc(db, 'usernames', cleanName))
+     c. If found → get UID → fetch full profile from "users" collection.
+     d. Validation checks:
+        - If uid === teacher's own uid → error "Can't add yourself"
+        - If role === 'teacher' → error "Can't add teachers"
+     e. If valid → display the found user card.
+  4. Teacher clicks the green "Add" button → handleAddStudent():
+     └── updateDoc(doc(db, 'classes', classId), {
+           studentIds: arrayUnion(foundUser.uid)
+         });
+  5. The student's UID is appended to the class's `studentIds[]` array.
+  6. Toast success → modal closes.
+
+  NOTE: The student's own "users" document is NOT modified.
+  NOTE: No duplicate check needed — arrayUnion() is idempotent.
+
+
+──────────────────────────────────────
+METHOD B: Student Join Request Flow (RequestsTab.tsx)
+──────────────────────────────────────
+Flow (student-side, not in this folder):
+  1. Student enters the 6-char joinCode somewhere in the student app.
+  2. A request document is created in: /classes/{classId}/requests/
+     Document contains: { studentId, studentName, studentUsername }
+
+Flow (teacher-side, in RequestsTab.tsx):
+  1. RequestsTab listens to the "requests" subcollection via onSnapshot.
+  2. Each request shows the student's name, username, and two buttons.
+  3. ACCEPT (handleAccept):
+     a. updateDoc(doc(db, 'classes', classId), { studentIds: arrayUnion(req.studentId) })
+     b. deleteDoc(doc(db, 'classes', classId, 'requests', req.id))
+     c. Toast success.
+  4. REJECT (handleReject):
+     a. Confirm dialog.
+     b. deleteDoc(doc(db, 'classes', classId, 'requests', reqId))
+     c. Toast success.
+
+  KEY INSIGHT: Both methods ultimately just add to the `studentIds[]` array.
+  The request subcollection is a temporary queue that gets cleaned up.
+
+
+╔══════════════════════════════════════════════════════════════════════════╗
+║  5. ROSTER DISPLAY & MANAGEMENT (RosterTab.tsx)                        ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+Data Source:
+  - The parent page.tsx reads classData.studentIds[] from the class document.
+  - It passes studentIds to RosterTab as a prop.
+
+Loading Strategy (3-Layer Smart Caching):
+  1. GLOBAL CACHE: A module-level `globalRosterCache` object persists across
+     tab switches (no re-fetching when user switches tabs and comes back).
+  2. PAGINATED LOADING: Students are loaded in pages of 10 (PAGE_SIZE = 10).
+     - loadStudentsPage(pageIndex) → fetches UIDs[start..end] individually
+     - Each UID is resolved via getDoc(doc(db, 'users', uid))
+  3. INFINITE SCROLL: IntersectionObserver on the last element triggers
+     loading the next page automatically.
+  4. SILENT REVALIDATION: If cache exists but is older than 60 seconds,
+     a background revalidation fetches fresh data without showing a loader.
+
+Student Removal:
+  - handleRemove(e, studentUid):
+    └── updateDoc(doc(db, 'classes', classId), { studentIds: arrayRemove(studentUid) })
+  - Uses Firestore's arrayRemove to cleanly remove the UID.
+  - The parent's onSnapshot listener auto-triggers a UI refresh.
+
+Deleted User Handling:
+  - If getDoc for a UID returns !exists, the student is shown as "deleted"
+    with a UserX icon and grayed-out styling. isDeleted flag prevents
+    click-to-details navigation.
+
+
+╔══════════════════════════════════════════════════════════════════════════╗
+║  6. ASSIGNMENT (TEST) FLOW (AssignTestModal.tsx)                       ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+Two modes: CREATE and EDIT (determined by `editData` prop).
+
+CREATE MODE:
+  Step 1 — Select Test:
+    - Fetches teacher's tests from "custom_tests": where('teacherId', '==', user.uid)
+    - Paginated: limit(10), startAfter for "Load More"
+    - Client-side search filtering on titles.
+    - Teacher selects a test → proceeds to Step 2.
+
+  Step 2 — Configure Rules:
+    - Instructions textarea (max 200 chars)
+    - Allowed attempts stepper (1-10, or 0 = unlimited)
+    - Open date & due date (datetime-local inputs + preset buttons: +1/+3/+7 days)
+    - Assign to: "All Students" or "Select Individuals" (checkbox list from roster)
+
+  Submit (handleSave):
+    └── addDoc(collection(db, 'classes', classId, 'assignments'), {
+          testId, testTitle, questionCount, description, openAt, dueAt,
+          assignedTo: 'all' | string[],
+          allowedAttempts, status: 'active', teacherId, createdAt: serverTimestamp()
+        });
+    - After save: sends push notifications to target students via sendNotification()
+
+EDIT MODE:
+  - Pre-fills all fields from editData.
+  - Skips Step 1 (goes directly to Step 2).
+  - Submit calls updateDoc instead of addDoc.
+
+
+╔══════════════════════════════════════════════════════════════════════════╗
+║  7. EXAM (BSB/CHSB) FLOW (AssignExamModal.tsx)                        ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+Same 2-step pattern, but for formal examinations:
+
+  Step 1 — Select Exam:
+    - Fetches from "bsb_chsb_tests": where('teacherId', '==', user.uid)
+    - Paginated with "Load More" button.
+
+  Step 2 — Configure:
+    - Start time with quick-select buttons (+10 min, +1 hr, +2 hr, +24 hr)
+    - Duration selector (30, 45, 60, 90, 120 minutes)
+    - "Hide Results" toggle (students can't see correct answers)
+
+  Submit (handleSave):
+    └── addDoc(collection(db, 'classes', classId, 'exams'), {
+          testId, title, assessmentType, examDate, durationMinutes,
+          hideResults, submittedStudentIds: [], status: 'scheduled',
+          teacherId, createdAt: serverTimestamp()
+        });
+
+
+╔══════════════════════════════════════════════════════════════════════════╗
+║  8. STUDENT DETAILS & GRADE DRILL-DOWN (StudentDetailsModal.tsx)       ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+Trigger: Clicking a student row in RosterTab.
+
+View 1 — Assignment History:
+  1. Fetches all attempts for this student in this class:
+     query(collection(db, 'attempts'), where('classId', '==', classId), where('userId', '==', student.uid))
+  2. Maps results into attemptsMap[assignmentId] for fast lookup.
+  3. Displays each assignment as a card showing:
+     - Test title, due date, score/percentage, or "Missing"/"Pending" status.
+  4. Infinite scroll pagination (PAGE_SIZE = 10).
+  5. "View Profile" button links to /teacher/students/{uid}.
+
+View 2 — Attempt Drill-Down (clicking a completed assignment):
+  1. Fetches the full test template: getDoc(doc(db, 'custom_tests', attempt.testId))
+  2. Shows 3-card bento grid:
+     - Score (X/Y correct + progress bar)
+     - Integrity (tab switch count with red/green color coding)
+     - Submission info (date, attempt number)
+  3. Below: question-by-question analysis
+     - Each question shows: the question text (with LaTeX rendering),
+       the student's answer vs the correct answer.
+     - Correct answers: green styling. Incorrect: red styling with correct answer shown.
+
+
+╔══════════════════════════════════════════════════════════════════════════╗
+║  9. CLASS SETTINGS (ClassSettingsModal.tsx)                             ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+Uses React Portal (createPortal to document.body) for z-index isolation.
+
+Settings available:
+  1. Class Profile:
+     - Edit title (required)
+     - Edit description (optional)
+  2. Security & Access:
+     - View current joinCode (with Copy button)
+     - Regenerate joinCode (random 6-char uppercase alphanumeric)
+     - Lock/Unlock class toggle
+       - When locked: new join requests are blocked (isLocked = true)
+
+Save (handleSaveProfile):
+  └── updateDoc(doc(db, 'classes', classId), {
+        title: title.trim(),
+        description: description.trim(),
+        isLocked
+      });
+
+Regenerate Code (handleRegenerateCode):
+  └── updateDoc(doc(db, 'classes', classId), { joinCode: newCode });
+
+
+╔══════════════════════════════════════════════════════════════════════════╗
+║  10. DATA FLOW & RELATIONSHIPS DIAGRAM                                 ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+  /users/{uid}                    ← Global user profiles (students, teachers, managers)
+       │
+       │  studentIds[] references UIDs from here
+       ▼
+  /classes/{classId}              ← Core class document (owned by teacher)
+       │
+       ├── /requests/{reqId}      ← Temporary join requests (deleted after accept/reject)
+       │
+       ├── /assignments/{aId}     ← Assigned tests (references custom_tests via testId)
+       │       │
+       │       ▼
+       │   /custom_tests/{tId}    ← Teacher's test library (questions stored here)
+       │
+       ├── /exams/{eId}           ← Scheduled BSB/CHSB exams (references bsb_chsb_tests)
+       │       │
+       │       ▼
+       │   /bsb_chsb_tests/{tId} ← Teacher's exam library
+       │
+       └── (materials stored via UploadMaterialModal — separate subcollection)
+
+  /attempts/{attemptId}           ← Global attempts (links classId + userId + assignmentId)
+  /usernames/{username}           ← Global username→uid lookup (used by AddStudentModal)
+
+
+╔══════════════════════════════════════════════════════════════════════════╗
+║  11. KEY ARCHITECTURAL PATTERNS                                        ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+  1. DENORMALIZATION: Test titles and question counts are copied into assignment
+     documents to avoid extra reads when listing assignments.
+
+  2. REAL-TIME LISTENERS: All major views use onSnapshot for live updates:
+     - Classes list, class detail, requests queue.
+
+  3. PAGINATION: Both test library browsing and roster loading use Firestore
+     cursor-based pagination (startAfter) for efficient reads.
+
+  4. PORTALS: Modals that need z-index isolation (ClassSettingsModal,
+     StudentDetailsModal, AssignTestModal, AssignExamModal) use React's
+     createPortal(jsx, document.body) with SSR hydration guards.
+
+  5. CACHING: RosterTab uses a module-level globalRosterCache object
+     that survives tab switches, preventing unnecessary re-reads.
+     Cache lifespan: 60 seconds, after which silent revalidation occurs.
+
+  6. i18n: Every component has a TRANSLATIONS dictionary supporting
+     uz (Uzbek), en (English), and ru (Russian), accessed via
+     useTeacherLanguage() hook from the teacher layout context.
+
+  7. STUDENT ARRAY vs SUBCOLLECTION: Students are stored as a simple
+     string[] in the class document (studentIds), NOT as a subcollection.
+     This allows atomic operations (arrayUnion/arrayRemove) but means
+     individual user profiles must be fetched separately.

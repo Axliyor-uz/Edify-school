@@ -1,0 +1,89 @@
+[
+  {
+    "category": "10-sinf",
+    "index": 1,
+    "chapters": [
+      {
+        "chapter": "MOLEKULYAR BIOLOGIYA",
+        "index": 1,
+        "subtopics": [
+          { "name": "Biologiya fan sifatida", "index": 1 },
+          { "name": "Tirik organizmlarning kimyoviy tarkibi", "index": 3 },
+          { "name": "Uglevodlar", "index": 5 },
+          { "name": "Lipidlar", "index": 6 },
+          { "name": "Oqsillar", "index": 7 },
+          { "name": "Nuklein kislotalar", "index": 9 }
+        ]
+      },
+      {
+        "chapter": "HUJAYRA BIOLOGIYASI",
+        "index": 2,
+        "subtopics": [
+          { "name": "Eukariot hujayra. Hujayra qobig'i", "index": 1 },
+          { "name": "Sitoplazma. Hujayraning membranasiz organoidlari", "index": 2 },
+          { "name": "Hujayraning membranali organoidlari", "index": 3 },
+          { "name": "Yadro", "index": 5 },
+          { "name": "Prokariot hujayra", "index": 6 },
+          { "name": "Hujayrada moddalar almashinuvi. Hujayrada energetik almashinuv", "index": 8 },
+          { "name": "Hujayrada irsiy axborotning amalga oshirilishi", "index": 10 },
+          { "name": "Prokariot va eukariot hujayralarning bo'linishi", "index": 12 },
+          { "name": "Meyoz", "index": 13 }
+        ]
+      },
+      {
+        "chapter": "HAYOTIY JARAYONLAR",
+        "index": 3,
+        "subtopics": [
+          { "name": "Organizmlarning jinssiz ko'payishi", "index": 1 },
+          { "name": "Gametogenez", "index": 2 },
+          { "name": "Organizmlarning jinsiy ko'payishi", "index": 3 },
+          { "name": "O'simlik va hayvonlar hayot siklida jinssiz va jinsiy nasl gallanishi", "index": 4 }
+        ]
+      },
+      {
+        "chapter": "IRSIYAT VA O'ZGARUVCHANLIK",
+        "index": 4,
+        "subtopics": [
+          { "name": "Irsiyat qonuniyatlari", "index": 1 },
+          { "name": "Jins genetikasi", "index": 4 },
+          { "name": "Belgilarning jinsga bog'liq holda irsiylanishi", "index": 5 },
+          { "name": "O'zgaruvchanlik", "index": 7 },
+          { "name": "Genotipik o'zgaruvchanlik turlari", "index": 9 }
+        ]
+      },
+      {
+        "chapter": "GENETIK MUHANDISLIK VA BIOTEXNOLOGIYA",
+        "index": 5,
+        "subtopics": [
+          { "name": "Genetik muhandislik", "index": 1 },
+          { "name": "Hujayra irsiyatini o'zgartirish", "index": 2 },
+
+
+
+
+          
+          { "name": "Biotexnologiya", "index": 3 }
+        ]
+      },
+      {
+        "chapter": "EKOSISTEMA",
+        "index": 6,
+        "subtopics": [
+          { "name": "Ekosistemaning tarkibiy tuzilmasi", "index": 1 },
+          { "name": "Ekologik omillar", "index": 3 },
+          { "name": "Ekosistemaning trofik strukturasi", "index": 5 }
+        ]
+      },
+      {
+        "chapter": "EVOLYUTSIYA",
+        "index": 7,
+        "subtopics": [
+          { "name": "Evolyutsiyani harakatlantiruvchi omillari", "index": 1 },
+          { "name": "Tabiiy tanlanish", "index": 3 },
+          { "name": "Organik olamdagi moslanishlar – evolyutsiya natijasi", "index": 4 },
+          { "name": "Turlarning paydo bo'lishi", "index": 6 }
+        ]
+      }
+    ]
+  }
+]

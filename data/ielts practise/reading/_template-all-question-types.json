@@ -1,0 +1,214 @@
+{
+  "module": "reading",
+  "test_id": "platform_reading_template_all_types",
+  "test_title": "Reading Importer Smoke Test — all 13 question types",
+  "test_category": "academic",
+  "total_time_minutes": 30,
+  "passages": [
+    {
+      "title": "The Lighthouse at Eddystone",
+      "subtitle": "Four towers on one rock",
+      "instruction": "This is a fixture, not a real exam paper. It exercises every question type the builder supports so that the admin importer, the student runner and the grader can be checked end to end.",
+      "difficulty": "easy",
+      "blocks": [
+        {
+          "label": "A",
+          "content": "The Eddystone rocks lie fourteen kilometres off the coast of Plymouth, submerged at high water and directly across the approach to one of England's busiest harbours. Four lighthouses have stood there in succession, and the story of the four is, in miniature, the story of how engineers learned to build in the sea."
+        },
+        {
+          "label": "B",
+          "content": "The first, completed by Henry Winstanley in 1698, was a timber structure elaborately ornamented with iron scrollwork and open galleries. Winstanley was so confident of it that he expressed a wish to be inside during the greatest storm that ever blew. In November 1703 he was, and neither he nor the tower was seen again."
+        },
+        {
+          "label": "C",
+          "content": "John Smeaton's tower of 1759 was the decisive advance. He shaped it like the trunk of an oak, broad at the base and tapering upwards, and he cut the granite blocks with dovetails so that each course locked into its neighbours and into the rock itself. He also revived hydraulic lime, a mortar that sets under water. The tower stood for one hundred and twenty-three years and was dismantled only because the rock beneath it, not the masonry, had begun to fail."
+        },
+        {
+          "label": "D",
+          "content": "James Douglass replaced it in 1882 with the tower that stands today, seating it on a cylindrical base designed to break up the waves before they reached the shaft. Smeaton's tower was taken down course by course and rebuilt on Plymouth Hoe, where it remains open to visitors."
+        }
+      ],
+      "questions": [
+        {
+          "type": "matching_headings",
+          "instructions": "Choose the correct heading for each paragraph from the list of headings below.",
+          "options": [
+            { "id": "i", "text": "A tower and its builder are lost" },
+            { "id": "ii", "text": "The design that solved the problem" },
+            { "id": "iii", "text": "Why the site is dangerous" },
+            { "id": "iv", "text": "The lighthouse in use today" }
+          ],
+          "questions": [
+            { "question_number": 1, "target_paragraph": "A", "correct_answer": "iii", "passage_reference": "directly across the approach to one of England's busiest harbours" },
+            { "question_number": 2, "target_paragraph": "C", "correct_answer": "ii", "passage_reference": "John Smeaton's tower of 1759 was the decisive advance." }
+          ]
+        },
+        {
+          "type": "true_false_not_given",
+          "instructions": "Do the following statements agree with the information given in the passage?",
+          "options": [
+            { "label": "TRUE", "description": "if the statement agrees with the information" },
+            { "label": "FALSE", "description": "if the statement contradicts the information" },
+            { "label": "NOT GIVEN", "description": "if there is no information on this" }
+          ],
+          "questions": [
+            { "question_number": 3, "statement": "Winstanley's lighthouse was built of stone.", "correct_answer": "FALSE", "passage_reference": "was a timber structure elaborately ornamented with iron scrollwork" },
+            { "question_number": 4, "statement": "Smeaton's tower was removed because the rock under it was weakening.", "correct_answer": "TRUE", "passage_reference": "the rock beneath it, not the masonry, had begun to fail" }
+          ]
+        },
+        {
+          "type": "multiple_choice",
+          "instructions": "Choose the correct letter, A, B, C or D.",
+          "questions": [
+            {
+              "question_number": 5,
+              "question_text": "What shape did Smeaton give his tower?",
+              "options": [
+                { "id": "A", "text": "a cylinder of constant width" },
+                { "id": "B", "text": "the trunk of an oak tree" },
+                { "id": "C", "text": "a square block" },
+                { "id": "D", "text": "an open framework" }
+              ],
+              "correct_answer": ["B"],
+              "passage_reference": "He shaped it like the trunk of an oak"
+            }
+          ]
+        },
+        {
+          "type": "summary_completion",
+          "instructions": "Complete the summary. Choose the correct letter for each gap.",
+          "summary_title": "Smeaton's method",
+          "summary_text": "Smeaton locked his blocks together using [6] cut into the granite, and bedded them in hydraulic [7], which hardens even under water.",
+          "options": [
+            { "id": "A", "text": "lime" },
+            { "id": "B", "text": "dovetails" },
+            { "id": "C", "text": "iron" },
+            { "id": "D", "text": "timber" }
+          ],
+          "questions": [
+            { "question_number": 6, "correct_answer": "B", "passage_reference": "he cut the granite blocks with dovetails" },
+            { "question_number": 7, "correct_answer": "A", "passage_reference": "He also revived hydraulic lime, a mortar that sets under water." }
+          ]
+        },
+        {
+          "type": "matching_paragraph_information",
+          "instructions": "Which paragraph contains the following information? Write the correct letter, A–D.",
+          "options": ["A", "B", "C", "D"],
+          "questions": [
+            { "question_number": 8, "statement": "a remark by a builder about his own confidence", "correct_answer": "B", "passage_reference": "he expressed a wish to be inside during the greatest storm that ever blew" },
+            { "question_number": 9, "statement": "reference to a structure that was moved to a new site", "correct_answer": "D", "passage_reference": "rebuilt on Plymouth Hoe" }
+          ]
+        },
+        {
+          "type": "list_selection",
+          "instructions": "Choose TWO letters, A–E.",
+          "questions": [
+            {
+              "question_number": 10,
+              "question_text": "Which TWO features of Smeaton's tower are mentioned?",
+              "options": [
+                { "id": "A", "text": "interlocking stone courses" },
+                { "id": "B", "text": "a mortar that sets under water" },
+                { "id": "C", "text": "an iron gallery" },
+                { "id": "D", "text": "a cylindrical wave-breaking base" },
+                { "id": "E", "text": "an open timber frame" }
+              ],
+              "correct_answer": ["A", "B"],
+              "passage_reference": "each course locked into its neighbours"
+            }
+          ]
+        },
+        {
+          "type": "matching_features",
+          "instructions": "Match each statement with the correct engineer, A, B or C.",
+          "options": [
+            { "id": "A", "text": "Henry Winstanley" },
+            { "id": "B", "text": "John Smeaton" },
+            { "id": "C", "text": "James Douglass" }
+          ],
+          "questions": [
+            { "question_number": 12, "statement": "designed a base intended to break up incoming waves", "correct_answer": ["C"], "passage_reference": "seating it on a cylindrical base designed to break up the waves" },
+            { "question_number": 13, "statement": "died in the building he had constructed", "correct_answer": ["A"], "passage_reference": "neither he nor the tower was seen again" }
+          ]
+        },
+        {
+          "type": "sentence_completion",
+          "instructions": "Complete the sentences below. Choose NO MORE THAN TWO WORDS from the passage for each answer.",
+          "word_limit": 2,
+          "options": null,
+          "questions": [
+            { "question_number": 14, "sentence": "The Eddystone rocks are covered by the sea at [14] water.", "correct_answer": ["high"], "passage_reference": "submerged at high water" },
+            { "question_number": 15, "sentence": "The present tower was completed in [15].", "correct_answer": ["1882"], "passage_reference": "James Douglass replaced it in 1882" }
+          ]
+        },
+        {
+          "type": "matching_sentence_endings",
+          "instructions": "Complete each sentence with the correct ending, A–D, below.",
+          "options": [
+            { "id": "A", "text": "because the rock beneath had started to give way." },
+            { "id": "B", "text": "because it was made of wood and stood in the open sea." },
+            { "id": "C", "text": "because visitors can still climb it today." },
+            { "id": "D", "text": "because the harbour was closed to shipping." }
+          ],
+          "questions": [
+            { "question_number": 16, "sentence_start": "The first lighthouse did not survive the storm of 1703", "correct_answer": ["B"], "passage_reference": "was a timber structure" },
+            { "question_number": 17, "sentence_start": "Smeaton's tower was taken down after 123 years", "correct_answer": ["A"], "passage_reference": "had begun to fail" }
+          ]
+        },
+        {
+          "type": "short_answer",
+          "instructions": "Answer the question below. Choose NO MORE THAN THREE WORDS from the passage.",
+          "word_limit": 3,
+          "questions": [
+            { "question_number": 18, "question_text": "How far from Plymouth are the Eddystone rocks?", "correct_answer": ["fourteen kilometres", "14 kilometres"], "passage_reference": "fourteen kilometres off the coast of Plymouth" }
+          ]
+        },
+        {
+          "type": "table_completion",
+          "instructions": "Complete the table below. Choose NO MORE THAN TWO WORDS from the passage for each answer.",
+          "word_limit": 2,
+          "options": null,
+          "table_title": "The four towers",
+          "headers": ["Builder", "Completed", "Material or key idea"],
+          "rows": [
+            { "cells": ["Winstanley", "1698", "[19] with iron ornament"] },
+            { "cells": ["Smeaton", "[20]", "interlocking granite"] },
+            { "cells": ["Douglass", "1882", "cylindrical base"] }
+          ],
+          "questions": [
+            { "question_number": 19, "correct_answer": ["timber", "wood"], "passage_reference": "a timber structure elaborately ornamented with iron scrollwork" },
+            { "question_number": 20, "correct_answer": ["1759"], "passage_reference": "John Smeaton's tower of 1759" }
+          ]
+        },
+        {
+          "type": "flowchart_completion",
+          "instructions": "Complete the flow-chart below. Choose NO MORE THAN TWO WORDS from the passage for each answer.",
+          "word_limit": 2,
+          "options": null,
+          "flowchart_title": "Replacing Smeaton's tower",
+          "steps": [
+            "The [21] beneath the tower was found to be failing.",
+            "A new tower was built by [22] on a cylindrical base.",
+            "The old tower was taken down course by course and rebuilt on Plymouth Hoe."
+          ],
+          "questions": [
+            { "question_number": 21, "correct_answer": ["rock"], "passage_reference": "the rock beneath it, not the masonry, had begun to fail" },
+            { "question_number": 22, "correct_answer": ["Douglass", "James Douglass"], "passage_reference": "James Douglass replaced it in 1882" }
+          ]
+        },
+        {
+          "type": "diagram_completion",
+          "instructions": "Label the diagram below. Choose NO MORE THAN TWO WORDS from the passage for each answer.\n\n(No diagram_url is set on this fixture — the runner renders a placeholder frame, which is itself worth checking.)",
+          "word_limit": 2,
+          "options": null,
+          "diagram_title": "Cross-section of the present tower",
+          "diagram_alt_text": "Cross-section showing the base and shaft of the Eddystone lighthouse",
+          "questions": [
+            { "question_number": 23, "correct_answer": ["cylindrical"], "passage_reference": "seating it on a cylindrical base" },
+            { "question_number": 24, "correct_answer": ["waves"], "passage_reference": "designed to break up the waves before they reached the shaft" }
+          ]
+        }
+      ]
+    }
+  ]
+}
