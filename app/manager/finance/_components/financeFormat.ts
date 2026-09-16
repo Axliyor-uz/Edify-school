@@ -2,37 +2,16 @@
 // Every label-producing helper takes the current manager language — components
 // pass `lang` from useManagerLanguage().
 
-import { addMonthsClamped } from "@/lib/finance/billingEngine";
+import { shiftMonthKey } from "@/lib/finance/billingEngine";
 import { formatSum } from "@/lib/finance/money";
 import type { Charge, ChargeStatus, PaymentMethod, PaymentMethodSplit } from "@/types/finance";
 import type { LangType } from "@/app/manager/_components/ManagerLanguage";
+import { MONTHS, MONTHS_RU_GEN, monthLabelOf } from "@/app/manager/_components/monthLabels";
 
-export const MONTHS: Record<LangType, string[]> = {
-  uz: [
-    "Yanvar", "Fevral", "Mart", "Aprel", "May", "Iyun",
-    "Iyul", "Avgust", "Sentabr", "Oktabr", "Noyabr", "Dekabr",
-  ],
-  en: [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December",
-  ],
-  ru: [
-    "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
-    "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь",
-  ],
-};
-
-/** Russian genitive month names for "15 июля"-style dates. */
-const MONTHS_RU_GEN = [
-  "января", "февраля", "марта", "апреля", "мая", "июня",
-  "июля", "августа", "сентября", "октября", "ноября", "декабря",
-];
-
-/** "2026-07" → "Iyul 2026" / "July 2026" / "Июль 2026". */
-export function monthLabelOf(monthKey: string, lang: LangType): string {
-  const [y, m] = monthKey.split("-").map(Number);
-  return `${MONTHS[lang][(m || 1) - 1]} ${y}`;
-}
+// Re-exported for this file's existing importers — the definitions now live in
+// lib/finance/billingEngine.ts (shiftMonthKey) and monthLabels.ts (the rest),
+// shared with app/manager/dashboard/* and app/office/page.tsx.
+export { MONTHS, monthLabelOf, shiftMonthKey };
 
 /** "2026-07-15" → "15-iyul" / "Jul 15" / "15 июля". */
 export function shortDateLabel(dateKey: string, lang: LangType): string {
@@ -82,10 +61,6 @@ export function periodLabelOf(
 ): string {
   if (charge.periodKey.length === 7) return monthLabelOf(charge.periodKey, lang);
   return `${shortDateLabel(charge.periodStart, lang)} – ${shortDateLabel(charge.periodEnd, lang)}`;
-}
-
-export function shiftMonthKey(monthKey: string, delta: number): string {
-  return addMonthsClamped(`${monthKey}-01`, delta).slice(0, 7);
 }
 
 // ── Shared UI label maps (used by several sibling tabs) ──────────────────────

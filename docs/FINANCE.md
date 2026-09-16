@@ -5,7 +5,7 @@
 > **Quick reference:** [FINANCE_DATABASE.md](FINANCE_DATABASE.md) maps every collection and,
 > per UI action, exactly which documents change — read that first for "where does my data go".
 
-**Last verified:** 2026-09-15 (the buxgalter/director back-office got read access + an accountant write path — §5.1, [OFFICE.md](OFFICE.md); previously 2026-09-14, the multi-method split §4.2a). Tuition core (Phase 1) and payroll & expenses (Phase 3) are **built — this is a current-state reference**; §10 lists what remains future. (Formerly `FINANCE_PLAN.md`.)
+**Last verified:** 2026-09-16 (expense approval workflow — §9, the director's first WRITE capability; previously 2026-09-15, the buxgalter/director back-office got read access + an accountant write path — §5.1, [OFFICE.md](OFFICE.md); previously 2026-09-14, the multi-method split §4.2a). Tuition core (Phase 1) and payroll & expenses (Phase 3) are **built — this is a current-state reference**; §10 lists what remains future. (Formerly `FINANCE_PLAN.md`.)
 
 ## 0. Locked product decisions
 
@@ -255,7 +255,12 @@ new `options.office` argument on the `financePostHandler` factory:
 |---|---|---|
 | `/payments`, `/payments/cancel`, `/expenses`, `/expenses/cancel` | `'accountant'` | manager **or** buxgalter |
 | `/payroll/calculate` | `'any'` | manager **or** any office role (it writes nothing) |
+| `/expenses/approve`, `/expenses/reject` (2026-09-16, §9) | `'director'` | manager **or** director — buxgalter excluded |
 | everything else | *(omitted)* | manager only — unchanged |
+
+`office: 'director'` is the third `FinanceOfficeAccess` value: "manager or director, buxgalter
+excluded" — the mirror image of `'accountant'`. It exists only for the two approve/reject routes,
+since a submitter must never be able to approve their own entry.
 
 `resolveFinanceCaller` tries `requireActiveCenterManager` first and only falls through to
 `requireCenterOffice` on a **403** (authenticated but not this center's manager); a 401 propagates.
@@ -374,11 +379,22 @@ Deploy: `firebase deploy --only firestore:rules,firestore:indexes`.
 
 - **`center_expenses/{autoId}`** — `{ centerId, category, amount, date (YYYY-MM-DD, not future),
   note?, method?, methodSplit?, teacherId?, payoutId?, createdBy, createdAt, status:
-  'active'|'cancelled' + cancel audit }`. `method`/`methodSplit` (2026-09-14, see §4.2a) are
-  optional — absent on every expense recorded before that date, incl. every salary payout expense
-  (payroll never sets them). Append-only. Salary payouts create expenses with the reserved category
-  `'salary'` and a `payoutId` link — **salary-linked expenses cannot be cancelled** (v1).
-  Index: `centerId+date`.
+  'active'|'pending_approval'|'rejected'|'cancelled' + approve/reject/cancel audit }`.
+  `method`/`methodSplit` (2026-09-14, see §4.2a) are optional — absent on every expense recorded
+  before that date, incl. every salary payout expense (payroll never sets them). Append-only.
+  Salary payouts create expenses with the reserved category `'salary'` and a `payoutId` link —
+  **salary-linked expenses cannot be cancelled** (v1). Index: `centerId+date`.
+  - **Approval workflow (2026-09-16)**: `createExpense` picks the starting status from WHO is
+    calling — manager (or, historically, before this feature, no one else) → `'active'` immediately,
+    unchanged. **Buxgalter → `'pending_approval'`**: a manager or director must
+    `approveExpense`/`rejectExpense` (`/expenses/approve`, `/expenses/reject`, §5.1) before it counts
+    as money spent. The submitter may `cancelExpense` their own still-pending row (a self-withdraw —
+    `cancelExpense` now accepts `pending_approval` too, but ONLY when `caller.uid === createdBy`; the
+    pre-existing `active` branch is untouched). Rejecting requires a reason, same as cancelling.
+    ⚠️ **Every money-sum site in the app filters the exact string `'active'`** (never
+    `!== 'cancelled'`) — `pending_approval`/`rejected` rows are therefore excluded from
+    `expensesTotal`/`profit`/the Excel total/the category chips automatically. Don't "helpfully"
+    widen any of those filters to `!== 'cancelled'`.
 - **Salary config** = `salary: { fixed?, percent?, perLesson? }` map on `center_teachers/{uid}` —
   all parts optional, the payout is the SUM of configured parts (no salaryType enum). Edited via
   `POST /teacher-salary`.
@@ -474,6 +490,22 @@ There is no Telegram-bot integration — no bot token, no chat id, no server upl
 to avoid new secrets/infra for what the OS share sheet already does on the devices managers actually
 carry to send a report to a colleague.
 
+### 9.4 Non-teaching employee payroll (2026-09-16, docs/EMPLOYEES.md)
+
+Reuses `center_payouts` — no parallel collection. A payout gains an optional `staffKind: 'employee'`
+(absent = `'teacher'`); `teacherId`/`teacherName` are reused verbatim for the employee's roster-doc-id
+and name. `calculateEmployeePayroll`/`saveEmployeePayout` (`financeOps.ts`) are the employee-shaped
+siblings of `calculatePayroll`/`savePayout` — fixed + `hourlyRate` × hours worked (summed from
+`center_staff_attendance`, the SAME collection teacher/staff attendance already writes) + allowances −
+deductions, never percent/perLesson. **`markPayoutPaid` is called completely unchanged** for both —
+it only ever reads the payout doc's own fields, so it needed zero changes to support a second staff
+kind. UI: a teacher/employee segmented toggle above the Oyliklar tab
+(`app/manager/finance/_components/EmployeePayrollTab.tsx`) switches between the pre-existing
+`PayrollTab` and this new one. Routes: `/api/manager/finance/employee-salary`,
+`/api/manager/finance/payroll/employees/{calculate,save}` (mirror the teacher routes' guards exactly —
+`calculate` is `office: 'any'`, `save` is manager-only); `payroll/mark-paid` is the existing route,
+unchanged.
+
 ## 10. Later phases (context for reviewers)
 
 - **Phase 2 polish (NOT built)**: printable receipt, balance-recalculate repair (no route re-derives
@@ -493,3 +525,37 @@ carry to send a report to a colleague.
 
 `firestore.rules` still contains a `center_finances/{financeId}` block that predates this module.
 **No code reads or writes that collection** — do not build on it; it's a cleanup candidate.
+
+## 12. Unified manager dashboard (2026-09-16)
+
+`app/manager/dashboard/page.tsx` was attendance-only historically (docs/ATTENDANCE.md); it now also
+shows finance — the income/debt KPI cards are computed via the shared `computeFinanceStats`
+(`lib/finance/financeStats.ts`, extracted from this file's own `stats` memo — `app/office/page.tsx`
+had already independently re-implemented the same calculation, so this extraction removes a
+duplicate rather than adding a third copy) fed by the same four fetchers (`fetchChargesForMonth`,
+`fetchPaymentsForMonth`, `fetchOpenCharges`, `fetchExpensesForMonth`) `finance/page.tsx` uses.
+
+Three new charts, all through `components/ChartFrame.tsx` (CLAUDE.md — never a raw
+`<ResponsiveContainer>`), the **first manager-side charts in the repo**:
+- **Revenue vs. expenses, trailing 6 months** (`RevenueExpenseTrendChart.tsx`) — loops
+  `buildTrailingMonthKeys` + `computeFinanceStats` per month (with empty `charges`/`openCharges`,
+  since only `collected`/`expensesTotal` are needed).
+- **Attendance rate, trailing 6 months** (`AttendanceTrendChart.tsx`) — a SEPARATE, wider
+  `fetchCenterSessions` call from the existing current-month-only `sessions` state, bucketed by month
+  and reduced through the existing `rateOfSessions` (never re-implement the rate formula,
+  docs/ATTENDANCE.md rule #6).
+- **Expense-category distribution, current month** (`ExpenseCategoryPieChart.tsx`) — the **first
+  pie/donut chart in the repo** — fed by `groupExpensesByCategory` (also in `financeStats.ts`,
+  extracted verbatim from `ExpensesTab.tsx`'s `byCategory` memo).
+
+`monthLabelOf`/`MONTHS` (trilingual month names) moved from the route-local
+`app/manager/finance/_components/financeFormat.ts` to `app/manager/_components/monthLabels.ts`, and
+`shiftMonthKey` moved to `lib/finance/billingEngine.ts` (no `LangType` dependency) — `financeFormat.ts`
+re-exports both so its existing importers need no changes. `app/office/page.tsx` already imported
+`monthLabelOf`/`shiftMonthKey` cross-route from `financeFormat.ts` before this change; the dashboard
+becoming a third consumer is what triggered giving these a shared home instead of a second copy.
+
+If this feature ships a multi-branch owner view later, `/manager/branches` is the natural place to
+reuse `computeFinanceStats` and these three chart components looped over several `centerId`s for a
+branch-comparison view — this is why the extraction happened now rather than being built directly
+into a future multi-branch page.

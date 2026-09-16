@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import {
+  Check,
   Home,
   Megaphone,
   Package,
@@ -10,12 +11,18 @@ import {
   Undo2,
   Users,
   Wallet,
+  X,
   Zap,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import ManagerSheet from "../../_components/ManagerSheet";
 import type { Expense } from "@/types/finance";
-import { cancelExpenseApi, createExpenseApi } from "@/services/financeService";
+import {
+  approveExpenseApi,
+  cancelExpenseApi,
+  createExpenseApi,
+  rejectExpenseApi,
+} from "@/services/financeService";
 import { formatUZS } from "@/lib/finance/money";
 import { getTodayKey } from "@/lib/dateUtils";
 import { Button, EmptyState, StatusChip } from "@/components/manager-ui";
@@ -40,6 +47,13 @@ interface Props {
   /** 🟢 Office panel (docs/OFFICE.md): a DIRECTOR reads expenses but may not
    *  add or cancel one. Defaults to true — manager + accountant unchanged. */
   canRecord?: boolean;
+  /** 🟢 (docs/FINANCE.md §9) Manager/director can approve or reject an
+   *  accountant's `pending_approval` expense. Defaults to true — manager
+   *  unchanged; the office page passes `staffRole === 'director'`. */
+  canApprove?: boolean;
+  /** Current caller's uid — lets the accountant withdraw their OWN still-
+   *  pending expense (a plain cancel, gated to the submitter server-side). */
+  currentUid?: string;
 }
 
 // Keys are the stored category values — never translated.
@@ -80,6 +94,8 @@ const T_UZ = {
   emptySearchDesc: "Qidiruvni o'zgartirib ko'ring",
   emptyDesc: "Ijara, kommunal va boshqa sarflarni shu yerga yozib boring",
   cancelledChip: "Bekor qilingan",
+  pendingChip: "Tasdiq kutilmoqda",
+  rejectedChip: "Rad etildi",
   cancelExpenseTitle: "Xarajatni bekor qilish",
   cancelMessage: (category: string, amount: string) =>
     `${category} — ${amount}. Xarajat o'chirilmaydi, "bekor qilingan" deb belgilanadi.`,
@@ -90,7 +106,19 @@ const T_UZ = {
   notePlaceholder: "Izoh (ixtiyoriy)",
   save: "Saqlash",
   expenseSaved: "Xarajat saqlandi.",
+  expenseSubmitted: "Tasdiqlash uchun yuborildi.",
   saveError: "Saqlashda xatolik.",
+  approveTitle: "Xarajatni tasdiqlash",
+  approveAction: "Tasdiqlash",
+  rejectTitle: "Xarajatni rad etish",
+  rejectMessage: (category: string, amount: string) => `${category} — ${amount}. Sababni yozing.`,
+  rejectConfirm: "Rad etish",
+  withdrawTitle: "Xarajatni qaytarib olish",
+  withdrawMessage: (category: string, amount: string) =>
+    `${category} — ${amount}. Tasdiq kutayotgan xarajatingiz qaytarib olinadi.`,
+  withdrawConfirm: "Qaytarib olish",
+  approved: "Xarajat tasdiqlandi.",
+  rejected: "Xarajat rad etildi.",
 };
 
 const TRANSLATIONS: Record<LangType, typeof T_UZ> = {
@@ -104,6 +132,8 @@ const TRANSLATIONS: Record<LangType, typeof T_UZ> = {
     emptySearchDesc: "Try changing your search",
     emptyDesc: "Record rent, utilities and other spending here",
     cancelledChip: "Cancelled",
+    pendingChip: "Pending approval",
+    rejectedChip: "Rejected",
     cancelExpenseTitle: "Cancel expense",
     cancelMessage: (category: string, amount: string) =>
       `${category} — ${amount}. The expense is not deleted — it is marked "cancelled".`,
@@ -114,7 +144,19 @@ const TRANSLATIONS: Record<LangType, typeof T_UZ> = {
     notePlaceholder: "Note (optional)",
     save: "Save",
     expenseSaved: "Expense saved.",
+    expenseSubmitted: "Submitted for approval.",
     saveError: "Failed to save.",
+    approveTitle: "Approve expense",
+    approveAction: "Approve",
+    rejectTitle: "Reject expense",
+    rejectMessage: (category: string, amount: string) => `${category} — ${amount}. Write the reason.`,
+    rejectConfirm: "Reject",
+    withdrawTitle: "Withdraw expense",
+    withdrawMessage: (category: string, amount: string) =>
+      `${category} — ${amount}. Your still-pending expense will be withdrawn.`,
+    withdrawConfirm: "Withdraw",
+    approved: "Expense approved.",
+    rejected: "Expense rejected.",
   },
   ru: {
     addExpense: "Добавить расход",
@@ -125,6 +167,8 @@ const TRANSLATIONS: Record<LangType, typeof T_UZ> = {
     emptySearchDesc: "Попробуйте изменить запрос",
     emptyDesc: "Записывайте здесь аренду, коммунальные и прочие траты",
     cancelledChip: "Отменён",
+    pendingChip: "Ожидает подтверждения",
+    rejectedChip: "Отклонён",
     cancelExpenseTitle: "Отменить расход",
     cancelMessage: (category: string, amount: string) =>
       `${category} — ${amount}. Расход не удаляется — он помечается как «отменён».`,
@@ -135,7 +179,19 @@ const TRANSLATIONS: Record<LangType, typeof T_UZ> = {
     notePlaceholder: "Комментарий (необязательно)",
     save: "Сохранить",
     expenseSaved: "Расход сохранён.",
+    expenseSubmitted: "Отправлено на подтверждение.",
     saveError: "Не удалось сохранить.",
+    approveTitle: "Подтвердить расход",
+    approveAction: "Подтвердить",
+    rejectTitle: "Отклонить расход",
+    rejectMessage: (category: string, amount: string) => `${category} — ${amount}. Укажите причину.`,
+    rejectConfirm: "Отклонить",
+    withdrawTitle: "Отозвать расход",
+    withdrawMessage: (category: string, amount: string) =>
+      `${category} — ${amount}. Ваш ожидающий подтверждения расход будет отозван.`,
+    withdrawConfirm: "Отозвать",
+    approved: "Расход подтверждён.",
+    rejected: "Расход отклонён.",
   },
 };
 
@@ -150,12 +206,24 @@ const CATEGORY_META: Record<string, { Icon: LucideIcon; avatar: string }> = {
 };
 const categoryMeta = (c: string) => CATEGORY_META[c] || CATEGORY_META.boshqa;
 
-/** Month's expenses: per-category totals, add, cancel. Salary rows come from payroll and are protected. */
-export default function ExpensesTab({ expenses, categories, monthLabel, onShiftMonth, onChanged, canRecord = true }: Props) {
+/** Month's expenses: per-category totals, add, cancel, approve/reject. Salary rows come from payroll and are protected. */
+export default function ExpensesTab({
+  expenses,
+  categories,
+  monthLabel,
+  onShiftMonth,
+  onChanged,
+  canRecord = true,
+  canApprove = true,
+  currentUid,
+}: Props) {
   const { lang } = useManagerLanguage();
   const t = TRANSLATIONS[lang];
   const [showAdd, setShowAdd] = useState(false);
   const [cancelTarget, setCancelTarget] = useState<Expense | null>(null);
+  const [rejectTarget, setRejectTarget] = useState<Expense | null>(null);
+  const [withdrawTarget, setWithdrawTarget] = useState<Expense | null>(null);
+  const [approvingId, setApprovingId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
 
   const filtered = useMemo(() => {
@@ -215,12 +283,16 @@ export default function ExpensesTab({ expenses, categories, monthLabel, onShiftM
         ) : (
           filtered.map((e) => {
             const cancelled = e.status === "cancelled";
+            const pending = e.status === "pending_approval";
+            const rejected = e.status === "rejected";
+            const struck = cancelled || rejected;
             const meta = categoryMeta(e.category);
+            const isMine = !!currentUid && e.createdBy === currentUid;
             return (
               <div key={e.id} className="flex items-center gap-3 px-4 py-3 hover:bg-state-hover transition-colors">
                 <div
                   className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
-                    cancelled ? "bg-surface-container-highest text-on-surface-variant" : meta.avatar
+                    struck ? "bg-surface-container-highest text-on-surface-variant" : meta.avatar
                   }`}
                 >
                   <meta.Icon size={18} strokeWidth={2.1} />
@@ -228,7 +300,7 @@ export default function ExpensesTab({ expenses, categories, monthLabel, onShiftM
                 <div className="flex-1 min-w-0">
                   <p
                     className={`text-[14.5px] font-semibold truncate ${
-                      cancelled ? "text-on-surface-variant line-through" : "text-on-surface"
+                      struck ? "text-on-surface-variant line-through" : "text-on-surface"
                     }`}
                   >
                     {categoryLabel(e.category, lang)}
@@ -237,6 +309,7 @@ export default function ExpensesTab({ expenses, categories, monthLabel, onShiftM
                   <p className="text-[12.5px] text-on-surface-variant mt-0.5">
                     {shortDateLabel(e.date, lang)}
                     {(e.method || e.methodSplit?.length) && ` · ${formatMethodSplit(e, lang)}`}
+                    {rejected && e.rejectReason && ` · ${e.rejectReason}`}
                   </p>
                 </div>
                 {cancelled && (
@@ -244,17 +317,66 @@ export default function ExpensesTab({ expenses, categories, monthLabel, onShiftM
                     {t.cancelledChip}
                   </StatusChip>
                 )}
+                {pending && (
+                  <StatusChip tone="warning" className="shrink-0">
+                    {t.pendingChip}
+                  </StatusChip>
+                )}
+                {rejected && (
+                  <StatusChip tone="error" noDot className="shrink-0">
+                    {t.rejectedChip}
+                  </StatusChip>
+                )}
                 <p
                   className={`text-[14.5px] font-bold tabular-nums shrink-0 ${
-                    cancelled ? "text-on-surface-variant line-through" : "text-on-surface"
+                    struck ? "text-on-surface-variant line-through" : "text-on-surface"
                   }`}
                 >
                   −{formatUZS(e.amount)}
                 </p>
-                {!cancelled && !e.payoutId && canRecord && (
+                {e.status === "active" && !e.payoutId && canRecord && (
                   <button
                     onClick={() => setCancelTarget(e)}
                     title={t.cancelExpenseTitle}
+                    className="w-9 h-9 rounded-full hover:bg-error-container text-on-surface-variant hover:text-error flex items-center justify-center transition-colors shrink-0"
+                  >
+                    <Undo2 size={15} />
+                  </button>
+                )}
+                {pending && canApprove && (
+                  <div className="flex items-center gap-1 shrink-0">
+                    <button
+                      onClick={async () => {
+                        setApprovingId(e.id);
+                        try {
+                          await approveExpenseApi(e.id);
+                          toast.success(t.approved);
+                          onChanged();
+                        } catch (err: any) {
+                          toast.error(err.message || t.genericError);
+                        } finally {
+                          setApprovingId(null);
+                        }
+                      }}
+                      disabled={approvingId === e.id}
+                      title={t.approveAction}
+                      className="w-9 h-9 rounded-full hover:bg-success-container text-on-surface-variant hover:text-success flex items-center justify-center transition-colors disabled:opacity-50"
+                    >
+                      <Check size={16} />
+                    </button>
+                    <button
+                      onClick={() => setRejectTarget(e)}
+                      title={t.rejectConfirm}
+                      className="w-9 h-9 rounded-full hover:bg-error-container text-on-surface-variant hover:text-error flex items-center justify-center transition-colors"
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
+                )}
+                {pending && isMine && (
+                  <button
+                    onClick={() => setWithdrawTarget(e)}
+                    title={t.withdrawConfirm}
                     className="w-9 h-9 rounded-full hover:bg-error-container text-on-surface-variant hover:text-error flex items-center justify-center transition-colors shrink-0"
                   >
                     <Undo2 size={15} />
@@ -294,6 +416,42 @@ export default function ExpensesTab({ expenses, categories, monthLabel, onShiftM
           }}
         />
       )}
+      {rejectTarget && (
+        <ReasonDialog
+          title={t.rejectTitle}
+          message={t.rejectMessage(categoryLabel(rejectTarget.category, lang), formatUZS(rejectTarget.amount))}
+          confirmLabel={t.rejectConfirm}
+          onClose={() => setRejectTarget(null)}
+          onConfirm={async (reason) => {
+            try {
+              await rejectExpenseApi(rejectTarget.id, reason);
+              toast.success(t.rejected);
+              setRejectTarget(null);
+              onChanged();
+            } catch (e: any) {
+              toast.error(e.message || t.genericError);
+            }
+          }}
+        />
+      )}
+      {withdrawTarget && (
+        <ReasonDialog
+          title={t.withdrawTitle}
+          message={t.withdrawMessage(categoryLabel(withdrawTarget.category, lang), formatUZS(withdrawTarget.amount))}
+          confirmLabel={t.withdrawConfirm}
+          onClose={() => setWithdrawTarget(null)}
+          onConfirm={async (reason) => {
+            try {
+              await cancelExpenseApi(withdrawTarget.id, reason);
+              toast.success(t.expenseCancelled);
+              setWithdrawTarget(null);
+              onChanged();
+            } catch (e: any) {
+              toast.error(e.message || t.genericError);
+            }
+          }}
+        />
+      )}
     </div>
   );
 }
@@ -326,7 +484,7 @@ function AddExpenseModal({
     if (!valid || submitting) return;
     setSubmitting(true);
     try {
-      await createExpenseApi({
+      const { status } = await createExpenseApi({
         category,
         amount: parsed,
         method: methodLines[0].method,
@@ -334,7 +492,7 @@ function AddExpenseModal({
         ...(date !== todayKey ? { date } : {}),
         ...(note.trim() ? { note: note.trim() } : {}),
       });
-      toast.success(t.expenseSaved);
+      toast.success(status === "pending_approval" ? t.expenseSubmitted : t.expenseSaved);
       onDone();
     } catch (e: any) {
       toast.error(e.message || t.saveError);

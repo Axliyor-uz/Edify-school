@@ -15,8 +15,8 @@ import {
   fetchPaymentsForMonth,
   fetchPositiveBalances,
   fetchRecentPayments,
-  openAmountOf,
 } from "@/services/financeService";
+import { computeFinanceStats } from "@/lib/finance/financeStats";
 import type { Charge, Expense, FinanceSettings, Payment } from "@/types/finance";
 import { getTodayKey, monthKeyOf } from "@/lib/dateUtils";
 import { Badge, Tabs } from "@/components/manager-ui";
@@ -27,6 +27,7 @@ import PaymentsTab from "./_components/PaymentsTab";
 import DebtorsTab from "./_components/DebtorsTab";
 import ChargesTab from "./_components/ChargesTab";
 import PayrollTab from "./_components/PayrollTab";
+import EmployeePayrollTab from "./_components/EmployeePayrollTab";
 import ExpensesTab from "./_components/ExpensesTab";
 import SettingsTab from "./_components/SettingsTab";
 import RecordPaymentModal from "./_components/RecordPaymentModal";
@@ -124,6 +125,13 @@ const TRANSLATIONS: Record<LangType, typeof T_UZ> = {
   },
 };
 
+/** Oyliklar tab's teacher/employee segmented toggle (docs/EMPLOYEES.md). */
+const PAYROLL_VIEW_T: Record<LangType, { teachers: string; employees: string }> = {
+  uz: { teachers: "O'qituvchilar", employees: "Xodimlar" },
+  en: { teachers: "Teachers", employees: "Employees" },
+  ru: { teachers: "Учителя", employees: "Сотрудники" },
+};
+
 export default function ManagerFinancePage() {
   const { user } = useAuth();
   const { lang } = useManagerLanguage();
@@ -135,6 +143,7 @@ export default function ManagerFinancePage() {
   const todayKey = useMemo(() => getTodayKey(), []);
   const [monthKey, setMonthKey] = useState(() => monthKeyOf(getTodayKey()));
   const [tab, setTab] = useState<Tab>("payments");
+  const [payrollView, setPayrollView] = useState<"teachers" | "employees">("teachers");
 
   const [charges, setCharges] = useState<Charge[]>([]);
   const [openCharges, setOpenCharges] = useState<Charge[]>([]);
@@ -221,14 +230,10 @@ export default function ManagerFinancePage() {
     };
   }, [centerId, openCharges, todayKey]);
 
-  const stats = useMemo(() => {
-    const confirmed = monthPayments.filter((p) => p.status === "confirmed");
-    const collected = confirmed.reduce((s, p) => s + (p.type === "payment" ? p.amount : -p.amount), 0);
-    const charged = charges.filter((c) => c.status !== "cancelled").reduce((s, c) => s + c.amount, 0);
-    const debtTotal = openCharges.reduce((s, c) => s + openAmountOf(c), 0);
-    const expensesTotal = expenses.filter((e) => e.status === "active").reduce((s, e) => s + e.amount, 0);
-    return { collected, charged, debtTotal, expensesTotal, profit: collected - expensesTotal };
-  }, [monthPayments, charges, openCharges, expenses]);
+  const stats = useMemo(
+    () => computeFinanceStats({ charges, monthPayments, openCharges, expenses }),
+    [monthPayments, charges, openCharges, expenses]
+  );
 
   const unbilledClassTitles = useMemo(
     () => classes.filter((c) => (c.studentIds?.length || 0) > 0 && !(c.monthlyFee && c.monthlyFee > 0)).map((c) => c.title),
@@ -361,12 +366,33 @@ export default function ManagerFinancePage() {
           onChanged={reload}
         />
       ) : tab === "payroll" ? (
-        <PayrollTab
-          monthKey={monthKey}
-          monthLabel={monthLabel}
-          onShiftMonth={(delta) => setMonthKey((k) => shiftMonthKey(k, delta))}
-          onExpensesChanged={reload}
-        />
+        <div className="space-y-3">
+          <Tabs
+            variant="segmented"
+            className="w-fit"
+            tabs={[
+              { id: "teachers", label: PAYROLL_VIEW_T[lang].teachers },
+              { id: "employees", label: PAYROLL_VIEW_T[lang].employees },
+            ]}
+            value={payrollView}
+            onChange={(id) => setPayrollView(id as "teachers" | "employees")}
+          />
+          {payrollView === "teachers" ? (
+            <PayrollTab
+              monthKey={monthKey}
+              monthLabel={monthLabel}
+              onShiftMonth={(delta) => setMonthKey((k) => shiftMonthKey(k, delta))}
+              onExpensesChanged={reload}
+            />
+          ) : (
+            <EmployeePayrollTab
+              monthKey={monthKey}
+              monthLabel={monthLabel}
+              onShiftMonth={(delta) => setMonthKey((k) => shiftMonthKey(k, delta))}
+              onExpensesChanged={reload}
+            />
+          )}
+        </div>
       ) : tab === "expenses" ? (
         <ExpensesTab
           expenses={expenses}
@@ -374,6 +400,7 @@ export default function ManagerFinancePage() {
           monthLabel={monthLabel}
           onShiftMonth={(delta) => setMonthKey((k) => shiftMonthKey(k, delta))}
           onChanged={reload}
+          currentUid={user?.uid}
         />
       ) : (
         <SettingsTab

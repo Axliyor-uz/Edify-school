@@ -6,6 +6,7 @@ import { UserCheck, Users, Loader2, ScanFace, Settings } from "lucide-react";
 import { useAuth } from "@/lib/AuthContext";
 import { getUserProfile } from "@/services/userService";
 import { useCenterClasses } from "@/hooks/useCenterClasses";
+import { useCenterEmployees } from "@/hooks/useCenterEmployees";
 import StaffAttendanceGrid from "@/components/attendance/StaffAttendanceGrid";
 import FaceTerminalStatus from "@/components/attendance/FaceTerminalStatus";
 import { useManagerLanguage } from "@/app/manager/_components/ManagerLanguage";
@@ -46,13 +47,18 @@ export default function StaffAttendancePage() {
     getUserProfile(user.uid).then((p) => { if (p?.centerId) setCenterId(p.centerId); });
   }, [user]);
 
-  const { teachers, isLoading } = useCenterClasses(centerId);
+  const { teachers, isLoading: teachersLoading } = useCenterClasses(centerId);
+  // 🟢 (docs/EMPLOYEES.md) Non-teaching staff share this SAME grid/collection —
+  // an employee's roster doc id doubles as its center_staff_attendance.staffUid.
+  const { employees, isLoading: employeesLoading } = useCenterEmployees(centerId);
+  const isLoading = teachersLoading || employeesLoading;
 
   const staff = useMemo(
-    () => teachers
-      .map((tch) => ({ uid: tch.teacherId, name: tch.teacherName || tch.teacherEmail || t.staffFallback }))
-      .sort((a, b) => a.name.localeCompare(b.name, "uz", { sensitivity: "base" })),
-    [teachers, t]
+    () => [
+      ...teachers.map((tch) => ({ uid: tch.teacherId, name: tch.teacherName || tch.teacherEmail || t.staffFallback })),
+      ...employees.map((e) => ({ uid: e.id, name: e.employeeName || t.staffFallback })),
+    ].sort((a, b) => a.name.localeCompare(b.name, "uz", { sensitivity: "base" })),
+    [teachers, employees, t]
   );
 
   return (

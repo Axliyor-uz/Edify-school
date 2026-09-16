@@ -902,6 +902,21 @@ service cloud.firestore {
       allow delete: if isAuth() && resource.data.ownerUid == request.auth.uid;
     }
 
+    // 🟢 MULTI-BRANCH OWNER VIEW (2026-09-16). Doc id `${ownerUid}_${centerId}` —
+    // an explicit, auditable grant letting ONE owner personally operate several
+    // `centers` docs (switching which one `users.centerId` points at via
+    // POST /api/manager/switch-branch). Deliberately NOT the authorization
+    // boundary for anything else: `centers.ownerUid` still is, unchanged, on
+    // every existing finance/attendance/roster rule. `list` is a plain field
+    // compare — zero get() cost, even cheaper than isCenterManager's pattern.
+    match /center_oversight/{linkId} {
+      allow get: if isAuth() && (
+        resource == null || resource.data.ownerUid == request.auth.uid || isSuperAdmin()
+      );
+      allow list: if isAuth() && resource.data.ownerUid == request.auth.uid;
+      allow write: if false; // Admin SDK only — the super-admin "attach branch" route
+    }
+
     match /crm_leads/{leadId} {
       allow create: if isAuth() && isActiveCenterManager(request.resource.data.centerId);
       allow read: if isAuth() && isCenterManager(resource.data.centerId);
@@ -1039,6 +1054,29 @@ service cloud.firestore {
                     teacherId == request.resource.data.teacherId;
 
       allow update, delete: if isAuth() && isActiveCenterManager(resource.data.centerId);
+    }
+
+    // 🟢 NON-TEACHING EMPLOYEES (2026-09-16, docs/EMPLOYEES.md) — receptionist,
+    // cleaner, security, driver, HR… A center-scoped roster/HR record BESIDE
+    // center_teachers (teaching) and center_staff (director/accountant
+    // oversight) — but UNLIKE either of those, an employee gets NO login
+    // account: nothing in this app needs a cleaner or driver to sign in, so
+    // there is no Auth user, no username, no credentials doc. Auto-id doc,
+    // client-created by the manager directly (same shape as `rooms` above) —
+    // its own doc id doubles as this employee's stable identifier everywhere
+    // else (center_staff_attendance.staffUid, a payout's teacherId).
+    match /center_employees/{employeeId} {
+      allow get: if isAuth() && (
+        resource == null ||
+        isCenterManager(resource.data.centerId) ||
+        isCenterOffice(resource.data.centerId)
+      );
+      allow list: if isAuth() && (
+        isCenterManager(resource.data.centerId) ||
+        isCenterOffice(resource.data.centerId)
+      );
+      allow create, update: if isAuth() && isActiveCenterManager(request.resource.data.centerId);
+      allow delete: if isAuth() && isActiveCenterManager(resource.data.centerId);
     }
 
     // 🟢 CENTER STUDENT ROSTER (2026-07-15). Doc id MUST be

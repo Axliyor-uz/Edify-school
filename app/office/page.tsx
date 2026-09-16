@@ -14,11 +14,13 @@
  * the manager's full behavior, so this page only ever SUBTRACTS capability.
  *
  * Capability, in one place:
- *   director   → everything read-only
- *   accountant → the same, plus recording/cancelling payments and expenses
- * The flag below is UX. The real gate is `requireCenterOffice(..., ['accountant'])`
- * on the four record-money routes — a director who forges `canRecord` client-side
- * still gets a 403 from the server.
+ *   director   → read-only, EXCEPT approving/rejecting the accountant's
+ *                pending expenses (docs/FINANCE.md §9) — never creates one
+ *   accountant → read-only plus recording/cancelling payments and expenses;
+ *                an accountant's own expense starts `pending_approval`
+ * The flags below are UX. The real gates are `requireCenterOffice(..., [...])`
+ * on the server — a director who forges `canRecord`, or an accountant who
+ * forges `canApprove`, client-side still gets a 403 from the server.
  */
 
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -34,8 +36,8 @@ import {
   fetchPaymentsForMonth,
   fetchPositiveBalances,
   fetchRecentPayments,
-  openAmountOf,
 } from "@/services/financeService";
+import { computeFinanceStats } from "@/lib/finance/financeStats";
 import type { Charge, Expense, FinanceSettings, Payment } from "@/types/finance";
 import { getTodayKey, monthKeyOf } from "@/lib/dateUtils";
 import { Badge, Tabs } from "@/components/manager-ui";
@@ -193,14 +195,10 @@ export default function OfficePage() {
     };
   }, [centerId, openCharges, todayKey]);
 
-  const stats = useMemo(() => {
-    const confirmed = monthPayments.filter((p) => p.status === "confirmed");
-    const collected = confirmed.reduce((s, p) => s + (p.type === "payment" ? p.amount : -p.amount), 0);
-    const charged = charges.filter((c) => c.status !== "cancelled").reduce((s, c) => s + c.amount, 0);
-    const debtTotal = openCharges.reduce((s, c) => s + openAmountOf(c), 0);
-    const expensesTotal = expenses.filter((e) => e.status === "active").reduce((s, e) => s + e.amount, 0);
-    return { collected, charged, debtTotal, expensesTotal, profit: collected - expensesTotal };
-  }, [monthPayments, charges, openCharges, expenses]);
+  const stats = useMemo(
+    () => computeFinanceStats({ charges, monthPayments, openCharges, expenses }),
+    [monthPayments, charges, openCharges, expenses]
+  );
 
   const debtorCount = useMemo(() => new Set(openCharges.map((c) => c.studentId)).size, [openCharges]);
   const monthLabel = monthLabelOf(monthKey, lang);
@@ -272,6 +270,8 @@ export default function OfficePage() {
           onShiftMonth={(delta) => setMonthKey((k) => shiftMonthKey(k, delta))}
           onChanged={reload}
           canRecord={canRecord}
+          canApprove={session.staffRole === "director"}
+          currentUid={session.uid}
         />
       ) : tab === "debtors" ? (
         <DebtorsTab

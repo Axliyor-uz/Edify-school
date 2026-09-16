@@ -52,8 +52,8 @@ and staff attendance.
 | `app/teacher/center/_components/AttendanceTab.tsx` | 🟢 **Read-only** month overview (2026-07-29): one `centerId+date` range query per month → overall rate, per-group bars (`rateOfSessions`), recent sessions, month nav. Marking still happens in each group's own grid. |
 | `app/manager/attendance/page.tsx` · `[classId]/page.tsx` | Manager attendance: group grid + walk-in tab → class detail. The class-detail "Dars jadvali" tab is **read-only** (a link to the group page); schedule **editing** moved to the group. |
 | `app/manager/groups/_shared/ScheduleTab.tsx` | **Schedule + room editor** (moved here from attendance; 2026-09-14 promoted to `_shared` so both the flat group detail and a School Class subject's detail reuse it). "Jadval & xona" tab. Writes `classes/{id}.schedule` directly. |
-| `app/manager/staff-attendance/page.tsx` | Staff attendance page (resolves centerId, feeds teachers into `StaffAttendanceGrid`). |
-| `app/manager/dashboard/page.tsx` | Real analytics dashboard (today rate, monthly rate, chronic absentees, per-group bars, today's lessons). |
+| `app/manager/staff-attendance/page.tsx` | Staff attendance page (resolves centerId, feeds teachers **and** non-teaching employees — 2026-09-16, [EMPLOYEES.md](EMPLOYEES.md) — into ONE merged `StaffAttendanceGrid` roster). |
+| `app/manager/dashboard/page.tsx` | Real analytics dashboard — attendance (today rate, monthly rate, chronic absentees, per-group bars, today's lessons) **and** finance (income/debt KPI cards, a 6-month revenue-vs-expense trend, a 6-month attendance-rate trend, a current-month expense-category pie — 2026-09-16, docs/FINANCE.md §12). Was attendance-only historically; this line was stale. |
 | `app/manager/students/page.tsx` | **Consumer** of today's `records` — reads `.status` (tolerant of legacy string); also shows the `FaceTerminalStatus` badge + Face ID config link. |
 | `firestore.rules` | Security rules (flat file, no numbered sections; attendance blocks are near the bottom, after `center_teachers`; face terminal block is at the very end). |
 | `firestore.indexes.json` | Composite indexes for attendance range queries. |

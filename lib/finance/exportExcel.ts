@@ -89,9 +89,9 @@ const PAYMENT_STATUS_T: Record<LangType, Record<Payment["status"], string>> = {
 };
 
 const EXPENSE_STATUS_T: Record<LangType, Record<string, string>> = {
-  uz: { active: "Faol", cancelled: "Bekor qilingan" },
-  en: { active: "Active", cancelled: "Cancelled" },
-  ru: { active: "Активен", cancelled: "Отменён" },
+  uz: { active: "Faol", pending_approval: "Tasdiq kutilmoqda", rejected: "Rad etilgan", cancelled: "Bekor qilingan" },
+  en: { active: "Active", pending_approval: "Pending approval", rejected: "Rejected", cancelled: "Cancelled" },
+  ru: { active: "Активен", pending_approval: "Ожидает подтверждения", rejected: "Отклонён", cancelled: "Отменён" },
 };
 
 const PAYOUT_STATUS_T: Record<LangType, Record<"none" | "approved" | "paid", string>> = {

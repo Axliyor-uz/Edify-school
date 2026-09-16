@@ -52,6 +52,10 @@ export interface CenterStaffCredentials {
 /** Can this role record payments/expenses, or is it strictly read-only? */
 export const canRecordMoney = (role: OfficeRole) => role === "accountant";
 
+/** Can this role approve/reject an accountant's pending expense (docs/FINANCE.md §9)?
+ *  Deliberately the director, not the accountant — a submitter cannot approve their own entry. */
+export const canApproveExpense = (role: OfficeRole) => role === "director";
+
 export const OFFICE_ROLE_LABELS: Record<OfficeRole, { uz: string; ru: string; en: string }> = {
   director: { uz: "Direktor", ru: "Директор", en: "Director" },
   accountant: { uz: "Buxgalter", ru: "Бухгалтер", en: "Accountant" },

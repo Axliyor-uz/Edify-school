@@ -4,7 +4,7 @@
 >
 > Money model: [FINANCE.md](FINANCE.md). Roles & guards: [AUTH.md](AUTH.md). Provisioning surface: [ADMIN.md](ADMIN.md).
 
-**Last verified:** 2026-09-15 (built on top of `90fcba7`). ⚠️ `tests/rules/centerStaff.rules.test.mjs` was written with this change but **has not been executed** — the dev machine has no Java, so the Firestore emulator could not start. Run `npm run test:rules` before deploying the ruleset.
+**Last verified:** 2026-09-16 (expense approval — the director's first WRITE capability, [FINANCE.md](FINANCE.md) §9; previously 2026-09-15, built on top of `90fcba7`). ⚠️ `tests/rules/centerStaff.rules.test.mjs` was written with this change but **has not been executed** — the dev machine has no Java, so the Firestore emulator could not start. Run `npm run test:rules` before deploying the ruleset.
 
 ## Purpose & scope
 
@@ -12,8 +12,8 @@ Two center-scoped back-office roles that sit **beside** the center manager, not 
 
 | Role | `users.role` / `center_staff.staffRole` | Can |
 |---|---|---|
-| **Director** (direktor) | `director` | Read everything below. Writes **nothing**, anywhere. |
-| **Buxgalter** (accountant) | `accountant` | The same reads, **plus** recording and cancelling payments and expenses. |
+| **Director** (direktor) | `director` | Read everything below. Writes **nothing** — except approving/rejecting a buxgalter's pending expense (2026-09-16, [FINANCE.md](FINANCE.md) §9). Never creates one. |
+| **Buxgalter** (accountant) | `accountant` | The same reads, **plus** recording and cancelling payments and expenses. An expense THEY record starts `pending_approval` and waits for the manager or director. |
 
 Both see one page, `/office`: the month's money summary, payments, expenses, debtors, and the teaching staff with their attendance and salaries.
 
@@ -116,6 +116,10 @@ No new money code was written. `financePostHandler` gained an `office` option, a
 | `/api/manager/finance/expenses` | `'accountant'` | recording an expense |
 | `/api/manager/finance/expenses/cancel` | `'accountant'` | same correction argument |
 | `/api/manager/finance/payroll/calculate` | `'any'` | pure computation, writes nothing — lets the **director** see live salaries |
+| `/api/manager/finance/expenses/approve` | `'director'` | 🟢 (2026-09-16) manager or director approve a pending expense — **accountant excluded**, a submitter cannot approve their own entry |
+| `/api/manager/finance/expenses/reject` | `'director'` | same, rejects with a mandatory reason |
+
+`'director'` is a THIRD `FinanceOfficeAccess` value (beside `'accountant'`/`'any'`) — it means "manager or director, accountant excluded", the opposite selection from `'accountant'`. It exists only for these two routes.
 
 Everything else (`charges/*`, `settings`, `student`, `group-fees`, `payroll/save`, `payroll/mark-paid`, `teacher-salary`) stays **manager-only** by omitting the option.
 
@@ -137,6 +141,7 @@ Resolution order in `resolveFinanceCaller`: try `requireActiveCenterManager` fir
 **Reusing the manager's components is deliberate**: the number a director questions must be the exact number the manager sees, and a parallel implementation is how those drift. Each reused component gained an **additive** capability flag that **defaults to the manager's full behavior**, so this page only ever subtracts:
 
 - `PaymentsTab` / `ExpensesTab`: `canRecord?: boolean = true` — hides the add button and the per-row cancel.
+- `ExpensesTab` additionally: `canApprove?: boolean = true` (approve/reject buttons on a pending row — the office page passes `staffRole === 'director'`) and `currentUid` (lets the accountant withdraw their OWN still-pending expense).
 - `StudentInfoDialog`: `canManage?: boolean = true` (hides discount + freeze, which are manager-only writes) and `onRecordPayment` now accepts `null` (hides the button).
 
 There is no "Umumiy" tab — `FinanceStats` sits above the tab bar and is visible on all of them.
@@ -172,7 +177,8 @@ The shell (`app/office/layout.tsx`) reuses `ManagerThemeProvider` + `ManagerLang
 2. Log in as that director *with the username*. You should land on `/office`, not `/dashboard`.
 3. Confirm the six stat cards match `/manager/finance` for the same month, then check every tab: **no** "To'lov qabul qilish" button, **no** add-expense button, **no** per-row cancel (↩) icons, **no** FAB on mobile. Open a debtor → the dialog shows history but **no** discount/freeze controls and **no** record-payment button.
 4. O'qituvchilar tab: teacher rows show groups, this month's attendance %, and a salary with a status chip. Expand one → breakdown lines. Shift the month back and forth.
-5. Create an **accountant** in the same center and log in: the same page now has the record/cancel affordances. Record a payment → check the `center_payments` doc's `receivedBy` is the **accountant's** uid, and that the manager's Moliya page shows it.
-6. As the accountant, hit a manager-only route directly (e.g. `POST /api/manager/finance/charges/generate` with their bearer token) → **403**. As the director, hit `POST /api/manager/finance/payments` → **403**.
+5. Create an **accountant** in the same center and log in: the same page now has the record/cancel affordances. Record a payment → check the `center_payments` doc's `receivedBy` is the **accountant's** uid, and that the manager's Moliya page shows it. Record an EXPENSE → confirm it shows "Tasdiq kutilmoqda" and is excluded from the Xarajatlar/Foyda stat cards and the Excel export total.
+6. As the accountant, hit a manager-only route directly (e.g. `POST /api/manager/finance/charges/generate` with their bearer token) → **403**. As the director, hit `POST /api/manager/finance/payments` → **403**. As the accountant, hit `POST /api/manager/finance/expenses/approve` → **403** (director/manager only).
+6b. Log back in as the director → confirm Approve/Reject buttons appear on the accountant's pending expense (and only that row). Reject one with a reason → chip shows the reason, still excluded from totals. Approve the other → flips to `active`, immediately appears in the stat cards. Log back in as the accountant → confirm they can Withdraw a still-pending expense of their own, but have no Approve/Reject buttons on anyone else's.
 7. Back in `/admin`, "New password" on a row → log in with the new one. "Remove" → the user can no longer reach `/office`.
 8. Regression: a manager, a teacher and a student each still land on their own dashboard, and `/manager/finance` is byte-for-byte as before (record, cancel, discount, freeze all still present).

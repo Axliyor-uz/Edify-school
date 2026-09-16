@@ -5,10 +5,11 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 /** POST — record an expense. Body: { category, amount, date?, note?, method?, methodSplit? }. */
-export const POST = financePostHandler('/api/manager/finance/expenses', ({ uid, centerId }, body) =>
+export const POST = financePostHandler('/api/manager/finance/expenses', ({ uid, centerId, callerRole }, body) =>
   createExpense({
     centerId,
     uid,
+    callerRole,
     category: body.category,
     amount: body.amount,
     date: body.date,

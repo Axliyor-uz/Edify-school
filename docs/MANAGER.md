@@ -114,6 +114,14 @@ The manager can provision a full teacher account (`CreateTeacherModal.tsx` → `
 - Rules: the `studentIds`-only self-diff branch lets a user add/remove ONLY their own uid — and on center groups (`centerId != ''`) additions are blocked entirely (2026-07-19), so manager adds ride the manager branch, never the self-join one.
 - Today's status comes from one `fetchCenterSessions(centerId, today, today)` list query (per-doc `get` would be denied for stale-centerId docs — deliberate).
 
+## Non-teaching employees (2026-09-16)
+
+Receptionist, cleaner, security, driver, HR… a roster BESIDE teachers and office staff, with its own
+nav item ("Xodimlar", beside Teachers). Unlike either of those, an employee gets **no login account** —
+`center_employees/{autoId}` is a plain client-writable roster doc (the `rooms` pattern, not the
+teacher/office-staff account pattern), and its own doc id doubles as the identifier used everywhere
+else (staff attendance, payroll). Full contract: [EMPLOYEES.md](EMPLOYEES.md).
+
 ## Office staff — director & buxgalter (2026-09-15)
 
 A center can also have **director** and **buxgalter** (accountant) accounts with their own panel at

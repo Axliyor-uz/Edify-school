@@ -40,14 +40,20 @@ import {
 } from '@/lib/finance/billingEngine';
 import { roundTo1000 } from '@/lib/finance/money';
 import type {
+  CalculateEmployeePayrollResult,
   CalculatePayrollResult,
+  EmployeePayoutBreakdown,
+  EmployeePayrollRow,
+  EmployeeSalaryConfig,
   Expense,
+  ExpenseStatus,
   Payout,
   PayoutBreakdown,
   PayrollRow,
   TeacherSalaryConfig,
 } from '@/types/finance';
 import { payoutDocId } from '@/types/finance';
+import type { FinanceCallerRole } from '@/lib/server/financeRoute';
 
 const DATE_KEY_RE = /^\d{4}-\d{2}-\d{2}$/;
 const MONTH_KEY_RE = /^\d{4}-\d{2}$/;
@@ -857,6 +863,11 @@ const expenseRef = (id?: string) =>
 export async function createExpense(params: {
   centerId: string;
   uid: string;
+  /** docs/FINANCE.md §9: a manager's expense goes straight to `active`
+   *  (unchanged); an accountant's starts `pending_approval` and needs a
+   *  manager/director to approve or reject it. A director never calls this —
+   *  the route this feeds stays `office: 'accountant'`. */
+  callerRole: FinanceCallerRole;
   category: string;
   amount: number;
   date?: string;
@@ -865,7 +876,7 @@ export async function createExpense(params: {
    *  from it) — same relationship `RecordPaymentRequest` has, see there. */
   method?: PaymentMethod;
   methodSplit?: PaymentMethodSplit[];
-}): Promise<{ expenseId: string }> {
+}): Promise<{ expenseId: string; status: ExpenseStatus }> {
   const category = typeof params.category === 'string' ? params.category.trim() : '';
   if (!category || category.length > 40) throw new ManagerApiError("Kategoriya noto'g'ri.", 400);
   const amount = requireValidMoney(params.amount);
@@ -884,6 +895,7 @@ export async function createExpense(params: {
     method = params.method;
   }
 
+  const status: ExpenseStatus = params.callerRole === 'accountant' ? 'pending_approval' : 'active';
   const ref = expenseRef();
   await ref.set({
     centerId: params.centerId,
@@ -892,12 +904,12 @@ export async function createExpense(params: {
     date,
     createdBy: params.uid,
     createdAt: FieldValue.serverTimestamp(),
-    status: 'active',
+    status,
     ...(note ? { note } : {}),
     ...(method ? { method } : {}),
     ...(methodSplit ? { methodSplit } : {}),
   });
-  return { expenseId: ref.id };
+  return { expenseId: ref.id, status };
 }
 
 export async function cancelExpense(params: {
@@ -914,15 +926,65 @@ export async function cancelExpense(params: {
     const snap = await tx.get(ref);
     const expense = snap.data() as Expense | undefined;
     if (!expense || expense.centerId !== params.centerId) throw new ManagerApiError('Xarajat topilmadi.', 404);
-    if (expense.status !== 'active') throw new ManagerApiError('Bu xarajat allaqachon bekor qilingan.', 400);
     if (expense.payoutId) {
       throw new ManagerApiError("Oylik to'loviga bog'langan xarajatni bekor qilib bo'lmaydi.", 400);
+    }
+    // A still-pending expense may only be withdrawn by the person who
+    // submitted it — "cancel" means "the submitter walks it back"; someone
+    // else's decision on it is an approve/reject, not a cancel.
+    if (expense.status === 'pending_approval') {
+      if (expense.createdBy !== params.uid) {
+        throw new ManagerApiError('Faqat yuborgan shaxs uni bekor qila oladi.', 403);
+      }
+    } else if (expense.status !== 'active') {
+      throw new ManagerApiError('Bu xarajat allaqachon bekor qilingan.', 400);
     }
     tx.update(ref, {
       status: 'cancelled',
       cancelledAt: FieldValue.serverTimestamp(),
       cancelledBy: params.uid,
       cancelReason: reason,
+    });
+  });
+}
+
+/** Manager/director approves an accountant's pending expense (docs/FINANCE.md §9). */
+export async function approveExpense(params: { centerId: string; uid: string; expenseId: string }): Promise<void> {
+  await adminDb.runTransaction(async (tx) => {
+    const ref = expenseRef(params.expenseId);
+    const snap = await tx.get(ref);
+    const expense = snap.data() as Expense | undefined;
+    if (!expense || expense.centerId !== params.centerId) throw new ManagerApiError('Xarajat topilmadi.', 404);
+    if (expense.status !== 'pending_approval') {
+      throw new ManagerApiError('Bu xarajat tasdiq kutmayapti.', 400);
+    }
+    tx.update(ref, { status: 'active', approvedBy: params.uid, approvedAt: FieldValue.serverTimestamp() });
+  });
+}
+
+/** Manager/director rejects an accountant's pending expense (docs/FINANCE.md §9). */
+export async function rejectExpense(params: {
+  centerId: string;
+  uid: string;
+  expenseId: string;
+  reason: string;
+}): Promise<void> {
+  const reason = (params.reason || '').trim().slice(0, 500);
+  if (!reason) throw new ManagerApiError('Rad etish sababi majburiy.', 400);
+
+  await adminDb.runTransaction(async (tx) => {
+    const ref = expenseRef(params.expenseId);
+    const snap = await tx.get(ref);
+    const expense = snap.data() as Expense | undefined;
+    if (!expense || expense.centerId !== params.centerId) throw new ManagerApiError('Xarajat topilmadi.', 404);
+    if (expense.status !== 'pending_approval') {
+      throw new ManagerApiError('Bu xarajat tasdiq kutmayapti.', 400);
+    }
+    tx.update(ref, {
+      status: 'rejected',
+      rejectedBy: params.uid,
+      rejectedAt: FieldValue.serverTimestamp(),
+      rejectReason: reason,
     });
   });
 }
@@ -1147,6 +1209,181 @@ export async function markPayoutPaid(params: { centerId: string; uid: string; pa
     } else {
       tx.update(ref, { status: 'paid', paidAt: todayKey, updatedAt: FieldValue.serverTimestamp() });
     }
+  });
+}
+
+// ─── Employee payroll (docs/EMPLOYEES.md) ─────────────────────────────────────
+// Salary config lives on center_employees/{uid}.salary — the non-teaching-
+// staff analog of center_teachers.salary, but fixed + hourly×hours (from
+// center_staff_attendance) + allowances − deductions, never percent/perLesson
+// (a revenue share or a per-lesson rate has no meaning for a driver). Payouts
+// land in the SAME `center_payouts` collection as teachers, tagged
+// `staffKind: 'employee'` — `markPayoutPaid` above is fully generic (it only
+// reads the payout doc's own teacherId/teacherName/finalAmount) and is reused
+// verbatim, unchanged, for both.
+
+function requireAllowanceLines(raw: unknown, label: string): { label: string; amount: number }[] {
+  if (raw === undefined) return [];
+  if (!Array.isArray(raw)) throw new ManagerApiError(`${label} ro'yxati noto'g'ri.`, 400);
+  if (raw.length > 20) throw new ManagerApiError(`${label} soni juda ko'p.`, 400);
+  return raw.map((line) => {
+    const l = (line ?? {}) as { label?: unknown; amount?: unknown };
+    const amount = requireValidMoney(l.amount, label);
+    const text = typeof l.label === 'string' ? l.label.trim().slice(0, 60) : '';
+    if (!text) throw new ManagerApiError(`${label} nomi majburiy.`, 400);
+    return { label: text, amount };
+  });
+}
+
+export async function updateEmployeeSalary(params: {
+  centerId: string;
+  uid: string;
+  employeeId: string;
+  config: Record<string, unknown>;
+}): Promise<void> {
+  const { centerId, employeeId, config } = params;
+  const ceRef = adminDb.collection('center_employees').doc(employeeId);
+  const ceSnap = await ceRef.get();
+  if (!ceSnap.exists || ceSnap.data()!.centerId !== centerId) {
+    throw new ManagerApiError('Xodim markazingizda topilmadi.', 404);
+  }
+
+  const salary: Record<string, unknown> = {};
+  for (const key of ['fixed', 'hourlyRate'] as const) {
+    if (!(key in config)) continue;
+    const v = config[key];
+    if (v === null || v === 0) salary[key] = FieldValue.delete();
+    else salary[key] = requireValidMoney(v, key === 'fixed' ? 'Fiks oylik' : "Soatlik narx");
+  }
+  if ('allowances' in config) salary.allowances = requireAllowanceLines(config.allowances, "Ustama");
+  if ('deductions' in config) salary.deductions = requireAllowanceLines(config.deductions, 'Ushlab qolish');
+  if (Object.keys(salary).length === 0) throw new ManagerApiError("O'zgartirish uchun maydon yo'q.", 400);
+
+  await ceRef.set({ salary }, { merge: true });
+}
+
+export async function calculateEmployeePayroll(params: {
+  centerId: string;
+  periodKey: string;
+}): Promise<CalculateEmployeePayrollResult> {
+  const { centerId, periodKey } = params;
+  if (!MONTH_KEY_RE.test(periodKey)) throw new ManagerApiError("Davr formati noto'g'ri.", 400);
+  const monthStart = `${periodKey}-01`;
+  const monthEnd = `${periodKey}-31`;
+
+  const ceSnap = await adminDb.collection('center_employees').where('centerId', '==', centerId).get();
+  const employees = ceSnap.docs.map((d) => ({
+    employeeId: d.id,
+    employeeName: (d.data().employeeName as string) || 'Xodim',
+    config: (d.data().salary || {}) as EmployeeSalaryConfig,
+  }));
+
+  // Hours worked this month, from the SAME collection staff attendance already
+  // writes (docs/ATTENDANCE.md) — no new attendance shape, just a new reader.
+  const hoursByEmployee = new Map<string, number>();
+  if (employees.length > 0) {
+    const attSnap = await adminDb
+      .collection('center_staff_attendance')
+      .where('centerId', '==', centerId)
+      .where('date', '>=', monthStart)
+      .where('date', '<=', monthEnd)
+      .get();
+    for (const doc of attSnap.docs) {
+      const s = doc.data();
+      if (typeof s.hoursWorked === 'number' && s.hoursWorked > 0) {
+        hoursByEmployee.set(s.staffUid, (hoursByEmployee.get(s.staffUid) || 0) + s.hoursWorked);
+      }
+    }
+  }
+
+  const payoutSnap = await adminDb
+    .collection('center_payouts')
+    .where('centerId', '==', centerId)
+    .where('periodKey', '==', periodKey)
+    .get();
+  const payoutByEmployee = new Map<string, Payout>();
+  payoutSnap.docs.forEach((d) => {
+    const p = d.data() as Payout;
+    if (p.staffKind === 'employee') payoutByEmployee.set(p.teacherId, { ...p, id: d.id });
+  });
+
+  const rows: EmployeePayrollRow[] = employees.map((e) => {
+    const fixed = e.config.fixed || 0;
+    const hours = hoursByEmployee.get(e.employeeId) || 0;
+    const rate = e.config.hourlyRate || 0;
+    const hourlyAmount = rate ? roundTo1000(rate * hours) : 0;
+    const allowances = e.config.allowances || [];
+    const deductions = e.config.deductions || [];
+    const allowancesTotal = allowances.reduce((s, a) => s + a.amount, 0);
+    const deductionsTotal = deductions.reduce((s, d) => s + d.amount, 0);
+    const breakdown: EmployeePayoutBreakdown = {
+      fixed,
+      hourly: { rate, hours, amount: hourlyAmount },
+      allowances,
+      allowancesTotal,
+      deductions,
+      deductionsTotal,
+    };
+    return {
+      employeeId: e.employeeId,
+      employeeName: e.employeeName,
+      config: e.config,
+      breakdown,
+      calculatedAmount: fixed + hourlyAmount + allowancesTotal - deductionsTotal,
+      payout: payoutByEmployee.get(e.employeeId) || null,
+    };
+  });
+
+  return { periodKey, rows };
+}
+
+export async function saveEmployeePayout(params: {
+  centerId: string;
+  uid: string;
+  employeeId: string;
+  periodKey: string;
+  adjustment?: number;
+  adjustmentNote?: string;
+}): Promise<void> {
+  const adjustment = params.adjustment ?? 0;
+  if (!Number.isInteger(adjustment) || Math.abs(adjustment) > MAX_AMOUNT) {
+    throw new ManagerApiError("Qo'shimcha/jarima summasi noto'g'ri.", 400);
+  }
+  const adjustmentNote = typeof params.adjustmentNote === 'string' ? params.adjustmentNote.trim().slice(0, 500) : '';
+  if (adjustment !== 0 && !adjustmentNote) {
+    throw new ManagerApiError("Qo'shimcha/jarima uchun izoh majburiy.", 400);
+  }
+
+  // Always recompute server-side — the client never sends amounts.
+  const calc = await calculateEmployeePayroll({ centerId: params.centerId, periodKey: params.periodKey });
+  const row = calc.rows.find((r) => r.employeeId === params.employeeId);
+  if (!row) throw new ManagerApiError('Xodim markazingizda topilmadi.', 404);
+  const finalAmount = row.calculatedAmount + adjustment;
+  if (finalAmount < 0) throw new ManagerApiError("Yakuniy summa manfiy bo'lishi mumkin emas.", 400);
+
+  const ref = adminDb.collection('center_payouts').doc(payoutDocId(params.employeeId, params.periodKey));
+  await adminDb.runTransaction(async (tx) => {
+    const snap = await tx.get(ref);
+    const existing = snap.data() as Payout | undefined;
+    if (existing && existing.status === 'paid') {
+      throw new ManagerApiError("To'langan oylikni o'zgartirib bo'lmaydi.", 400);
+    }
+    tx.set(ref, {
+      centerId: params.centerId,
+      teacherId: params.employeeId,
+      teacherName: row.employeeName,
+      periodKey: params.periodKey,
+      staffKind: 'employee',
+      breakdown: row.breakdown,
+      calculatedAmount: row.calculatedAmount,
+      adjustment,
+      ...(adjustmentNote ? { adjustmentNote } : {}),
+      finalAmount,
+      status: 'approved',
+      createdBy: existing?.createdBy || params.uid,
+      createdAt: existing?.createdAt || FieldValue.serverTimestamp(),
+      updatedAt: FieldValue.serverTimestamp(),
+    });
   });
 }
 

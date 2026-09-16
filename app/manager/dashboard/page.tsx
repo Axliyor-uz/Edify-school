@@ -15,12 +15,23 @@ import { useAuth } from "@/lib/AuthContext";
 import { getUserProfile } from "@/services/userService";
 import { useCenterClasses } from "@/hooks/useCenterClasses";
 import { useCenterRooms } from "@/hooks/useCenterRooms";
-import { getTodayKey, parseDateKey } from "@/lib/dateUtils";
+import { getTodayKey, monthKeyOf, parseDateKey } from "@/lib/dateUtils";
 import { fetchCenterSessions, rateOfSessions, tallyStudent, type CenterSession } from "@/services/attendanceService";
-import { fetchOpenCharges, fetchPaymentsForMonth, openAmountOf } from "@/services/financeService";
+import {
+  fetchChargesForMonth,
+  fetchExpensesForMonth,
+  fetchFinanceSettings,
+  fetchOpenCharges,
+  fetchPaymentsForMonth,
+} from "@/services/financeService";
+import { computeFinanceStats, groupExpensesByCategory, buildTrailingMonthKeys } from "@/lib/finance/financeStats";
 import { formatUZS } from "@/lib/finance/money";
 import { PageHeader, EmptyState, Spinner, staggerContainer, staggerItem } from "@/components/manager-ui";
 import { useManagerLanguage, type LangType } from "@/app/manager/_components/ManagerLanguage";
+import { monthLabelOf } from "@/app/manager/_components/monthLabels";
+import RevenueExpenseTrendChart, { type TrendPoint } from "./_components/RevenueExpenseTrendChart";
+import ExpenseCategoryPieChart from "./_components/ExpenseCategoryPieChart";
+import AttendanceTrendChart, { type AttendancePoint } from "./_components/AttendanceTrendChart";
 
 // Locale for the header date line only (attendance time math stays en-GB/Tashkent).
 const DATE_LOCALE: Record<LangType, string> = { uz: "uz-UZ", en: "en-US", ru: "ru-RU" };
@@ -63,6 +74,9 @@ const TRANSLATIONS = {
     paymentsAndDebtors: "To'lovlar va qarzdorlar",
     groupAttendance: "Guruhlar bo'yicha davomat",
     noGroups: "Guruhlar yo'q",
+    revenueExpenseTrend: "Tushum va xarajat (6 oy)",
+    expenseCategories: "Xarajatlar taqsimoti (shu oy)",
+    attendanceTrend: "Davomat dinamikasi (6 oy)",
   },
   en: {
     title: "Dashboard",
@@ -101,6 +115,9 @@ const TRANSLATIONS = {
     paymentsAndDebtors: "Payments and debtors",
     groupAttendance: "Attendance by group",
     noGroups: "No groups",
+    revenueExpenseTrend: "Revenue vs. expenses (6 months)",
+    expenseCategories: "Expense breakdown (this month)",
+    attendanceTrend: "Attendance trend (6 months)",
   },
   ru: {
     title: "Панель управления",
@@ -139,6 +156,9 @@ const TRANSLATIONS = {
     paymentsAndDebtors: "Платежи и должники",
     groupAttendance: "Посещаемость по группам",
     noGroups: "Групп нет",
+    revenueExpenseTrend: "Доход и расход (6 месяцев)",
+    expenseCategories: "Распределение расходов (за этот месяц)",
+    attendanceTrend: "Динамика посещаемости (6 месяцев)",
   },
 };
 type T = typeof TRANSLATIONS.uz;
@@ -164,7 +184,10 @@ function getInitials(name: string): string {
 
 interface FinanceSummary {
   collected: number;
+  charged: number;
   debtTotal: number;
+  expensesTotal: number;
+  profit: number;
   debtorCount: number;
 }
 
@@ -207,6 +230,11 @@ export default function ManagerDashboard() {
   // Month's money snapshot — failure never blocks the attendance widgets.
   const [finance, setFinance] = useState<FinanceSummary | null>(null);
   const [financeLoading, setFinanceLoading] = useState(true);
+  const [expenseCategories, setExpenseCategories] = useState<[string, number][]>([]);
+
+  // Trailing-6-months trend data for the charts below (docs/FINANCE.md §12).
+  const [trendData, setTrendData] = useState<TrendPoint[]>([]);
+  const [attendanceTrendData, setAttendanceTrendData] = useState<AttendancePoint[]>([]);
 
   useEffect(() => {
     if (!centerId) return;
@@ -219,24 +247,79 @@ export default function ManagerDashboard() {
     return () => { mounted = false; };
   }, [centerId, monthStart, today]);
 
+  const currentMonthKey = useMemo(() => monthKeyOf(today), [today]);
+
   useEffect(() => {
     if (!centerId) return;
     let mounted = true;
     setFinanceLoading(true);
-    Promise.all([fetchPaymentsForMonth(centerId, today.slice(0, 7)), fetchOpenCharges(centerId)])
-      .then(([pays, open]) => {
+    fetchFinanceSettings(centerId)
+      .then((settings) =>
+        Promise.all([
+          fetchChargesForMonth(centerId, currentMonthKey, settings.billingAnchor),
+          fetchPaymentsForMonth(centerId, currentMonthKey),
+          fetchOpenCharges(centerId),
+          fetchExpensesForMonth(centerId, currentMonthKey),
+        ])
+      )
+      .then(([charges, monthPayments, openCharges, expenses]) => {
         if (!mounted) return;
-        const confirmed = pays.filter((p) => p.status === "confirmed");
-        setFinance({
-          collected: confirmed.reduce((s, p) => s + (p.type === "refund" ? -p.amount : p.amount), 0),
-          debtTotal: open.reduce((s, c) => s + openAmountOf(c), 0),
-          debtorCount: new Set(open.map((c) => c.studentId)).size,
-        });
+        const stats = computeFinanceStats({ charges, monthPayments, openCharges, expenses });
+        setFinance({ ...stats, debtorCount: new Set(openCharges.map((c) => c.studentId)).size });
+        setExpenseCategories(groupExpensesByCategory(expenses));
       })
       .catch((e) => console.error("Dashboard finance error:", e))
       .finally(() => { if (mounted) setFinanceLoading(false); });
     return () => { mounted = false; };
-  }, [centerId, today]);
+  }, [centerId, currentMonthKey]);
+
+  // Trailing-6-months revenue/expense trend — reuses computeFinanceStats per
+  // month with empty charges/openCharges (only `collected`/`expensesTotal` are
+  // needed here, both derived purely from that month's payments/expenses).
+  useEffect(() => {
+    if (!centerId) return;
+    let mounted = true;
+    const monthKeys = buildTrailingMonthKeys(currentMonthKey, 6);
+    Promise.all(
+      monthKeys.map((mk) =>
+        Promise.all([fetchPaymentsForMonth(centerId, mk), fetchExpensesForMonth(centerId, mk)])
+      )
+    )
+      .then((results) => {
+        if (!mounted) return;
+        setTrendData(
+          results.map(([monthPayments, expenses], i) => {
+            const stats = computeFinanceStats({ charges: [], monthPayments, openCharges: [], expenses });
+            return { label: monthLabelOf(monthKeys[i], lang).split(" ")[0], revenue: stats.collected, expenses: stats.expensesTotal };
+          })
+        );
+      })
+      .catch((e) => console.error("Dashboard trend error:", e));
+    return () => { mounted = false; };
+  }, [centerId, currentMonthKey, lang]);
+
+  // Trailing-6-months attendance-rate trend — a SEPARATE, wider session fetch
+  // (the existing `sessions` state below stays current-month-only, so it never
+  // affects `monthRate`/`chronic`/`groupRates`).
+  useEffect(() => {
+    if (!centerId) return;
+    let mounted = true;
+    const monthKeys = buildTrailingMonthKeys(currentMonthKey, 6);
+    const rangeStart = `${monthKeys[0]}-01`;
+    fetchCenterSessions(centerId, rangeStart, today)
+      .then((trendSessions) => {
+        if (!mounted) return;
+        setAttendanceTrendData(
+          monthKeys.map((mk) => {
+            const bucket = trendSessions.filter((s) => s.date.startsWith(mk));
+            const endOfBucket = mk === currentMonthKey ? today : `${mk}-31`;
+            return { label: monthLabelOf(mk, lang).split(" ")[0], rate: rateOfSessions(bucket, endOfBucket).rate };
+          })
+        );
+      })
+      .catch((e) => console.error("Dashboard attendance trend error:", e));
+    return () => { mounted = false; };
+  }, [centerId, currentMonthKey, today, lang]);
 
   // Class-roster students — the ones attendance math can say anything about.
   const uniqueStudentIds = useMemo(() => {
@@ -515,6 +598,31 @@ export default function ManagerDashboard() {
           )}
         </div>
       </div>
+
+      {/* Trend charts (docs/FINANCE.md §12) */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="space-y-3">
+          <h2 className="text-[16px] font-bold text-on-surface tracking-tight">{t.revenueExpenseTrend}</h2>
+          <div className="bg-surface-container-lowest border border-outline-variant rounded-m3-xl p-3">
+            <RevenueExpenseTrendChart data={trendData} />
+          </div>
+        </div>
+        <div className="space-y-3">
+          <h2 className="text-[16px] font-bold text-on-surface tracking-tight">{t.attendanceTrend}</h2>
+          <div className="bg-surface-container-lowest border border-outline-variant rounded-m3-xl p-3">
+            <AttendanceTrendChart data={attendanceTrendData} />
+          </div>
+        </div>
+      </div>
+
+      {expenseCategories.length > 0 && (
+        <div className="space-y-3">
+          <h2 className="text-[16px] font-bold text-on-surface tracking-tight">{t.expenseCategories}</h2>
+          <div className="bg-surface-container-lowest border border-outline-variant rounded-m3-xl p-3">
+            <ExpenseCategoryPieChart byCategory={expenseCategories} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

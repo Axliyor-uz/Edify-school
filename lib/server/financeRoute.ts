@@ -11,8 +11,16 @@ import { OfficeApiError, requireCenterOffice } from '@/lib/server/verifyCenterOf
  *    A director is refused here, which is what keeps that role read-only.
  *  - `'any'` — any office role. Reserved for routes that only COMPUTE and
  *    write nothing (payroll/calculate), so a director can see live salaries.
+ *  - `'director'` — the director too, accountant excluded. Reserved for the
+ *    expense approve/reject routes (docs/FINANCE.md §9): the director gets a
+ *    genuinely new WRITE capability there (approve/reject only, never create),
+ *    so it deliberately does not reuse `'any'`.
  */
-export type FinanceOfficeAccess = 'accountant' | 'any';
+export type FinanceOfficeAccess = 'accountant' | 'any' | 'director';
+
+/** Who actually resolved this request — `createExpense` branches on it to
+ *  decide the starting `status` (docs/FINANCE.md §9). */
+export type FinanceCallerRole = 'manager' | 'director' | 'accountant';
 
 /**
  * Resolve the calling center for a finance route.
@@ -26,17 +34,17 @@ export type FinanceOfficeAccess = 'accountant' | 'any';
 async function resolveFinanceCaller(
   request: Request,
   office?: FinanceOfficeAccess,
-): Promise<{ uid: string; centerId: string }> {
+): Promise<{ uid: string; centerId: string; callerRole: FinanceCallerRole }> {
   try {
-    return await requireActiveCenterManager(request);
+    const ctx = await requireActiveCenterManager(request);
+    return { ...ctx, callerRole: 'manager' };
   } catch (error) {
     if (!office) throw error;
     if (!(error instanceof ManagerApiError) || error.status !== 403) throw error;
-    const { uid, centerId } = await requireCenterOffice(
-      request,
-      office === 'accountant' ? ['accountant'] : undefined,
-    );
-    return { uid, centerId };
+    const roles: ('director' | 'accountant')[] | undefined =
+      office === 'accountant' ? ['accountant'] : office === 'director' ? ['director'] : undefined;
+    const { uid, centerId, staffRole } = await requireCenterOffice(request, roles);
+    return { uid, centerId, callerRole: staffRole };
   }
 }
 
@@ -51,7 +59,7 @@ async function resolveFinanceCaller(
  */
 export function financePostHandler(
   label: string,
-  op: (ctx: { uid: string; centerId: string }, body: any) => Promise<unknown>,
+  op: (ctx: { uid: string; centerId: string; callerRole: FinanceCallerRole }, body: any) => Promise<unknown>,
   options?: { office?: FinanceOfficeAccess }
 ) {
   return async function POST(request: Request) {

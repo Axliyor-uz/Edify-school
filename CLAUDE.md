@@ -24,6 +24,9 @@ This repo maintains verified per-domain docs in [docs/](docs/) so an agent can l
 | `app/teacher/*` — test creation, classes, grading, analytics, subscription | [docs/TEACHER.md](docs/TEACHER.md) |
 | AI routes, credit limits, `lib/ai/*`, `/api/analyze`, TTS | [docs/AI.md](docs/AI.md) |
 | `app/manager/*` core — approval gate, groups, teachers, enrollment, walk-in | [docs/MANAGER.md](docs/MANAGER.md) |
+| **Non-teaching employees** (receptionist, cleaner, security, driver, HR…) — `center_employees`, no login account, payroll via `center_payouts` | [docs/EMPLOYEES.md](docs/EMPLOYEES.md) |
+| **Director & buxgalter back-office** — the `center_staff` link doc, `app/office/*`, the `isCenterOffice()` rules helper, `requireCenterOffice()`, office access on the finance routes, `/api/admin/centers/[id]/staff` | [docs/OFFICE.md](docs/OFFICE.md) |
+| **"My Mistakes"** — the student's private bucket of wrong/blank questions + the "practise 5 similar" lookup: `student_mistakes`, `app/(student)/mistakes/*`, `lib/mistakes.ts`, `services/mistakeService.ts`, and the capture hook in the SAT / Milliy / Rasch submit paths | [docs/MISTAKES.md](docs/MISTAKES.md) |
 | Attendance (student + staff) | [docs/ATTENDANCE.md](docs/ATTENDANCE.md) |
 | **Parent access by QR** — `parent_links`, `app/p/*`, `app/manager/parents/*`, `/api/parent/*`, `/api/manager/parent-links/*` | [docs/PARENTS.md](docs/PARENTS.md) |
 | Rooms / timetable / schedule conflicts | [docs/ROOMS.md](docs/ROOMS.md) |

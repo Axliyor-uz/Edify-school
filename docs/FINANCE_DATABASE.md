@@ -2,7 +2,7 @@
 
 > **Agent workflow:** read this (and [FINANCE.md](FINANCE.md)) BEFORE touching finance code; update it in the same change whenever a UI action's writes change. Simple map of every Firestore collection the **Moliya** module touches, and — for every button in the UI — exactly which documents are written. Design decisions and deeper rules live in [FINANCE.md](FINANCE.md). Index: [README.md](README.md).
 
-**Last verified:** 2026-09-14 (`center_payments`/`center_expenses` gained an optional `methodSplit` — see docs/FINANCE.md §4.2a; previously 2026-07-12, commit `7c31a96`).
+**Last verified:** 2026-09-16 (`center_expenses` gained the approval workflow — `pending_approval`/`rejected` statuses, see docs/FINANCE.md §9; previously 2026-09-14, `methodSplit` §4.2a; previously 2026-07-12, commit `7c31a96`).
 
 ---
 
@@ -100,10 +100,11 @@ why clicking "Yaratish" twice can never create the same charge twice.
 | `teacherId`, `payoutId` | set only on salary expenses — links back to the payout. **Salary-linked expenses cannot be cancelled manually** |
 | `status` | `'active'` or `'cancelled'` (+ audit fields) |
 
-### 2.7 `center_payouts/{teacherUid}_{YYYY-MM}` 🔒 — one teacher's salary for one month
+### 2.7 `center_payouts/{teacherUid}_{YYYY-MM}` 🔒 — one teacher's (or employee's) salary for one month
 | Field | Meaning |
 |---|---|
-| `breakdown` | the open formula: `fixed` + `percent {rate, base, baseAmount, amount}` + `perLesson {count, rate, amount}` |
+| `staffKind` | 🟢 (2026-09-16) `'teacher'` (absent = default) or `'employee'` — see docs/EMPLOYEES.md. `teacherId`/`teacherName` are reused verbatim for an employee's roster-doc-id/name |
+| `breakdown` | teacher: `fixed` + `percent {rate, base, baseAmount, amount}` + `perLesson {count, rate, amount}`. Employee: `fixed` + `hourly {rate, hours, amount}` + `allowances[]`/`allowancesTotal` + `deductions[]`/`deductionsTotal` |
 | `calculatedAmount`, `adjustment`, `finalAmount` | computed sum ± bonus/jarima (note required) |
 | `status` | `'approved'` (saved, editable) → `'paid'` (**immutable**, salary expense created) |
 | `paidAt`, `expenseId` | set when marked paid |
@@ -113,11 +114,20 @@ why clicking "Yaratish" twice can never create the same charge twice.
 |---|---|
 | `salary` 🔒 | `{fixed?, percent?, perLesson?}` — the teacher's salary formula. Payout = sum of whichever parts are set. Edited from the Oyliklar tab ⚙ button |
 
+### 2.8a `center_employees/{autoId}` — one finance field on an existing collection (🟢 2026-09-16, docs/EMPLOYEES.md)
+Otherwise a manager-panel roster collection (client-writable, `isActiveCenterManager` rules — NOT
+finance-gated); only the `salary` field is finance's to write.
+| Field | Meaning |
+|---|---|
+| `salary` 🔒 | `{fixed?, hourlyRate?, allowances?, deductions?}` — the employee's salary formula. Payout = fixed + hourlyRate×hours + allowances − deductions. Edited from the employee's info panel, via `/api/manager/finance/employee-salary` |
+
 ### 2.9 Read-only neighbors 👁
 | Collection | Why finance reads it |
 |---|---|
 | `center_attendance` | per-lesson salaries count `held`/`makeup` lessons; debtor list shows attendance % |
+| `center_staff_attendance` | 🟢 employee payroll sums `hoursWorked` for the month (docs/EMPLOYEES.md) |
 | `center_teachers` | finding the center's classes; payroll teacher list |
+| `center_employees` | payroll employee list (roster fields other than `salary`) |
 | `users` | student display names (snapshotted into charges/payments) |
 | `centers` | the API guard checks `status == 'active'` before any money operation |
 
@@ -169,8 +179,10 @@ why clicking "Yaratish" twice can never create the same charge twice.
 ### Xarajatlar tab
 | Action | Writes |
 |---|---|
-| **Xarajat qo'shish** | creates a `center_expenses` doc |
-| **↩ Xarajatni bekor qilish** | that `center_expenses` doc (`status: cancelled`; refused for salary-linked ones) |
+| **Xarajat qo'shish** | creates a `center_expenses` doc — `status: 'active'` if a manager/director records it, `'pending_approval'` if a buxgalter does (2026-09-16) |
+| **✓ Tasdiqlash** (manager/director, on a pending row) | that doc (`status: active`, `approvedBy/At`) |
+| **✗ Rad etish** (manager/director, on a pending row) | that doc (`status: rejected`, `rejectedBy/At/rejectReason`) |
+| **↩ Xarajatni bekor qilish** | that `center_expenses` doc (`status: cancelled`; refused for salary-linked ones; on a `pending_approval` row, only the submitter may) |
 
 ### O'quvchilar page → student panel (Moliya section)
 | Action | Writes |
@@ -208,6 +220,9 @@ center_payments:   confirmed ──cancel──▶ cancelled (allocations revers
 center_payouts:    (live calculation) ──Tasdiqlash──▶ approved ──To'landi──▶ paid (immutable)
 
 center_expenses:   active ──cancel──▶ cancelled    (salary-linked: protected)
+                   pending_approval ──approve──▶ active
+                                    ──reject───▶ rejected
+                                    ──cancel───▶ cancelled   (submitter-only self-withdraw)
 ```
 
 **The balance invariant** (kept true by every transaction above):

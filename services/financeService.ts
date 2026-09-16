@@ -19,9 +19,11 @@ import {
   DEFAULT_FINANCE_SETTINGS,
   studentFinanceDocId,
   type BillingAnchor,
+  type CalculateEmployeePayrollResult,
   type CalculatePayrollResult,
   type Charge,
   type Expense,
+  type ExpenseStatus,
   type FinanceSettings,
   type GenerateChargesRequest,
   type GenerateChargesResult,
@@ -209,10 +211,16 @@ export const createExpenseApi = (body: {
   note?: string;
   method?: PaymentMethod;
   methodSplit?: PaymentMethodSplit[];
-}) => apiFetch<{ expenseId: string }>("/api/manager/finance/expenses", { method: "POST", body });
+}) => apiFetch<{ expenseId: string; status: ExpenseStatus }>("/api/manager/finance/expenses", { method: "POST", body });
 
 export const cancelExpenseApi = (expenseId: string, reason: string) =>
   apiFetch("/api/manager/finance/expenses/cancel", { method: "POST", body: { expenseId, reason } });
+
+export const approveExpenseApi = (expenseId: string) =>
+  apiFetch("/api/manager/finance/expenses/approve", { method: "POST", body: { expenseId } });
+
+export const rejectExpenseApi = (expenseId: string, reason: string) =>
+  apiFetch("/api/manager/finance/expenses/reject", { method: "POST", body: { expenseId, reason } });
 
 export const calculatePayrollApi = (periodKey: string) =>
   apiFetch<CalculatePayrollResult>("/api/manager/finance/payroll/calculate", { method: "POST", body: { periodKey } });
@@ -225,3 +233,24 @@ export const markPayoutPaidApi = (payoutId: string) =>
 
 export const saveTeacherSalaryApi = (teacherId: string, config: Partial<Record<keyof TeacherSalaryConfig, number | null>>) =>
   apiFetch("/api/manager/finance/teacher-salary", { method: "POST", body: { teacherId, config } });
+
+// ─── Employee payroll (docs/EMPLOYEES.md) — mirrors the teacher wrappers above,
+// reusing markPayoutPaidApi verbatim (the route is fully staff-agnostic). ────
+
+export const calculateEmployeePayrollApi = (periodKey: string) =>
+  apiFetch<CalculateEmployeePayrollResult>("/api/manager/finance/payroll/employees/calculate", {
+    method: "POST",
+    body: { periodKey },
+  });
+
+export const saveEmployeePayoutApi = (body: {
+  employeeId: string;
+  periodKey: string;
+  adjustment?: number;
+  adjustmentNote?: string;
+}) => apiFetch("/api/manager/finance/payroll/employees/save", { method: "POST", body });
+
+export const saveEmployeeSalaryApi = (
+  employeeId: string,
+  config: Partial<{ fixed: number | null; hourlyRate: number | null; allowances: { label: string; amount: number }[]; deductions: { label: string; amount: number }[] }>,
+) => apiFetch("/api/manager/finance/employee-salary", { method: "POST", body: { employeeId, config } });

@@ -62,6 +62,13 @@ export function addMonthsClamped(anchorKey: string, n: number): string {
   return formatDateKey(firstOfTarget);
 }
 
+/** "2026-07" shifted by `delta` months → "2026-08" (or "2026-06"). Lives here
+ *  (not route-local `financeFormat.ts`) since it has no `LangType` dependency
+ *  and `app/manager/dashboard/page.tsx` needs it too (docs/FINANCE.md §12). */
+export function shiftMonthKey(monthKey: string, delta: number): string {
+  return addMonthsClamped(`${monthKey}-01`, delta).slice(0, 7);
+}
+
 /**
  * Rolling mode: every cycle from the enrollment date whose start is <= todayKey.
  * The caller filters out cycles that already have a charge (deterministic ids),

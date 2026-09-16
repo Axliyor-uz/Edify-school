@@ -215,7 +215,17 @@ export interface StudentFinancePatch {
 
 // ─── Expenses (Phase 3) ───────────────────────────────────────────────────────
 
-export type ExpenseStatus = "active" | "cancelled";
+/**
+ * `active`/`cancelled` are the original two. `pending_approval`/`rejected`
+ * (2026-09-16, docs/FINANCE.md §9) are new: an expense the ACCOUNTANT records
+ * starts as `pending_approval` and needs a manager/director to approve
+ * (→ `active`) or reject (→ `rejected`) it — the manager's/director's own
+ * `createExpense` calls are unaffected and still go straight to `active`.
+ * ⚠️ Every money-sum site in the app filters the exact string `'active'`
+ * (never `!== 'cancelled'`), so both new statuses are automatically excluded
+ * from totals — do not "helpfully" widen those filters.
+ */
+export type ExpenseStatus = "active" | "pending_approval" | "rejected" | "cancelled";
 
 /** Doc: center_expenses/{autoId} — append-only, cancel-not-delete. Salary payouts land here too. */
 export interface Expense {
@@ -238,6 +248,13 @@ export interface Expense {
   createdBy: string;
   createdAt?: any;
   status: ExpenseStatus;
+  /** Set when a manager/director approves a `pending_approval` expense. */
+  approvedBy?: string;
+  approvedAt?: any;
+  /** Set when a manager/director rejects a `pending_approval` expense. */
+  rejectedBy?: string;
+  rejectedAt?: any;
+  rejectReason?: string;
   cancelledAt?: any;
   cancelledBy?: string;
   cancelReason?: string;
@@ -261,16 +278,52 @@ export interface PayoutBreakdown {
   perLesson: { count: number; rate: number; amount: number };
 }
 
+/**
+ * docs/EMPLOYEES.md — the non-teaching-staff salary formula. Stored as the
+ * `salary` map on `center_employees/{uid}` (mirrors `center_teachers.salary`,
+ * but no `percent`/`perLesson` — a revenue share or a per-lesson rate has no
+ * meaning for a driver or cleaner). Payout = fixed + hourlyRate×hours(month,
+ * from center_staff_attendance) + Σallowances − Σdeductions.
+ */
+export interface EmployeeSalaryConfig {
+  fixed?: number;
+  hourlyRate?: number;
+  allowances?: { label: string; amount: number }[];
+  deductions?: { label: string; amount: number }[];
+}
+
+export interface EmployeePayoutBreakdown {
+  fixed: number;
+  hourly: { rate: number; hours: number; amount: number };
+  allowances: { label: string; amount: number }[];
+  allowancesTotal: number;
+  deductions: { label: string; amount: number }[];
+  deductionsTotal: number;
+}
+
 export type PayoutStatus = "approved" | "paid";
 
-/** Doc: center_payouts/{teacherUid}_{YYYY-MM} — saved (approved) salary for one teacher+month. */
+/** Which roster a payout's `teacherId` names — absent on every payout written
+ *  before this field existed, which means `'teacher'` (docs/EMPLOYEES.md). */
+export type StaffKind = "teacher" | "employee";
+
+/**
+ * Doc: center_payouts/{teacherUid}_{YYYY-MM} — saved (approved) salary for one
+ * teacher/employee+month. ⚠️ `teacherId`/`teacherName` are reused verbatim for
+ * an EMPLOYEE's uid/name when `staffKind === 'employee'` — a deliberate reuse
+ * (not a parallel `employeeId`/`employeeName` pair), since `markPayoutPaid`
+ * and every payout reader already key off these two fields regardless of who
+ * they belong to.
+ */
 export interface Payout {
   id: string;
   centerId: string;
   teacherId: string;
   teacherName: string;
   periodKey: string; // "YYYY-MM" — payroll is always calendar-monthly
-  breakdown: PayoutBreakdown;
+  /** Discriminates which breakdown shape `breakdown` actually is. */
+  staffKind?: StaffKind;
+  breakdown: PayoutBreakdown | EmployeePayoutBreakdown;
   calculatedAmount: number;
   adjustment: number; // signed: bonus (+) / penalty (−)
   adjustmentNote?: string;
@@ -284,6 +337,21 @@ export interface Payout {
 }
 
 export const payoutDocId = (teacherId: string, periodKey: string) => `${teacherId}_${periodKey}`;
+
+/** One row of the employee payroll screen: live calculation + the saved payout if any. */
+export interface EmployeePayrollRow {
+  employeeId: string;
+  employeeName: string;
+  config: EmployeeSalaryConfig;
+  breakdown: EmployeePayoutBreakdown;
+  calculatedAmount: number;
+  payout: Payout | null;
+}
+
+export interface CalculateEmployeePayrollResult {
+  periodKey: string;
+  rows: EmployeePayrollRow[];
+}
 
 /** One row of the payroll screen: live calculation + the saved payout if any. */
 export interface PayrollRow {
