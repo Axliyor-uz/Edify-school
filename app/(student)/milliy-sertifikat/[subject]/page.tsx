@@ -30,6 +30,8 @@ import {
 import {
   Banner, Button, Card, EmptyState, FilterChip, Page, cn,
 } from '@/components/student-ui';
+import { examMistakes } from '@/lib/mistakes';
+import { recordMistakes } from '@/services/mistakeService';
 import type { ExamQuestion } from '@/types/Exam';
 import type { MilliyQuiz, MilliyQuizResult } from '@/types/MilliyQuiz';
 import type { Lang } from '@/types/Math';

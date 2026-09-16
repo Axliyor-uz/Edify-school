@@ -16,7 +16,7 @@ import { toLocalized } from './questionSchema';
 import { normalizeAnswer } from './Examanswers';
 import type { NormalizedQuestion } from '@/types/question';
 import type { Lang, LocalizedText } from '@/types/Math';
-import type { SatMathDomain, SatModuleRoute, SatQuizItem } from '@/types/SatQuiz';
+import type { SatMathDomain, SatModuleRoute, SatQuizItem, SatRwDomain } from '@/types/SatQuiz';
 
 // ─── the domain registry ─────────────────────────────────────────────────────
 
@@ -44,6 +44,40 @@ export const findSatMathDomain = (id: string): SatMathDomainInfo | undefined =>
 
 export const SAT_MATH_TAXONOMY_SLUG = 'sat-matematika';
 
+/**
+ * The "no owner" sentinel used across the SAT feature for platform-owned
+ * content — `sat_math_tests`' own bundled sample test uses `teacherId: ''`
+ * (`scripts/createSatSampleTest.ts`); the donated 1,443-question SAT English
+ * bank uses the SAME empty string as `teacher_questions.creatorId`
+ * (`scripts/importSATEnglishQuestions.mjs`). `fetchMyQuestionsPage('')` reads
+ * exactly this pool — `teacher_questions` rules are `allow read: if isAuth()`
+ * for every signed-in user, so no rules change was needed to make one
+ * teacher's picker see another "teacher"'s (here, nobody's) questions.
+ */
+export const SAT_PLATFORM_CREATOR_ID = '';
+
+export interface SatRwDomainInfo {
+  id: SatRwDomain;
+  name: LocalizedText;
+}
+
+/**
+ * The 4 official digital SAT Reading & Writing domains, in College Board's
+ * own published order. Mirrors the topics under the `sat-ingliz-tili` subject
+ * in `data/question_topics.json` (`scripts/addSATEnglishTopics.mjs`).
+ */
+export const SAT_RW_DOMAINS: SatRwDomainInfo[] = [
+  { id: 'information-and-ideas', name: toLocalized('Information and Ideas') },
+  { id: 'craft-and-structure', name: toLocalized('Craft and Structure') },
+  { id: 'expression-of-ideas', name: toLocalized('Expression of Ideas') },
+  { id: 'standard-english-conventions', name: toLocalized('Standard English Conventions') },
+];
+
+export const findSatRwDomain = (id: string): SatRwDomainInfo | undefined =>
+  SAT_RW_DOMAINS.find((d) => d.id === id);
+
+export const SAT_RW_TAXONOMY_SLUG = 'sat-ingliz-tili';
+
 // ─── the section registry — which SAT sections exist ─────────────────────────
 
 export type SatSectionKind = 'live' | 'soon';
@@ -64,11 +98,15 @@ export interface SatSection {
  * (`app/teacher/sat/page.tsx`, `app/(student)/sat/page.tsx`) read this list, so
  * a section can never be live in one place and missing from the other.
  *
- * Reading & Writing has NO taxonomy and NO test-creation code yet — a 1,443
- * question bank exists (`questions.json`, repo root, 4 official R&W domains)
- * but is deliberately unwired in this pass (docs/SAT_QUIZ.md). Adding it later
- * is meant to be a registry flip plus a taxonomy + an import script, exactly
- * like a Milliy sertifikat subject going from `soon` to `generic`.
+ * Reading & Writing went live the same way every Milliy sertifikat subject
+ * went from `soon` to `generic`: a taxonomy (`sat-ingliz-tili`, 4 domains,
+ * `scripts/addSATEnglishTopics.mjs`), an import script
+ * (`scripts/importSATEnglishQuestions.mjs` — the donated 1,443-question bank,
+ * `questions.json` at the repo root, imported as PLATFORM-owned
+ * `teacher_questions`, `creatorId: SAT_PLATFORM_CREATOR_ID`), and this
+ * registry flip. It reuses the whole Math builder/runner/result SHAPE (own
+ * collections `sat_english_tests`/`sat_english_results`, own code namespace,
+ * own localStorage session key) — see docs/SAT_QUIZ.md.
  */
 export const SAT_SECTIONS: SatSection[] = [
   {
@@ -80,10 +118,10 @@ export const SAT_SECTIONS: SatSection[] = [
   },
   {
     id: 'reading-writing',
-    kind: 'soon',
+    kind: 'live',
     name: { uz: 'Reading & Writing', ru: 'Reading & Writing', en: 'Reading & Writing' },
-    teacherHref: null,
-    studentHref: null,
+    teacherHref: '/teacher/sat/english',
+    studentHref: '/sat/english',
   },
 ];
 
@@ -105,7 +143,9 @@ export function satQuizItem(n: NormalizedQuestion): SatQuizItem | null {
   if (n.isBlock) return null;
   if (n.type !== 'mcq' && n.type !== 'numeric') return null;
 
-  const domain = findSatMathDomain(n.topicId);
+  // Tries the Math registry first, then Reading & Writing's — a bank question
+  // only ever belongs to one taxonomy subject, so at most one of these matches.
+  const domain = findSatMathDomain(n.topicId) ?? findSatRwDomain(n.topicId);
 
   const item: SatQuizItem = {
     id: n.id,
@@ -231,3 +271,8 @@ export function satItemPreview(q: SatQuizItem, lang: Lang, max = 110): string {
 /** True for the two question types SAT Math authors — used to filter a bank picker. */
 export const isSatAuthorableType = (n: NormalizedQuestion): boolean =>
   !n.isBlock && (n.type === 'mcq' || n.type === 'numeric');
+
+/** SAT English authors ONLY `mcq` — the real digital SAT Reading & Writing
+ *  section has no grid-in/"student-produced response" questions, unlike Math. */
+export const isSatEnglishAuthorableType = (n: NormalizedQuestion): boolean =>
+  !n.isBlock && n.type === 'mcq';

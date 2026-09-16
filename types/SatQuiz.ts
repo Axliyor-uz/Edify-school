@@ -1,9 +1,19 @@
 // types/SatQuiz.ts
 //
-// A teacher-built, ADAPTIVE SAT Math test: Module 1 (fixed) then Module 2,
-// where the Module 2 pool served (Easier vs Harder) depends on the student's
+// A teacher-built, ADAPTIVE SAT test: Module 1 (fixed) then Module 2, where
+// the Module 2 pool served (Easier vs Harder) depends on the student's
 // Module 1 score — the real digital SAT's own per-module adaptivity. Contract
 // + traps: docs/SAT_QUIZ.md.
+//
+// ⚠️ Shared by BOTH SAT subjects — Math and English (Reading & Writing).
+// `SatMathTest`/`SatMathTestDraft`/`SatMathResult` keep their "Math" names
+// (touching every existing import for a rename was not worth it) but the
+// shapes are subject-agnostic and are reused AS-IS for
+// `sat_english_tests`/`sat_english_results` — only the `SatDomain` union
+// inside `SatQuizItem.domain`/`SatMathResult.domains` actually varies per
+// subject. Each subject still gets its OWN Firestore collections, own
+// localStorage session key and own 6-digit code namespace — "own everything"
+// except these type definitions.
 //
 // ⚠️ Deliberately NOT `ExamQuestion`/`teacher_rasch_quizzes`-shaped. Those types
 // carry blueprint/`testType` (Y-1/Y-2/O) and block machinery
@@ -28,6 +38,19 @@ export type SatMathDomain =
   | 'problem-solving-and-data-analysis'
   | 'geometry-and-trigonometry';
 
+/** The 4 official digital SAT Reading & Writing domains —
+ *  `data/question_topics.json`'s `sat-ingliz-tili` topic slugs. See
+ *  `lib/SatMathQuiz.ts::SAT_RW_DOMAINS`. */
+export type SatRwDomain =
+  | 'information-and-ideas'
+  | 'craft-and-structure'
+  | 'expression-of-ideas'
+  | 'standard-english-conventions';
+
+/** Either subject's domain — `SatQuizItem`/`SatMathResult` are shared by
+ *  BOTH SAT Math and SAT English (own Firestore collections, same shape). */
+export type SatDomain = SatMathDomain | SatRwDomain;
+
 /** Which Module 2 pool a student was served, decided from their Module 1 score. */
 export type SatModuleRoute = 'easier' | 'harder';
 
@@ -42,7 +65,7 @@ export interface SatQuizItem {
   qType: 'mcq' | 'numeric';
 
   /** The bank question's own topic slug + label, denormalized for the results page. */
-  domain: SatMathDomain;
+  domain: SatDomain;
   domainLabel: LocalizedText;
 
   difficultyId: number;
@@ -152,8 +175,33 @@ export interface SatMathResult {
    * (`lib/SATscore.ts::estimateScaledScore`), NOT College Board's proprietary
    * IRT-equated score. Never present this as an official/equated result —
    * see docs/SAT_QUIZ.md.
+   *
+   * ⚠️ Since 2026-09-16 this is the MIDPOINT of `scoreBand` (a published
+   * conversion curve). Sittings submitted before that date hold a number from
+   * the older straight-line model and are NOT comparable — see lib/SATscore.ts.
    */
   scaledScore: number;
+
+  /**
+   * The estimated scaled-score RANGE this sitting falls in, e.g.
+   * `{lower: 640, upper: 700}` — how College Board itself reports a
+   * practice-test estimate. ⚠️ Optional and additive-only (2026-09-16): a
+   * sitting from before this existed has none, and readers must fall back to
+   * showing `scaledScore` alone rather than inventing a band around it.
+   */
+  scoreBand?: { lower: number; upper: number };
+
+  /**
+   * Ids of questions the student left BLANK — the score report's third state,
+   * beside right and wrong. `items` alone cannot express this: it stores `0`
+   * for a blank exactly as it does for a wrong answer, and "you left 6 empty"
+   * is different coaching from "you got 6 wrong".
+   *
+   * ⚠️ Optional and additive-only (2026-09-16); absent on older sittings, which
+   * must render as "unknown", never as "zero blanks". A blank still scores 0 —
+   * this changes reporting only, never the grade.
+   */
+  omitted?: string[];
 
   durationSec: number;
   /** Epoch ms — matches every other exam-side timestamp (docs/DATA_MODEL.md). */
@@ -171,7 +219,7 @@ export interface SatMathResult {
   items?: Record<string, number>;
 
   /** Per-domain raw counts. A domain neither module touched is ABSENT, never `{0,0}`. */
-  domains?: Partial<Record<SatMathDomain, { correct: number; total: number }>>;
+  domains?: Partial<Record<SatDomain, { correct: number; total: number }>>;
 }
 
 // ─── the browser-side sitting (lib/SatSession.ts) ────────────────────────────

@@ -2,7 +2,7 @@
 
 > **Agent workflow:** read this BEFORE touching auth, signup, login, role guards, SSO, or `firestore.rules` helper functions. Update this doc in the same change whenever you alter behavior described here. Index of all docs: [README.md](README.md).
 
-**Last verified:** 2026-07-13.
+**Last verified:** 2026-09-15 (office roles — [OFFICE.md](OFFICE.md); previously 2026-07-13).
 
 ## Purpose & scope
 
@@ -26,15 +26,17 @@ How users sign up, log in, get a role, and get authorized — client-side (layou
 | `lib/sso.ts` + `app/api/sso/token/route.ts` | SSO custom-token mint for partner apps (e.g. tez-yozish typing trainer) |
 | `lib/server/verifySuperAdmin.ts` | `requireSuperAdmin(request)` — gates every `/api/admin/*` route |
 | `lib/server/verifyCenterManager.ts` | `requireActiveCenterManager(request)` — gates every `/api/manager/*` route; returns `{uid, centerId}` |
+| `lib/server/verifyCenterOffice.ts` | `requireCenterOffice(request, roles?)` — director/buxgalter guard, anchored on `center_staff/{uid}` ([OFFICE.md](OFFICE.md)) |
 | `lib/adminApi.ts` / `lib/managerApi.ts` | Client fetch wrappers attaching `Authorization: Bearer <idToken>`. **`managerApiFetch` is a re-export alias of `adminApiFetch`** — same client code; only the server-side verifier differs |
 | `firestore.rules` (top) | Role helper functions (see below) |
 
 **Not auth despite the name:** `lib/api.ts` is a syllabus-name→ID lookup. **Stale notes, do not trust:** `lib/aouth.txt`, `lib/fireba.md` (old "WASPAI" design docs — predate manager/admin roles, wrong redirect paths).
 
-## The two authorization mechanisms (never confuse them)
+## The authorization mechanisms (never confuse them)
 
 1. **`super_admin`** — Firebase **custom claim**. Read via `getIdTokenResult()` client-side, `decoded.super_admin === true` server-side, `request.auth.token.super_admin` in rules. **No code in this repo sets it** — it is provisioned out-of-band (gcloud/admin script). God-mode rule: `match /{document=**} { allow read, write: if isSuperAdmin(); }` (firestore.rules:58-60).
 2. **student / teacher / manager** — plain **`role` field on `users/{uid}`** (no claim). Checked by layouts via `getUserProfile()`.
+3. **director / accountant (buxgalter)** — the back-office roles ([OFFICE.md](OFFICE.md), 2026-09-15). ⚠️ **`users.role` is a REDIRECT HINT ONLY for these two**; the real boundary is the Admin-SDK-only link doc **`center_staff/{uid}`** (doc id == uid), checked by `isCenterOffice()` in rules and `requireCenterOffice()` on the server — the `center_teachers` pattern. Provisioned **only** by a super admin via `POST /api/admin/centers/{id}/staff`; the rules' `users` create allowlist deliberately still excludes both values, so nobody can self-serve one.
 
 ## Flows
 
@@ -74,7 +76,7 @@ Both paths then run the same post-sign-in precedence:
 1. SSO `returnTo` pending → `completeSsoRedirect` and stop.
 2. `getIdTokenResult(true)` → `super_admin` claim → `/admin`.
 3. `users/{uid}` doc; missing → redirect to `/auth/complete-profile` (resume onboarding — see Google sign-in).
-4. `role`: teacher → `/teacher/dashboard`, manager → `/manager/dashboard`, else `/dashboard`.
+4. `role`: teacher → `/teacher/dashboard`, manager → `/manager/dashboard`, **director|accountant → `/office`** ([OFFICE.md](OFFICE.md) — a hint only; that layout re-checks `center_staff`), else `/dashboard`.
 
 Already-signed-in users landing on the login page with `?returnTo=` are auto-SSO-redirected (one-shot `onAuthStateChanged`).
 
@@ -97,6 +99,7 @@ Security invariant: the caller proves identity with its own ID token, so SSO can
 | `app/(student)/layout.tsx` | `role` from profile | manager/teacher → their dashboards. ⚠️ **Fails OPEN**: profile-read error → `setIsAuthorized(true)` |
 | `app/teacher/layout.tsx` | `role === 'teacher'` | manager → `/manager/dashboard`, other → `/dashboard`; no explicit error catch |
 | `app/manager/layout.tsx` | `role === 'manager'` + resolves center name & `status` for `ApprovalGate` | **Fails CLOSED**: error → `/auth/login` |
+| `app/office/layout.tsx` | **`center_staff/{uid}`**, not `role` — resolves `centerId` + `staffRole` ([OFFICE.md](OFFICE.md)) | **Fails CLOSED**: no link / error → `/auth/login` |
 
 ## firestore.rules helpers
 
@@ -104,6 +107,7 @@ Security invariant: the caller proves identity with its own ID token, so SSO can
 - `isCenterManager(centerId)` — ownerUid match only. **READ-level checks only.**
 - `isActiveCenterManager(centerId)` — ownerUid **AND** `status == 'active'`. **All manager WRITE privileges go through this.** Missing `status` = pending = blocked.
 - `isTeacherInMyCenter(teacherUid)` / `isTeacherOfCenter(centerId)` — via `center_teachers/{teacherUid}` link docs.
+- `isCenterOffice(centerId)` — via `center_staff/{request.auth.uid}` (2026-09-15). **READ-level only**; every money collection stays `write: if false`. The path is constant, so it costs a fixed number of document accesses inside a `list` rule — see [OFFICE.md](OFFICE.md).
 - `isSuperAdmin()` + god-mode wildcard match.
 - `centers`: create requires `ownerUid == uid` AND `status == 'pending'` (no self-approval); owner update `hasOnly(['name','slug','size'])`. Activation happens only via god-mode client write from `/admin/centers` or Admin SDK.
 - `usernames`: public read; create-if-absent with own uid; owner delete; **update: false** (immutable).

@@ -17,6 +17,8 @@ import ExamReview from '../_components/ExamReview';
 import { useStudentLanguage } from '../../layout';
 import { saveExamResult, scoreByTopic, toItemResponses } from '@/services/RASCHProgressService';
 import { findQuizByCode, getQuiz, listMyQuizResults, saveQuizResult } from '@/services/teacherRaschQuizService';
+import { examMistakes } from '@/lib/mistakes';
+import { recordMistakes } from '@/services/mistakeService';
 import { estimateAbility } from '@/lib/RASCHtheta';
 import { RASCH_TOPICS, TOPIC_KEYS, type TopicKey } from '@/lib/RASCHtopics';
 import { skillCoverage, skill as skillMeta, SKILL_KEYS, type SkillKey } from '@/lib/RASCHskills';
@@ -698,6 +700,23 @@ export default function TeacherQuizPage() {
           theta: estimateAbility(items).theta,
         };
         await saveQuizResult(result);
+
+        // My Mistakes (docs/MISTAKES.md) — after the teacher's copy is safely
+        // written, and never allowed to fail the sitting. `itemOutcomes` is
+        // passed in rather than regraded, so the bucket can never disagree
+        // with the score above.
+        recordMistakes(
+          user.uid,
+          examMistakes({
+            source: 'rasch',
+            testId: session.quizId,
+            testTitle: session.quizTitle,
+            examLang: session.examLang,
+            questions: session.questions,
+            outcomes: itemOutcomes,
+            answers: session.answers,
+          }),
+        ).catch((e) => console.error('recordMistakes failed:', e));
 
         // Patch the sat-papers cache rather than invalidating it: the student
         // lands back on the code screen straight after this, and a list missing

@@ -344,6 +344,25 @@ export interface QuestionV1 {
    *  questions1 uses. Legacy teacher docs lack it until the backfill runs, so the
    *  exam sampler falls back to a createdAt page for those. */
   rand: number;
+
+  /**
+   * 🟢 2026-09-16 — set by the SAT JSON importer (`/teacher/sat/import`).
+   * `true` means the uploader chose to publish this question to the SHARED SAT
+   * pool, so every teacher's SAT builder can pick it from the "Shared" tab.
+   *
+   * ⚠️ This is a VISIBILITY flag, not an ownership change: `creatorId` stays
+   * the uploader's uid, so they alone can edit or delete it (the
+   * `teacher_questions` update/delete rule) and the picker shows their
+   * `creatorName` as attribution. That is what distinguishes it from the
+   * anonymous platform pool (`creatorId: ''`), which only an Admin-SDK script
+   * writes and which nobody in-app owns.
+   *
+   * A flat field for the same reason as the mirrors above: it is QUERIED
+   * (`sharedBank == true && subject.id == … orderBy createdAt desc`).
+   * Optional — absent on every question written before this existed, which
+   * reads as "not shared".
+   */
+  sharedBank?: boolean;
 }
 
 // ─── Statistics — a SEPARATE collection, never mixed into the question ───────

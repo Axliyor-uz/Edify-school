@@ -14,7 +14,6 @@ import {
 } from "@/services/financeService";
 import type {
   Charge,
-  PaymentMethod,
   PaymentType,
   RecordPaymentResult,
   StudentFinanceProfile,
@@ -23,7 +22,13 @@ import { formatUZS } from "@/lib/finance/money";
 import { getTodayKey } from "@/lib/dateUtils";
 import { Button } from "@/components/manager-ui";
 import { useManagerLanguage, type LangType } from "@/app/manager/_components/ManagerLanguage";
-import { PAYMENT_METHOD_KEYS, PAYMENT_METHOD_T, periodLabelOf } from "./financeFormat";
+import { formatMethodSplit, periodLabelOf } from "./financeFormat";
+import MethodSplitEditor, {
+  methodSplitPayload,
+  methodSplitValid,
+  singleSplitLine,
+  type MethodSplitLine,
+} from "./MethodSplitEditor";
 
 interface Props {
   centerId: string;
@@ -131,7 +136,7 @@ export default function RecordPaymentModal({ centerId, classes, preselectUid, on
 
   const todayKey = useMemo(() => getTodayKey(), []);
   const [amount, setAmount] = useState("");
-  const [method, setMethod] = useState<PaymentMethod>("cash");
+  const [methodLines, setMethodLines] = useState<MethodSplitLine[]>(singleSplitLine());
   const [type, setType] = useState<PaymentType>("payment");
   const [paidAt, setPaidAt] = useState(todayKey);
   const [note, setNote] = useState("");
@@ -195,9 +200,11 @@ export default function RecordPaymentModal({ centerId, classes, preselectUid, on
   const totalDebt = openCharges.reduce((s, c) => s + openAmountOf(c), 0);
   const parsedAmount = parseInt(amount, 10);
   const amountValid = Number.isInteger(parsedAmount) && parsedAmount > 0;
+  const splitValid = methodSplitValid(methodLines, parsedAmount);
+  const canSubmit = amountValid && splitValid;
 
   const submit = async () => {
-    if (!selected || !amountValid || submitting) return;
+    if (!selected || !canSubmit || submitting) return;
     if (type === "refund" && !note.trim()) {
       toast.error(t.refundNoteRequired);
       return;
@@ -208,7 +215,8 @@ export default function RecordPaymentModal({ centerId, classes, preselectUid, on
         studentId: selected.uid,
         amount: parsedAmount,
         type,
-        method,
+        method: methodLines[0].method,
+        ...(methodLines.length > 1 ? { methodSplit: methodSplitPayload(methodLines) } : {}),
         ...(paidAt !== todayKey ? { paidAt } : {}),
         ...(note.trim() ? { note: note.trim() } : {}),
       });
@@ -234,6 +242,11 @@ export default function RecordPaymentModal({ centerId, classes, preselectUid, on
           <p className="text-sm text-on-surface-variant mt-1">
             {selected.displayName} · {formatUZS(parsedAmount)}
           </p>
+          {methodLines.length > 1 && (
+            <p className="text-[12.5px] text-on-surface-variant mt-0.5">
+              {formatMethodSplit({ methodSplit: methodSplitPayload(methodLines) }, lang)}
+            </p>
+          )}
 
           {result.allocations.length > 0 && (
             <div className="mt-4 bg-surface-container-low border border-outline-variant rounded-m3-lg p-4 text-left space-y-1.5">
@@ -432,21 +445,12 @@ export default function RecordPaymentModal({ centerId, classes, preselectUid, on
                 </div>
 
                 {/* method */}
-                <div className="flex flex-wrap gap-1.5">
-                  {PAYMENT_METHOD_KEYS.map((m) => (
-                    <button
-                      key={m}
-                      onClick={() => setMethod(m)}
-                      className={`px-3.5 py-2 rounded-m3-md text-[13px] font-bold border transition-colors ${
-                        method === m
-                          ? "bg-primary text-on-primary border-primary"
-                          : "bg-surface-container-lowest text-on-surface-variant border-outline-variant hover:border-primary"
-                      }`}
-                    >
-                      {PAYMENT_METHOD_T[lang][m]}
-                    </button>
-                  ))}
-                </div>
+                <MethodSplitEditor
+                  lang={lang}
+                  totalAmount={amountValid ? parsedAmount : 0}
+                  lines={methodLines}
+                  onChange={setMethodLines}
+                />
 
                 {/* date + note */}
                 <div className="grid grid-cols-2 gap-2.5">
@@ -468,7 +472,7 @@ export default function RecordPaymentModal({ centerId, classes, preselectUid, on
                 <Button
                   variant={type === "payment" ? "filled" : "danger"}
                   onClick={submit}
-                  disabled={!amountValid}
+                  disabled={!canSubmit}
                   loading={submitting}
                   className="w-full"
                 >

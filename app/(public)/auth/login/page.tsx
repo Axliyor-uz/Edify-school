@@ -509,6 +509,11 @@ export default function LoginPage() {
         router.push("/teacher/dashboard");
       } else if (profile.role === "manager") {
         router.push("/manager/dashboard");
+      } else if (profile.role === "director" || profile.role === "accountant") {
+        // Office staff (docs/OFFICE.md). `role` is only a redirect HINT — the
+        // /office layout re-checks center_staff/{uid} and bounces anyone who
+        // painted this value onto their own (client-writable) user doc.
+        router.push("/office");
       } else {
         router.push("/dashboard");
       }

@@ -1,0 +1,821 @@
+{
+  "title": "SAT Math — Sample test",
+  "module1Minutes": 35,
+  "module2Minutes": 35,
+  "routingThreshold": 11,
+  "module1": [
+    {
+      "domainId": "advanced-math",
+      "question": "The product of a brother's and sister's ages is 96. If the brother is exactly 4 years older than his sister, how old is the sister?",
+      "options": {
+        "A": "6",
+        "B": "8",
+        "C": "12",
+        "D": "16"
+      },
+      "answer": "B",
+      "difficultyId": 3
+    },
+    {
+      "domainId": "advanced-math",
+      "question": "Which expression is equivalent to $\\frac{4}{x+1} + \\frac{x-1}{x^2-1}$, where $x > 1$?",
+      "options": {
+        "A": "$\\frac{5}{x+1}$",
+        "B": "$\\frac{3}{x+1}$",
+        "C": "$\\frac{4x-3}{x^2-1}$",
+        "D": "$\\frac{5x}{x^2-1}$"
+      },
+      "answer": "A",
+      "difficultyId": 3
+    },
+    {
+      "domainId": "algebra",
+      "question": "The graph of the linear function $f$ is shown in the $xy$-plane. The function $g$ is defined by $g(x) = f(x) + c$, where $c$ is a constant. If the $x$-intercept of the graph of $y = g(x)$ is $(0, 0)$, what is the value of $c$?",
+      "options": {
+        "A": "-4",
+        "B": "-2",
+        "C": "2",
+        "D": "4"
+      },
+      "answer": "B",
+      "difficultyId": 5,
+      "imageUrl": "/sat/sat_lin_func_graph_q05_c1.png"
+    },
+    {
+      "domainId": "algebra",
+      "question": "If $\\frac{72}{x} = 6x$, what is the value of $6x^2$?",
+      "options": {
+        "A": "432",
+        "B": "72",
+        "C": "12",
+        "D": "6"
+      },
+      "answer": "B",
+      "difficultyId": 1
+    },
+    {
+      "domainId": "algebra",
+      "question": "The graph of line $m$ is shown in the $xy$-plane. Line $n$ (not shown) is parallel to line $m$. The system of linear equations representing lines $m$ and $n$ has no solution. If line $n$ passes through the point $(2, -5)$, what is the $x$-coordinate of the $x$-intercept of line $n$?",
+      "options": {
+        "A": "$\\frac{11}{3}$",
+        "B": "11",
+        "C": "$-\\frac{11}{3}$",
+        "D": "-11"
+      },
+      "answer": "A",
+      "difficultyId": 3,
+      "imageUrl": "/sat/sat_sys_para_q2_c5.png"
+    },
+    {
+      "domainId": "advanced-math",
+      "question": "Which expression is equivalent to $(9nr^2 + 3nr) + (6n^2r + 5nr)$?",
+      "options": {
+        "A": "$15n^2r^2 + 8nr$",
+        "B": "$9nr^2 + 6n^2r + 8nr$",
+        "C": "$54n^3r^3 + 15n^2r^2$",
+        "D": "$15n^3r^3 + 8n^2r^2$"
+      },
+      "answer": "B",
+      "difficultyId": 0
+    },
+    {
+      "domainId": "algebra",
+      "question": "The graph of line $p$ is shown in the $xy$-plane. Line $q$ (not shown) is perpendicular to line $p$ and passes through the point $(-9, 6)$. What is the $y$-coordinate of the $y$-intercept of line $q$?",
+      "options": {
+        "A": "3",
+        "B": "-3",
+        "C": "6",
+        "D": "9"
+      },
+      "answer": "A",
+      "difficultyId": 3,
+      "imageUrl": "/sat/sat_sys_perp_q1_c5.png"
+    },
+    {
+      "domainId": "algebra",
+      "question": "If $\\frac{42}{x} = 7x$, what is the value of $7x^2$?",
+      "options": {
+        "A": "6",
+        "B": "7",
+        "C": "42",
+        "D": "294"
+      },
+      "answer": "C",
+      "difficultyId": 1
+    },
+    {
+      "domainId": "algebra",
+      "question": "The ratio of an object's height to the length of its shadow is constant at a certain time of day. A 6-foot tall person casts a 9-foot shadow. At the same time, a tree casts a shadow of $s$ feet. Which expression represents the height of the tree, in feet?",
+      "options": {
+        "A": "$1.5s$",
+        "B": "$s - 3$",
+        "C": "$\\frac{3}{2}s$",
+        "D": "$\\frac{2}{3}s$"
+      },
+      "answer": "D",
+      "difficultyId": 3
+    },
+    {
+      "domainId": "algebra",
+      "question": "The total mass, in kilograms, of $r$ identical objects is $t$. Which expression represents the total mass, in kilograms, of $146r$ of these objects?",
+      "options": {
+        "A": "$146 - t$",
+        "B": "$146 + t$",
+        "C": "$\\frac{t}{146}$",
+        "D": "$146t$"
+      },
+      "answer": "D",
+      "difficultyId": 1
+    },
+    {
+      "domainId": "algebra",
+      "question": "$\\frac{2}{c} - \\frac{7}{d} = 5$\n\nThe given equation relates the variables $c$ and $d$, where $c$ and $d$ are greater than 1. Which equation correctly expresses $d$ in terms of $c$?",
+      "options": {
+        "A": "$d = \\frac{c}{7(2 - 5c)}$",
+        "B": "$d = \\frac{7c}{2 - 5c}$",
+        "C": "$d = \\frac{7(2 - 5c)}{c}$",
+        "D": "$d = \\frac{2 - 5c}{7c}$"
+      },
+      "answer": "B",
+      "difficultyId": 3
+    },
+    {
+      "domainId": "advanced-math",
+      "question": "Which expression is equivalent to $60y + 90y$?",
+      "options": {
+        "A": "$540y^2$",
+        "B": "$150y^2$",
+        "C": "$150$",
+        "D": "$150y$"
+      },
+      "answer": "D",
+      "difficultyId": 0
+    },
+    {
+      "domainId": "algebra",
+      "question": "The graph of line $m$ is shown in the $xy$-plane. Line $n$ (not shown) is parallel to line $m$. The system of linear equations representing lines $m$ and $n$ has no solution. If line $n$ passes through the point $(-8, -2)$, what is the $x$-coordinate of the $x$-intercept of line $n$?",
+      "options": {
+        "A": "$-\\frac{32}{3}$",
+        "B": "$-8$",
+        "C": "$\\frac{32}{3}$",
+        "D": "$8$"
+      },
+      "answer": "A",
+      "difficultyId": 3,
+      "imageUrl": "/sat/sat_sys_para_q2_c4.png"
+    },
+    {
+      "domainId": "advanced-math",
+      "question": "Which expression is equivalent to $\\frac{k}{k-5} - \\frac{5k}{k^2-5k}$, where $k > 5$?",
+      "options": {
+        "A": "1",
+        "B": "$\\frac{k+5}{k-5}$",
+        "C": "$\\frac{k^2-5k}{k-5}$",
+        "D": "0"
+      },
+      "answer": "A",
+      "difficultyId": 3
+    },
+    {
+      "domainId": "algebra",
+      "question": "$b - 22 = \\frac{x}{y}$\n\nThe given equation relates positive numbers $b$, $x$, and $y$. Which equation correctly expresses $x$ in terms of $b$ and $y$?",
+      "options": {
+        "A": "$x = \\frac{by - 22}{y}$",
+        "B": "$x = by - 22$",
+        "C": "$x = by - 22y$",
+        "D": "$x = \\frac{b - 22}{y}$"
+      },
+      "answer": "C",
+      "difficultyId": 1
+    },
+    {
+      "domainId": "algebra",
+      "question": "According to Hooke's Law, the stretch of a spring is directly proportional to the weight attached. A certain spring stretches 12 centimeters when a 4-kilogram weight is attached. How many centimeters does it stretch when a $w$-kilogram weight is attached?",
+      "options": {
+        "A": "$\\frac{w}{3}$",
+        "B": "$\\frac{3}{w}$",
+        "C": "$3w$",
+        "D": "$w + 8$"
+      },
+      "answer": "C",
+      "difficultyId": 3
+    },
+    {
+      "domainId": "algebra",
+      "question": "The graph of line $g$ is shown in the $xy$-plane. Line $k$ is defined by $45x + py = w$, where $p$ and $w$ are constants. If line $k$ is graphed in this $xy$-plane, resulting in the graph of a system of two linear equations, the system of two linear equations will have infinitely many solutions. What is the value of $p + w$?",
+      "options": {
+        "A": "90",
+        "B": "135",
+        "C": "180",
+        "D": "225"
+      },
+      "answer": "B",
+      "difficultyId": 5,
+      "imageUrl": "/sat/sat_sys_graph_inf_q79_c1.png"
+    },
+    {
+      "domainId": "advanced-math",
+      "question": "The square of a positive number $w$ decreased by 3 times the number is equal to 70. What is the value of $w$?",
+      "options": {
+        "A": "7",
+        "B": "10",
+        "C": "14",
+        "D": "20"
+      },
+      "answer": "B",
+      "difficultyId": 3
+    },
+    {
+      "domainId": "algebra",
+      "question": "$ak = \\frac{b}{12}(7 + m)$\n\nThe given equation relates the positive variables $a$, $b$, $k$, and $m$. Which equation correctly expresses $m$ in terms of $a$, $b$, and $k$?",
+      "options": {
+        "A": "$m = \\frac{12(ak - 7)}{b}$",
+        "B": "$m = ak - 7 - \\frac{b}{12}$",
+        "C": "$m = ak - \\frac{7b}{12}$",
+        "D": "$m = \\frac{12ak}{b} - 7$"
+      },
+      "answer": "D",
+      "difficultyId": 2
+    },
+    {
+      "domainId": "algebra",
+      "question": "Alice and Bob will work together to make 120 paper flowers for a school party. The line shown represents the possible combinations of time, in hours, spent by Alice and Bob to fulfill this task. According to the graph, on average, how many paper flowers will Alice make per hour?",
+      "options": {
+        "A": "3",
+        "B": "4",
+        "C": "5",
+        "D": "6"
+      },
+      "answer": "A",
+      "difficultyId": 3,
+      "imageUrl": "/sat/sat_lin_func_graph_rate_q06_c1.png"
+    },
+    {
+      "domainId": "advanced-math",
+      "question": "If $9(x + 3) = 81$, what is the value of $x + 3$?",
+      "options": {
+        "A": "6",
+        "B": "9",
+        "C": "69",
+        "D": "72"
+      },
+      "answer": "B",
+      "difficultyId": 0
+    },
+    {
+      "domainId": "algebra",
+      "question": "$b - 72 = \\frac{x}{y}$\n\nThe given equation relates the positive numbers $b$, $x$, and $y$. Which equation correctly expresses $x$ in terms of $b$ and $y$?",
+      "options": {
+        "A": "$x = \\frac{b - 72}{y}$",
+        "B": "$x = by - 72$",
+        "C": "$x = \\frac{by - 72}{y}$",
+        "D": "$x = by - 72y$"
+      },
+      "answer": "D",
+      "difficultyId": 1
+    }
+  ],
+  "module2Easier": [
+    {
+      "domainId": "algebra",
+      "question": "If $\\frac{j}{k} = 62$ and $\\frac{96j}{12xk} = 62$, what is the value of $x$?",
+      "options": {
+        "A": "$\\frac{1}{8}$",
+        "B": "$\\frac{6}{31}$",
+        "C": "8",
+        "D": "96"
+      },
+      "answer": "C",
+      "difficultyId": 2
+    },
+    {
+      "domainId": "algebra",
+      "question": "If $\\frac{6}{7}p + 12 = 54$, what is the value of $7p$?",
+      "options": {
+        "A": "42",
+        "B": "49",
+        "C": "294",
+        "D": "343"
+      },
+      "answer": "D",
+      "difficultyId": 2
+    },
+    {
+      "domainId": "algebra",
+      "question": "$b^2 + 5c = 9d$\n\nThe given equation relates the real numbers $b$, $c$, and $d$, where $d > \\frac{5}{9}c$. Which equation correctly expresses $b$ in terms of $c$ and $d$?",
+      "options": {
+        "A": "$b = \\frac{9d+5c}{2}$",
+        "B": "$b = \\frac{9d-5c}{2}$",
+        "C": "$b = \\pm\\sqrt{9d+5c}$",
+        "D": "$b = \\pm\\sqrt{9d-5c}$"
+      },
+      "answer": "D",
+      "difficultyId": 2
+    },
+    {
+      "domainId": "advanced-math",
+      "question": "$49 = \\frac{2K}{v^2}$\n\nFor an object with a mass of 49 kilograms, the given equation relates the kinetic energy $K$, in joules, of the object to the object's speed $v$, in meters per second, where $K$ and $v$ are positive. Which equation correctly expresses this object's speed, in meters per second, in terms of the object's kinetic energy, in joules?",
+      "options": {
+        "A": "$v = \\sqrt{\\frac{2K}{49}}$",
+        "B": "$v = \\sqrt{\\frac{49}{2K}}$",
+        "C": "$v = \\frac{49^2}{2K}$",
+        "D": "$v = \\frac{2K}{49^2}$"
+      },
+      "answer": "A",
+      "difficultyId": 2
+    },
+    {
+      "domainId": "advanced-math",
+      "question": "Which of the following expressions is equivalent to $(\\frac{a}{4}+\\frac{b}{3})^2$?",
+      "options": {
+        "A": "$\\frac{a^2}{4}+\\frac{b^2}{3}$",
+        "B": "$\\frac{a^2}{16}+\\frac{b^2}{9}$",
+        "C": "$\\frac{a^2}{4}+\\frac{ab}{12}+\\frac{b^2}{3}$",
+        "D": "$\\frac{a^2}{16}+\\frac{ab}{6}+\\frac{b^2}{9}$"
+      },
+      "answer": "D",
+      "difficultyId": 1
+    },
+    {
+      "domainId": "algebra",
+      "question": "If $\\frac{x}{y} = 76$ and $\\frac{cx}{4y} = 76$, what is the value of $c$?",
+      "options": {
+        "A": "1",
+        "B": "4",
+        "C": "19",
+        "D": "76"
+      },
+      "answer": "B",
+      "difficultyId": 2
+    },
+    {
+      "domainId": "algebra",
+      "question": "If $2x + 3 = 9$, what is the value of $4x - 4$?",
+      "options": {
+        "A": "3",
+        "B": "6",
+        "C": "8",
+        "D": "12"
+      },
+      "answer": "C",
+      "difficultyId": 0
+    },
+    {
+      "domainId": "algebra",
+      "question": "$7x + 16 = \\frac{4}{y}$\n\nThe given equation relates the distinct positive numbers $x$ and $y$. Which equation correctly expresses $y$ in terms of $x$?",
+      "options": {
+        "A": "$y = 7x + 12$",
+        "B": "$y = \\frac{4}{7x + 16}$",
+        "C": "$y = \\frac{7x + 16}{4}$",
+        "D": "$y = 4(7x + 16)$"
+      },
+      "answer": "B",
+      "difficultyId": 1
+    },
+    {
+      "domainId": "advanced-math",
+      "question": "Which expression is equivalent to $(3x^3 - x^2 + 4)(5x^2 + 8x)$?",
+      "options": {
+        "A": "$15x^5 + 19x^4 - 8x^3 + 20x + 32$",
+        "B": "$15x^5 + 19x^4 - 8x^3 - 20x^2 + 32$",
+        "C": "$15x^5 + 19x^4 - 8x^3 + 20x^2 + 32x$",
+        "D": "$15x^5 + 29x^4 - 8x^3 - 20x^2 + 32x$"
+      },
+      "answer": "C",
+      "difficultyId": 1
+    },
+    {
+      "domainId": "algebra",
+      "question": "If $\\frac{2a}{b} = 6.5$ and $\\frac{a}{bn} = 26$, what is the value of $n$?",
+      "options": {
+        "A": "$\\frac{1}{8}$",
+        "B": "$\\frac{1}{4}$",
+        "C": "4",
+        "D": "8"
+      },
+      "answer": "A",
+      "difficultyId": 2
+    },
+    {
+      "domainId": "algebra",
+      "question": "If $\\frac{x}{y} = 63$ and $\\frac{cx}{3y} = 63$, what is the value of $c$?",
+      "options": {
+        "A": "1",
+        "B": "3",
+        "C": "9",
+        "D": "21"
+      },
+      "answer": "B",
+      "difficultyId": 2
+    },
+    {
+      "domainId": "algebra",
+      "question": "$v = -\\frac{w}{130x}$\n\nThe given equation relates the distinct positive numbers $v$, $w$, and $x$. Which equation correctly expresses $w$ in terms of $v$ and $x$?",
+      "options": {
+        "A": "$w = -130vx$",
+        "B": "$w = -\\frac{130v}{x}$",
+        "C": "$w = -\\frac{x}{130v}$",
+        "D": "$w = v + 130x$"
+      },
+      "answer": "A",
+      "difficultyId": 0
+    },
+    {
+      "domainId": "advanced-math",
+      "question": "If $x^3 + y^3 = 12$ and $x^3 - y^3 = 6$, what is the value of $x^6 - y^6$?",
+      "options": {
+        "A": "6",
+        "B": "18",
+        "C": "72",
+        "D": "108"
+      },
+      "answer": "C",
+      "difficultyId": 2
+    },
+    {
+      "domainId": "algebra",
+      "question": "The function $f$ gives the product of a number, $x$, and a number that is 66 more than $x$. Which equation defines $f$?",
+      "options": {
+        "A": "$f(x) = x^2 + x + 66$",
+        "B": "$f(x) = x^2 + 66$",
+        "C": "$f(x) = x^2 + 66x$",
+        "D": "$f(x) = x^2 + 66x + 66$"
+      },
+      "answer": "C",
+      "difficultyId": 1
+    },
+    {
+      "domainId": "algebra",
+      "question": "$v = -\\frac{w}{161x}$\n\nThe given equation relates the distinct positive numbers $v$, $w$, and $x$. Which equation correctly expresses $w$ in terms of $v$ and $x$?",
+      "options": {
+        "A": "$w = -161vx$",
+        "B": "$w = -\\frac{161v}{x}$",
+        "C": "$w = -\\frac{x}{161v}$",
+        "D": "$w = v + 161x$"
+      },
+      "answer": "A",
+      "difficultyId": 0
+    },
+    {
+      "domainId": "advanced-math",
+      "question": "Which expression is equivalent to $2(xy^2 + x^2y) - 8(xy^2 - 4x^2y)$?",
+      "options": {
+        "A": "$-6xy^2 + 34x^2y$",
+        "B": "$-6xy^2 + 33x^2y$",
+        "C": "$-6xy^2 - 30x^2y$",
+        "D": "$-6xy^2 - 31x^2y$"
+      },
+      "answer": "A",
+      "difficultyId": 1
+    },
+    {
+      "domainId": "algebra",
+      "question": "If $\\frac{7}{8}p + 35 = 56$, what is the value of $8p$?",
+      "options": {
+        "A": "24",
+        "B": "168",
+        "C": "192",
+        "D": "216"
+      },
+      "answer": "C",
+      "difficultyId": 2
+    },
+    {
+      "domainId": "algebra",
+      "question": "$x = 2a(b + 5)$\n\nThe given equation relates the positive numbers $a$, $b$, and $x$. Which equation correctly expresses $a$ in terms of $b$ and $x$?",
+      "options": {
+        "A": "$a = \\frac{x}{2} - (b + 5)$",
+        "B": "$a = \\frac{x}{2(b + 5)}$",
+        "C": "$a = \\frac{2(b + 5)}{x}$",
+        "D": "$a = 2x(b + 5)$"
+      },
+      "answer": "B",
+      "difficultyId": 1
+    },
+    {
+      "domainId": "advanced-math",
+      "question": "Which expression is equivalent to $(131y)^{\\frac{1}{2}}$, where $y > 1$?",
+      "options": {
+        "A": "$131\\sqrt{y}$",
+        "B": "$\\sqrt{131}y$",
+        "C": "$\\sqrt{131y}$",
+        "D": "$\\sqrt{(131y)^2}$"
+      },
+      "answer": "C",
+      "difficultyId": 0
+    },
+    {
+      "domainId": "algebra",
+      "question": "If $\\frac{x}{y} = 3$ and $\\frac{5x}{ty} = 135$, what is the value of $t$?",
+      "options": {
+        "A": "$\\frac{1}{9}$",
+        "B": "$\\frac{3}{5}$",
+        "C": "$\\frac{5}{3}$",
+        "D": "9"
+      },
+      "answer": "A",
+      "difficultyId": 2
+    },
+    {
+      "domainId": "algebra",
+      "question": "$x = 2a(b + 3)$\n\nThe given equation relates positive numbers $x$, $a$, and $b$. Which equation correctly expresses $a$ in terms of $b$ and $x$?",
+      "options": {
+        "A": "$a = \\frac{x}{2} - 4b + 3$",
+        "B": "$a = \\frac{x}{2(b + 3)}$",
+        "C": "$a = \\frac{2(b + 3)}{x}$",
+        "D": "$a = 2x(b + 3)$"
+      },
+      "answer": "B",
+      "difficultyId": 1
+    },
+    {
+      "domainId": "advanced-math",
+      "question": "Which expression is equivalent to $(5a^2 - 3ab + 7b^2) - (4a^2 + ab - 2b^2)$?",
+      "options": {
+        "A": "$a^2 - 4ab + 9b^2$",
+        "B": "$a^2 - 2ab + 5b^2$",
+        "C": "$a^4 - 4a^2b^2 + 9b^4$",
+        "D": "$a^4 - 2a^2b^2 + 5b^4$"
+      },
+      "answer": "A",
+      "difficultyId": 1
+    }
+  ],
+  "module2Harder": [
+    {
+      "domainId": "algebra",
+      "question": "The ratio of a person's weight on Earth to the person's weight on the Moon is constant. An astronaut who weighs 540 newtons on Earth weighs 90 newtons on the Moon. Another astronaut weighs $w$ newtons on Earth. Which of the following expressions represents this astronaut's weight, in newtons, on the Moon?",
+      "options": {
+        "A": "$6w$",
+        "B": "$0.6w$",
+        "C": "$\\frac{6}{w}$",
+        "D": "$\\frac{w}{6}$"
+      },
+      "answer": "D",
+      "difficultyId": 3
+    },
+    {
+      "domainId": "algebra",
+      "question": "The graph of line $p$ is shown in the $xy$-plane. Line $q$ (not shown) is perpendicular to line $p$ and passes through the point $(3, 5)$. What is the $y$-coordinate of the $y$-intercept of line $q$?",
+      "options": {
+        "A": "1",
+        "B": "5",
+        "C": "11",
+        "D": "-11"
+      },
+      "answer": "C",
+      "difficultyId": 3,
+      "imageUrl": "/sat/sat_sys_perp_q1_c1.png"
+    },
+    {
+      "domainId": "algebra",
+      "question": "The graph of the linear function $f$ is shown in the $xy$-plane. What is the value of $f(3)$?",
+      "options": {
+        "A": "6",
+        "B": "8",
+        "C": "10",
+        "D": "12"
+      },
+      "answer": "C",
+      "difficultyId": 3,
+      "imageUrl": "/sat/sat_lin_func_graph_q01_c1.png"
+    },
+    {
+      "domainId": "advanced-math",
+      "question": "Which expression is equivalent to $\\frac{y+2}{x-9} + \\frac{y(x-9)}{x^2y - 9xy}$, where $x > 9$ and $y > 0$?",
+      "options": {
+        "A": "$\\frac{xy+y-7}{x^3y-18x^2y+81xy}$",
+        "B": "$\\frac{xy+10y+2}{x^2y-9xy+x-9}$",
+        "C": "$\\frac{xy^2+3xy-9y}{x^2y-9xy}$",
+        "D": "$\\frac{xy^2+3xy-9y}{x^3y-18x^2y+81xy}$"
+      },
+      "answer": "C",
+      "difficultyId": 3
+    },
+    {
+      "domainId": "advanced-math",
+      "question": "The product of a positive number $x$ and the number that is 5 more than $x$ is 104. What is the value of $x$?",
+      "options": {
+        "A": "4",
+        "B": "8",
+        "C": "13",
+        "D": "26"
+      },
+      "answer": "B",
+      "difficultyId": 3
+    },
+    {
+      "domainId": "algebra",
+      "question": "The graph of line $m$ is shown in the $xy$-plane. Line $n$ (not shown) is parallel to line $m$. The system of linear equations representing lines $m$ and $n$ has no solution. If line $n$ passes through the point $(6, 2)$, what is the $x$-coordinate of the $x$-intercept of line $n$?",
+      "options": {
+        "A": "7.5",
+        "B": "10",
+        "C": "-7.5",
+        "D": "13.3"
+      },
+      "answer": "A",
+      "difficultyId": 3,
+      "imageUrl": "/sat/sat_sys_para_q2_c1.png"
+    },
+    {
+      "domainId": "algebra",
+      "question": "A car travels at a constant speed. It travels 300 miles in 5 hours. How many miles does it travel in $h$ hours?",
+      "options": {
+        "A": "$60h$",
+        "B": "$\\frac{h}{60}$",
+        "C": "$\\frac{60}{h}$",
+        "D": "$h - 60$"
+      },
+      "answer": "A",
+      "difficultyId": 3
+    },
+    {
+      "domainId": "algebra",
+      "question": "The graph of line $p$ is shown in the $xy$-plane. Line $q$ (not shown) is perpendicular to line $p$ and passes through the point $(-4, -3)$. What is the $y$-coordinate of the $y$-intercept of line $q$?",
+      "options": {
+        "A": "3",
+        "B": "-3",
+        "C": "6",
+        "D": "9"
+      },
+      "answer": "A",
+      "difficultyId": 3,
+      "imageUrl": "/sat/sat_sys_perp_q1_c2.png"
+    },
+    {
+      "domainId": "algebra",
+      "question": "The graph of the linear function $g$ is shown in the $xy$-plane. What is the value of $g(8)$?",
+      "options": {
+        "A": "3",
+        "B": "4.5",
+        "C": "5",
+        "D": "6"
+      },
+      "answer": "A",
+      "difficultyId": 3,
+      "imageUrl": "/sat/sat_lin_func_graph_q02_c1.png"
+    },
+    {
+      "domainId": "advanced-math",
+      "question": "Which expression is equivalent to $\\frac{a+5}{b-3} - \\frac{b-3}{b^2 - 3b}$, where $b > 3$?",
+      "options": {
+        "A": "$\\frac{ab+4b+3}{b^2-3b}$",
+        "B": "$\\frac{ab+5b-1}{b^2-3b}$",
+        "C": "$\\frac{ab+6b+3}{b(b-3)}$",
+        "D": "$\\frac{a+4}{b-3}$"
+      },
+      "answer": "A",
+      "difficultyId": 3
+    },
+    {
+      "domainId": "advanced-math",
+      "question": "A rectangular community garden has an area of 104 square meters. Its length is exactly 5 meters greater than its width. What is the width of the garden, in meters?",
+      "options": {
+        "A": "4",
+        "B": "8",
+        "C": "13",
+        "D": "26"
+      },
+      "answer": "B",
+      "difficultyId": 3
+    },
+    {
+      "domainId": "algebra",
+      "question": "The graph of line $m$ is shown in the $xy$-plane. Line $n$ (not shown) is parallel to line $m$. The system of linear equations representing lines $m$ and $n$ has no solution. If line $n$ passes through the point $(4, -1)$, what is the $x$-coordinate of the $x$-intercept of line $n$?",
+      "options": {
+        "A": "9",
+        "B": "-4.5",
+        "C": "4.5",
+        "D": "2"
+      },
+      "answer": "C",
+      "difficultyId": 3,
+      "imageUrl": "/sat/sat_sys_para_q2_c2.png"
+    },
+    {
+      "domainId": "algebra",
+      "question": "A baker uses a constant ratio of flour to sugar. A certain recipe requires 4 cups of flour for every 2 cups of sugar. If $f$ cups of flour are used, which expression represents the amount of sugar needed, in cups?",
+      "options": {
+        "A": "$2f$",
+        "B": "$\\frac{f}{2}$",
+        "C": "$\\frac{2}{f}$",
+        "D": "$f + 2$"
+      },
+      "answer": "B",
+      "difficultyId": 3
+    },
+    {
+      "domainId": "algebra",
+      "question": "The graph of line $p$ is shown in the $xy$-plane. Line $q$ (not shown) is perpendicular to line $p$ and passes through the point $(6, 2)$. What is the $y$-coordinate of the $y$-intercept of line $q$?",
+      "options": {
+        "A": "2",
+        "B": "5",
+        "C": "-5",
+        "D": "8"
+      },
+      "answer": "B",
+      "difficultyId": 3,
+      "imageUrl": "/sat/sat_sys_perp_q1_c3.png"
+    },
+    {
+      "domainId": "algebra",
+      "question": "The graph of the linear function $h$ is shown in the $xy$-plane. The function $p$ is defined by $p(x) = h(x) - 4$. What is the $x$-coordinate of the $x$-intercept of the graph of $y = p(x)$?",
+      "options": {
+        "A": "-3",
+        "B": "-1.5",
+        "C": "1.5",
+        "D": "6"
+      },
+      "answer": "B",
+      "difficultyId": 5,
+      "imageUrl": "/sat/sat_lin_func_graph_q03_c1.png"
+    },
+    {
+      "domainId": "advanced-math",
+      "question": "Which of the following expressions is equivalent to $\\frac{2m}{m+n} + \\frac{2m^2}{m^2+mn}$, where $m > 0$ and $n > 0$?",
+      "options": {
+        "A": "$\\frac{4m}{m+n}$",
+        "B": "$\\frac{2m(m+1)}{m+n}$",
+        "C": "$\\frac{4m^2}{m^2+mn}$",
+        "D": "$\\frac{2m^2+2m}{m^2+n^2}$"
+      },
+      "answer": "A",
+      "difficultyId": 3
+    },
+    {
+      "domainId": "advanced-math",
+      "question": "The product of two consecutive positive even integers is 168. What is the value of the smaller integer?",
+      "options": {
+        "A": "10",
+        "B": "12",
+        "C": "14",
+        "D": "16"
+      },
+      "answer": "B",
+      "difficultyId": 3
+    },
+    {
+      "domainId": "algebra",
+      "question": "The graph of line $m$ is shown in the $xy$-plane. Line $n$ (not shown) is parallel to line $m$. The system of linear equations representing lines $m$ and $n$ has no solution. If line $n$ passes through the point $(10, 8)$, what is the $x$-coordinate of the $x$-intercept of line $n$?",
+      "options": {
+        "A": "-10",
+        "B": "10",
+        "C": "4",
+        "D": "-4"
+      },
+      "answer": "A",
+      "difficultyId": 3,
+      "imageUrl": "/sat/sat_sys_para_q2_c3.png"
+    },
+    {
+      "domainId": "algebra",
+      "question": "At a specific currency exchange kiosk, 100 US dollars is equivalent to 85 Euros at a constant rate. Which expression shows how many Euros are equivalent to $d$ US dollars?",
+      "options": {
+        "A": "$0.85d$",
+        "B": "$\\frac{d}{0.85}$",
+        "C": "$\\frac{100d}{85}$",
+        "D": "$d - 15$"
+      },
+      "answer": "A",
+      "difficultyId": 3
+    },
+    {
+      "domainId": "algebra",
+      "question": "The graph of line $p$ is shown in the $xy$-plane. Line $q$ (not shown) is perpendicular to line $p$ and passes through the point $(2, -4)$. What is the $y$-coordinate of the $y$-intercept of line $q$?",
+      "options": {
+        "A": "-4",
+        "B": "1",
+        "C": "9",
+        "D": "-9"
+      },
+      "answer": "D",
+      "difficultyId": 3,
+      "imageUrl": "/sat/sat_sys_perp_q1_c4.png"
+    },
+    {
+      "domainId": "algebra",
+      "question": "The graph of the linear function $k$ is shown in the $xy$-plane. What is the value of $k(k(1))$?",
+      "options": {
+        "A": "3.5",
+        "B": "5.75",
+        "C": "7.25",
+        "D": "9.5"
+      },
+      "answer": "C",
+      "difficultyId": 5,
+      "imageUrl": "/sat/sat_lin_func_graph_q04_c1.png"
+    },
+    {
+      "domainId": "advanced-math",
+      "question": "Which expression is equivalent to $\\frac{p^2-2p}{p^2-4} + \\frac{3}{p+2}$, where $p > 2$?",
+      "options": {
+        "A": "$\\frac{p+3}{p+2}$",
+        "B": "$\\frac{p-1}{p-2}$",
+        "C": "$\\frac{p^2+1}{p^2-4}$",
+        "D": "$\\frac{p+3}{p-2}$"
+      },
+      "answer": "A",
+      "difficultyId": 3
+    }
+  ]
+}

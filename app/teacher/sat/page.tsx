@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ArrowRight, BadgeCheck, BookOpenText, Info, KeyRound, Sigma } from "lucide-react";
+import { ArrowRight, BadgeCheck, BookOpenText, Info, KeyRound, Sigma, Upload } from "lucide-react";
 
 import { useTeacherLanguage } from "@/app/teacher/layout";
 import { SAT_SECTIONS, type SatSection } from "@/lib/SatMathQuiz";
@@ -26,6 +26,7 @@ const TR: Record<string, Record<string, string>> = {
     build: "Test tuzish", notReady: "Bu bo'lim hali tayyor emas",
     mathHint: "2 modulli adaptiv test · o'z bazangizdan yoki yangi savol yozib tuzing",
     soonHint: "Savol bazasi va test tuzuvchi hali qo'shilmagan.",
+    importTitle: "Savollar importi", importHint: "JSON fayldan o'z savollaringizni bazaga qo'shing — xohlasangiz boshqa o'qituvchilar ham ko'radi.",
   },
   ru: {
     title: "SAT",
@@ -35,6 +36,7 @@ const TR: Record<string, Record<string, string>> = {
     build: "Составить тест", notReady: "Этот раздел пока не готов",
     mathHint: "Адаптивный тест из 2 модулей · из своей базы или новыми вопросами",
     soonHint: "База вопросов и конструктор теста пока не добавлены.",
+    importTitle: "Импорт вопросов", importHint: "Добавьте свои вопросы из JSON-файла — при желании их увидят и другие учителя.",
   },
   en: {
     title: "SAT",
@@ -44,6 +46,7 @@ const TR: Record<string, Record<string, string>> = {
     build: "Build a test", notReady: "This section is not built yet",
     mathHint: "2-module adaptive test · from your own bank or new questions",
     soonHint: "The question bank and test builder are not added yet.",
+    importTitle: "Question import", importHint: "Add your own questions from a JSON file — optionally visible to other teachers too.",
   },
 };
 
@@ -130,6 +133,31 @@ export default function SatHubPage() {
           );
         })}
       </div>
+
+      {/* Dataset import — a sibling of the section cards, not inside the grid:
+          it is subject-agnostic (the page itself asks Math vs English). */}
+      <Card
+        hoverable
+        onClick={() => router.push("/teacher/sat/import")}
+        role="link"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            router.push("/teacher/sat/import");
+          }
+        }}
+        className="group flex cursor-pointer items-center gap-3"
+      >
+        <span className="flex h-11 w-11 flex-none items-center justify-center rounded-m3-md bg-tertiary-container text-on-tertiary-container transition-transform duration-t-med group-hover:scale-105">
+          <Upload size={20} strokeWidth={2.4} />
+        </span>
+        <div className="min-w-0 flex-1">
+          <h2 className="text-[14.5px] font-bold leading-tight text-on-surface">{t.importTitle}</h2>
+          <p className="mt-0.5 text-[12px] font-medium leading-relaxed text-on-surface-variant">{t.importHint}</p>
+        </div>
+        <ArrowRight size={16} className="flex-none text-primary transition-transform duration-t-fast group-hover:translate-x-1" />
+      </Card>
     </div>
   );
 }

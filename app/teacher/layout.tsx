@@ -254,6 +254,8 @@ function TeacherShell({ children }: { children: React.ReactNode }) {
         else {
           const profile = await getUserProfile(user.uid);
           if (profile?.role === 'manager') router.push('/manager/dashboard');
+          // Office staff (docs/OFFICE.md) get their own panel, not /dashboard.
+          else if (profile?.role === 'director' || profile?.role === 'accountant') router.push('/office');
           else if (profile?.role !== 'teacher') router.push('/dashboard');
           else setIsAuthorized(true);
         }

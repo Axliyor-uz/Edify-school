@@ -859,7 +859,7 @@ export default function ManagerStudentInfoPanel({
                             (a, b) => WEEK_ORDER.indexOf(a.dayOfWeek) - WEEK_ORDER.indexOf(b.dayOfWeek),
                           );
                           return (
-                            <Link key={c.id} href={`/manager/groups/${c.id}`}
+                            <Link key={c.id} href={`/manager/groups/detail/${c.id}`}
                               className="group block p-4 bg-surface-container-low hover:bg-state-hover border border-outline-variant hover:border-primary rounded-m3-lg transition-colors">
                               <div className="flex items-center justify-between gap-3">
                                 <p className="text-[14px] font-bold text-on-surface truncate group-hover:text-primary transition-colors">{c.title}</p>

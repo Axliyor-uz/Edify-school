@@ -4,21 +4,23 @@ import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { AlertTriangle, ChevronDown, KeyRound, Play, TrendingUp } from "lucide-react";
 
 import { useAuth } from "@/lib/AuthContext";
-import { useStudentLanguage } from "../../layout";
 import { requestExamFullscreen } from "@/hooks/useExamLockdown";
 import { ACCESS_CODE_LENGTH, isValidAccessCode, sanitizeAccessCode } from "@/lib/RASCHquiz";
-import { shuffleSatItems } from "@/lib/SatMathQuiz";
+import { SAT_MATH_TAXONOMY_SLUG, shuffleSatItems } from "@/lib/SatMathQuiz";
+import { formatScoreBand } from "@/lib/SATscore";
+import { satMistakes } from "@/lib/mistakes";
+import { recordMistakes } from "@/services/mistakeService";
 import {
   clearSatSnapshot, getSatSnapshot, getServerSatSnapshot, saveSatSnapshot, subscribeSatSnapshot,
 } from "@/lib/SatSession";
 import {
-  findSatTestByCode, getSatMathTest, listMySatMathResults,
+  findSatTestByCode, getSatMathTest, listMySatMathResults, saveSatMathResult,
 } from "@/services/satMathQuizService";
 import SatRunner from "../_components/SatRunner";
 import SatReview from "../_components/SatReview";
+import SatScoreSummary from "../_components/SatScoreSummary";
 import { Banner, Button, Card, EmptyState, Page, cn } from "@/components/student-ui";
 import type { SatExamSnapshot, SatMathResult, SatMathTest, SatQuizItem } from "@/types/SatQuiz";
-import type { Lang } from "@/types/Math";
 
 /**
  * SAT Math — the student's code box, sitting and results. Contract: docs/SAT_QUIZ.md.
@@ -31,78 +33,36 @@ import type { Lang } from "@/types/Math";
  * `createSessionStore` pattern (`lib/SatSession.ts`, its own localStorage key
  * so a SAT sitting can never collide with a mock exam or a Milliy sertifikat
  * paper still running).
+ *
+ * ⚠️ English-only: the real SAT is administered in English, so this page (and
+ * the runner it launches) ignores `useStudentLanguage()` and always shows
+ * English chrome. `examLang` is hard-set to `'en'` for every new sitting —
+ * there is no question-language picker anymore. A sitting taken before this
+ * change may still carry `examLang: 'uz' | 'ru'`; `SatReview` still renders
+ * those correctly from the stored result, this only affects new sittings.
  */
 
-const UI: Record<Lang, Record<string, string>> = {
-  uz: {
-    title: "SAT Matematika",
-    lead: "O'qituvchingiz bergan 6 xonali kodni kiriting.",
-    codeLabel: "Kirish kodi",
-    open: "Ochish",
-    notFound: "Bu kod bilan test topilmadi. Tekshirib, qayta kiriting.",
-    closed: "Bu test yopilgan — o'qituvchingizga murojaat qiling.",
-    lookupFailed: "Kodni tekshirib bo'lmadi. Internetni tekshirib, qayta urinib ko'ring.",
-    intro: "Test", teacher: "O'qituvchi",
-    module1: "Modul 1", module2: "Modul 2", minutes: "daqiqa",
-    langLabel: "Savollar tili",
-    start: "Boshlash", another: "Boshqa kod kiritish",
-    result: "Natija", scaledScore: "Taxminiy ball (200-800)",
-    scaledHint: "Bu College Board'ning rasmiy hisob-kitobi emas — taxminiy shkala.",
-    route: "Yo'nalish", routeEasier: "Oson", routeHarder: "Qiyin",
-    correct: "To'g'ri", of: "/",
-    review: "Savollarni ko'rish",
-    myTests: "Ishlagan testlarim",
-    noTests: "Hali test ishlamagansiz.",
-    openReview: "Ko'rish", closeReview: "Yopish",
-    reviewGone: "Bu test o'chirilgan — savollarni ko'rsatib bo'lmaydi.",
-    reviewFailed: "Savollarni yuklab bo'lmadi.",
-  },
-  ru: {
-    title: "SAT Математика",
-    lead: "Введите 6-значный код, который дал учитель.",
-    codeLabel: "Код доступа",
-    open: "Открыть",
-    notFound: "Тест с таким кодом не найден. Проверьте и введите снова.",
-    closed: "Этот тест закрыт — обратитесь к учителю.",
-    lookupFailed: "Не удалось проверить код. Проверьте интернет и попробуйте снова.",
-    intro: "Тест", teacher: "Учитель",
-    module1: "Модуль 1", module2: "Модуль 2", minutes: "минут",
-    langLabel: "Язык вопросов",
-    start: "Начать", another: "Ввести другой код",
-    result: "Результат", scaledScore: "Приблизительный балл (200-800)",
-    scaledHint: "Это не официальный расчёт College Board — приблизительная шкала.",
-    route: "Направление", routeEasier: "Лёгкий", routeHarder: "Трудный",
-    correct: "Верно", of: "из",
-    review: "Просмотреть вопросы",
-    myTests: "Мои пройденные тесты",
-    noTests: "Вы ещё не проходили тест.",
-    openReview: "Открыть", closeReview: "Закрыть",
-    reviewGone: "Этот тест удалён — вопросы показать нельзя.",
-    reviewFailed: "Не удалось загрузить вопросы.",
-  },
-  en: {
-    title: "SAT Math",
-    lead: "Enter the 6-digit code your teacher gave you.",
-    codeLabel: "Access code",
-    open: "Open",
-    notFound: "No test found with that code. Check it and try again.",
-    closed: "This test is closed — ask your teacher.",
-    lookupFailed: "Could not check the code. Check your connection and try again.",
-    intro: "Test", teacher: "Teacher",
-    module1: "Module 1", module2: "Module 2", minutes: "minutes",
-    langLabel: "Question language",
-    start: "Start", another: "Enter another code",
-    result: "Result", scaledScore: "Approximate score (200-800)",
-    scaledHint: "Not College Board's official equating — an approximate scale.",
-    route: "Route", routeEasier: "Easier", routeHarder: "Harder",
-    correct: "Correct", of: "of",
-    review: "Review questions",
-    myTests: "Tests I've taken",
-    noTests: "You haven't taken a test yet.",
-    openReview: "Open", closeReview: "Close",
-    reviewGone: "That test was deleted — questions can't be shown.",
-    reviewFailed: "Could not load the questions.",
-  },
+const t = {
+  title: "SAT Math",
+  lead: "Enter the 6-digit code your teacher gave you.",
+  codeLabel: "Access code",
+  open: "Open",
+  notFound: "No test found with that code. Check it and try again.",
+  closed: "This test is closed — ask your teacher.",
+  lookupFailed: "Could not check the code. Check your connection and try again.",
+  intro: "Test", teacher: "Teacher",
+  module1: "Module 1", module2: "Module 2", minutes: "minutes",
+  start: "Start", another: "Enter another code",
+  result: "Result", scaledScore: "Approximate score (200-800)",
+  scaledHint: "Not College Board's official equating — an approximate scale.",
+  route: "Route", routeEasier: "Easier", routeHarder: "Harder",
+  correct: "Correct", of: "of",
+  review: "Review questions",
+  myTests: "Tests I've taken",
+  noTests: "You haven't taken a test yet.",
+  openReview: "Open", closeReview: "Close",
+  reviewGone: "That test was deleted — questions can't be shown.",
+  reviewFailed: "Could not load the questions.",
 };
 
 /** Module-lifetime cache for a reviewed test's item content — a sat test is an
@@ -112,13 +72,10 @@ let pastCache: { uid: string; at: number; rows: SatMathResult[] } | null = null;
 const PAST_TTL = 60_000;
 
 export default function SatMathPage() {
-  const { lang: appLang } = useStudentLanguage();
   const { user } = useAuth();
   const uid = user?.uid ?? "";
-  const t = UI[appLang] || UI.uz;
 
   const [code, setCode] = useState("");
-  const [pendingLang, setPendingLang] = useState<Lang>("uz");
   const [lookupError, setLookupError] = useState<string | null>(null);
   const [looking, setLooking] = useState(false);
   const [pendingTest, setPendingTest] = useState<SatMathTest | null>(null);
@@ -218,7 +175,7 @@ export default function SatMathPage() {
     const snapshot: SatExamSnapshot = {
       version: 1,
       uid,
-      examLang: pendingLang,
+      examLang: "en",
       testId: test.id,
       testTitle: test.title,
       teacherId: test.teacherId,
@@ -260,17 +217,38 @@ export default function SatMathPage() {
       <SatRunner
         uid={uid}
         studentName={user?.displayName || ""}
+        subjectName="Math"
         snapshot={live}
-        appLang={appLang}
         onChange={commit}
+        onSave={saveSatMathResult}
         onSubmit={(result, finished) => {
+          const served = finished.route === "harder" ? finished.module2Harder : finished.module2Easier;
           setSubmittedView({
             result,
             module1: finished.module1,
-            module2: finished.route === "harder" ? finished.module2Harder : finished.module2Easier,
+            module2: served,
             showAnswers: finished.showAnswers,
           });
           commit(null);
+          // My Mistakes (docs/MISTAKES.md) — fire-and-forget ON PURPOSE: the
+          // result is already saved by this point, and a failure to bank the
+          // mistakes must never cost the student their score.
+          if (uid) {
+            recordMistakes(
+              uid,
+              satMistakes({
+                source: "sat-math",
+                testId: result.testId,
+                testTitle: result.testTitle,
+                examLang: result.examLang,
+                items: [...finished.module1, ...served],
+                outcomes: result.items ?? {},
+                omitted: result.omitted,
+                subjectId: SAT_MATH_TAXONOMY_SLUG,
+                subjectName: "SAT Matematika",
+              }),
+            ).catch((e) => console.error("recordMistakes failed:", e));
+          }
         }}
       />
     );
@@ -285,20 +263,7 @@ export default function SatMathPage() {
         {submittedView && (
           <Card variant="filled" className="flex flex-col gap-4 p-5 text-center">
             <h2 className="text-[16px] font-black text-on-surface">{t.result}</h2>
-            <div>
-              <div className="text-[44px] font-black leading-none text-primary">{submittedView.result.scaledScore}</div>
-              <p className="mt-1 text-[11px] font-bold text-on-surface-variant">{t.scaledScore}</p>
-              <p className="mt-2 text-[11px] font-medium text-on-surface-variant">{t.scaledHint}</p>
-            </div>
-            <div className="flex items-center justify-center gap-4 text-[13px] font-bold text-on-surface">
-              <span>{submittedView.result.correct}{t.of}{submittedView.result.total} {t.correct}</span>
-              <span className={cn(
-                "rounded-m3-xs px-2 py-0.5 text-[11px] font-bold uppercase",
-                submittedView.result.route === "harder" ? "bg-success-container text-on-success-container" : "bg-warning-container text-on-warning-container",
-              )}>
-                {t.route}: {submittedView.result.route === "harder" ? t.routeHarder : t.routeEasier}
-              </span>
-            </div>
+            <SatScoreSummary result={submittedView.result} />
             <SatReview
               module1={submittedView.module1}
               module2={submittedView.module2}
@@ -320,24 +285,6 @@ export default function SatMathPage() {
             <div className="flex flex-wrap gap-3 text-[12.5px] font-bold text-on-surface-variant">
               <span>{t.module1}: {pendingTest.module1.length} · {pendingTest.module1Minutes} {t.minutes}</span>
               <span>{t.module2}: {pendingTest.module2Minutes} {t.minutes}</span>
-            </div>
-
-            <div>
-              <p className="mb-1.5 text-[11px] font-bold uppercase tracking-wider text-on-surface-variant">{t.langLabel}</p>
-              <div className="flex gap-2">
-                {(["uz", "ru", "en"] as Lang[]).map((l) => (
-                  <button
-                    key={l}
-                    onClick={() => setPendingLang(l)}
-                    className={cn(
-                      "rounded-m3-md border px-3 py-1.5 text-[12px] font-bold",
-                      pendingLang === l ? "border-primary bg-primary-container text-on-primary-container" : "border-outline-variant text-on-surface-variant",
-                    )}
-                  >
-                    {l.toUpperCase()}
-                  </button>
-                ))}
-              </div>
             </div>
 
             <Button size="lg" icon={<Play />} onClick={startTest}>{t.start}</Button>
@@ -380,7 +327,10 @@ export default function SatMathPage() {
                           className="flex w-full items-center gap-3 p-3 text-left"
                         >
                           <span className="min-w-0 flex-1 truncate text-[12.5px] font-bold text-on-surface">{r.testTitle}</span>
-                          <span className="flex-none text-[14px] font-black text-primary">{r.scaledScore}</span>
+                          {/* The BAND when the sitting has one, else the legacy single number. */}
+                          <span className="flex-none text-[14px] font-black text-primary">
+                            {r.scoreBand ? formatScoreBand(r.scoreBand) : r.scaledScore}
+                          </span>
                           <ChevronDown size={14} className={cn("flex-none text-on-surface-variant transition-transform", open && "rotate-180")} />
                         </button>
                         {open && (

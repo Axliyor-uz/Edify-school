@@ -10,7 +10,7 @@ import { overlaps } from "@/services/roomService";
 import { roomTheme } from "@/lib/roomColors";
 import type { ScheduleEntry } from "@/types/attendance";
 import { useManagerLanguage } from "@/app/manager/_components/ManagerLanguage";
-import ScheduleTab from "@/app/manager/groups/[classId]/_components/ScheduleTab";
+import ScheduleTab from "@/app/manager/groups/_shared/ScheduleTab";
 
 const DAY_ORDER = [1, 2, 3, 4, 5, 6, 0]; // Mon → Sun display order
 

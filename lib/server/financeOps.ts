@@ -20,6 +20,8 @@ import {
   type GenerateChargesResult,
   type Payment,
   type PaymentAllocation,
+  type PaymentMethod,
+  type PaymentMethodSplit,
   type RecordPaymentRequest,
   type RecordPaymentResult,
   type StudentFinancePatch,
@@ -52,6 +54,8 @@ const MONTH_KEY_RE = /^\d{4}-\d{2}$/;
 /** Sanity cap: 1 mlrd so'm per single charge/payment. */
 const MAX_AMOUNT = 1_000_000_000;
 const PAYMENT_METHODS = ['cash', 'card', 'click', 'payme', 'transfer', 'other'] as const;
+const isPaymentMethod = (v: unknown): v is PaymentMethod =>
+  typeof v === 'string' && (PAYMENT_METHODS as readonly string[]).includes(v);
 
 const settingsRef = (centerId: string) => adminDb.collection('center_finance_settings').doc(centerId);
 const chargeRef = (id: string) => adminDb.collection('center_charges').doc(id);
@@ -86,6 +90,48 @@ function requireValidMoney(amount: unknown, label = 'Summa'): number {
     throw new ManagerApiError(`${label} noto'g'ri kiritildi.`, 400);
   }
   return amount;
+}
+
+/** At most one line per method value would already cover every real case; a
+ *  little headroom for two different cards typed as separate "card" lines. */
+const MAX_SPLIT_LINES = 8;
+
+/**
+ * Validates an optional method-split array against the payment/expense's own
+ * `amount`, and derives the scalar `method` every existing reader expects.
+ *
+ * Returns `{ method: undefined, methodSplit: undefined }` when `rawSplit` is
+ * absent/empty — the caller then falls back to whatever plain `method` it was
+ * given, so a caller that has never heard of splitting keeps working exactly
+ * as before.
+ */
+function normalizeMethodSplit(
+  amount: number,
+  rawSplit: unknown
+): { method: PaymentMethod | undefined; methodSplit: PaymentMethodSplit[] | undefined } {
+  if (!Array.isArray(rawSplit) || rawSplit.length === 0) return { method: undefined, methodSplit: undefined };
+  if (rawSplit.length > MAX_SPLIT_LINES) {
+    throw new ManagerApiError("To'lov usullari juda ko'p.", 400);
+  }
+
+  const methodSplit: PaymentMethodSplit[] = rawSplit.map((raw) => {
+    const s = (raw ?? {}) as { method?: unknown; amount?: unknown; label?: unknown };
+    if (!isPaymentMethod(s.method)) {
+      throw new ManagerApiError("To'lov usuli noto'g'ri.", 400);
+    }
+    const splitAmount = requireValidMoney(s.amount, "Bo'lak summasi");
+    const label = typeof s.label === 'string' ? s.label.trim().slice(0, 60) : '';
+    return { method: s.method, amount: splitAmount, ...(label ? { label } : {}) };
+  });
+
+  const sum = methodSplit.reduce((total, s) => total + s.amount, 0);
+  if (sum !== amount) {
+    throw new ManagerApiError("To'lov usullari yig'indisi summaga teng emas.", 400);
+  }
+
+  const distinctMethods = new Set(methodSplit.map((s) => s.method));
+  const method = distinctMethods.size === 1 ? methodSplit[0].method : 'other';
+  return { method, methodSplit };
 }
 
 // ─── Settings ─────────────────────────────────────────────────────────────────
@@ -453,8 +499,15 @@ export async function recordPayment(params: {
   if (request.type !== 'payment' && request.type !== 'refund') {
     throw new ManagerApiError("Amal turi noto'g'ri.", 400);
   }
-  if (!PAYMENT_METHODS.includes(request.method as any)) {
-    throw new ManagerApiError("To'lov usuli noto'g'ri.", 400);
+  const { method: splitMethod, methodSplit } = normalizeMethodSplit(amount, request.methodSplit);
+  let method: PaymentMethod;
+  if (methodSplit) {
+    method = splitMethod!;
+  } else {
+    if (!isPaymentMethod(request.method)) {
+      throw new ManagerApiError("To'lov usuli noto'g'ri.", 400);
+    }
+    method = request.method;
   }
   const todayKey = getTodayKey();
   const paidAt = request.paidAt || todayKey;
@@ -518,7 +571,8 @@ export async function recordPayment(params: {
       studentName,
       type: request.type,
       amount,
-      method: request.method,
+      method,
+      ...(methodSplit ? { methodSplit } : {}),
       source: 'manual',
       allocations,
       unallocatedAmount: unallocated,
@@ -807,6 +861,10 @@ export async function createExpense(params: {
   amount: number;
   date?: string;
   note?: string;
+  /** Ignored when `methodSplit` is a non-empty array (method is then derived
+   *  from it) — same relationship `RecordPaymentRequest` has, see there. */
+  method?: PaymentMethod;
+  methodSplit?: PaymentMethodSplit[];
 }): Promise<{ expenseId: string }> {
   const category = typeof params.category === 'string' ? params.category.trim() : '';
   if (!category || category.length > 40) throw new ManagerApiError("Kategoriya noto'g'ri.", 400);
@@ -816,6 +874,15 @@ export async function createExpense(params: {
   if (!DATE_KEY_RE.test(date)) throw new ManagerApiError("Sana formati noto'g'ri.", 400);
   if (date > todayKey) throw new ManagerApiError("Kelajak sanasiga xarajat kiritib bo'lmaydi.", 400);
   const note = typeof params.note === 'string' ? params.note.trim().slice(0, 500) : '';
+
+  const { method: splitMethod, methodSplit } = normalizeMethodSplit(amount, params.methodSplit);
+  let method: PaymentMethod | undefined = splitMethod;
+  if (!methodSplit && params.method) {
+    if (!isPaymentMethod(params.method)) {
+      throw new ManagerApiError("To'lov usuli noto'g'ri.", 400);
+    }
+    method = params.method;
+  }
 
   const ref = expenseRef();
   await ref.set({
@@ -827,6 +894,8 @@ export async function createExpense(params: {
     createdAt: FieldValue.serverTimestamp(),
     status: 'active',
     ...(note ? { note } : {}),
+    ...(method ? { method } : {}),
+    ...(methodSplit ? { methodSplit } : {}),
   });
   return { expenseId: ref.id };
 }

@@ -16,7 +16,7 @@ import { doc, onSnapshot } from 'firebase/firestore';
 import {
   LayoutDashboard, BookOpen, User as UserIcon,
   LogOut, GraduationCap, Flame, Trophy, ChevronDown, Check,
-  Settings, BookMarked, Gamepad2, Globe, Building2, BadgeCheck, Target,
+  Settings, BookMarked, Gamepad2, Globe, Building2, BadgeCheck, Target, Brain,
 } from 'lucide-react';
 import { fetchMyCenters } from '@/services/studentCenterService';
 
@@ -55,19 +55,19 @@ export function useStudentLanguage() {
 // ============================================================================
 const LAYOUT_TRANSLATIONS: any = {
   uz: {
-    menu: { dashboard: "Boshqaruv", classes: "Sinflarim", explore: "Kurslar", library: "Kutubxona", games: "O'yinlar", leaderboard: "Reyting", ielts: "IELTS", profile: "Profil", raschmodel: "Rasch", milliy: "Milliy sertifikat", sat: "SAT", center: "Markazim" },
+    menu: { dashboard: "Boshqaruv", classes: "Sinflarim", explore: "Kurslar", library: "Kutubxona", games: "O'yinlar", leaderboard: "Reyting", ielts: "IELTS", profile: "Profil", raschmodel: "Rasch", milliy: "Milliy sertifikat", sat: "SAT", center: "Markazim", mistakes: "Xatolarim" },
     topbar: { streak: "Seriya", profile: "Profil", settings: "Sozlamalar", logout: "Chiqish", language: "Til" },
     loading: "Yuklanmoqda...",
     logoutConfirm: { title: "Tizimdan chiqish", desc: "Haqiqatan ham hisobingizdan chiqmoqchimisiz?", cancel: "Bekor qilish", confirm: "Ha, chiqish" }
   },
   en: {
-    menu: { dashboard: "Dashboard", classes: "Classes", explore: "Courses", library: "Library", games: "Games", leaderboard: "Rank", ielts: "IELTS", profile: "Profile", raschmodel: "Rasch", milliy: "Milliy sertifikat", sat: "SAT" },
+    menu: { dashboard: "Dashboard", classes: "Classes", explore: "Courses", library: "Library", games: "Games", leaderboard: "Rank", ielts: "IELTS", profile: "Profile", raschmodel: "Rasch", milliy: "Milliy sertifikat", sat: "SAT" , mistakes: "My Mistakes" },
     topbar: { streak: "Streak", profile: "Profile", settings: "Settings", logout: "Sign Out", language: "Language" },
     loading: "Loading...",
     logoutConfirm: { title: "Sign Out", desc: "Are you sure you want to sign out of your account?", cancel: "Cancel", confirm: "Yes, Sign Out" }
   },
   ru: {
-    menu: { dashboard: "Главная", classes: "Классы", explore: "Курсы", library: "Библиотека", games: "Игры", leaderboard: "Рейтинг", ielts: "IELTS", profile: "Профиль", raschmodel: "Rasch", milliy: "Milliy sertifikat", sat: "SAT" },
+    menu: { dashboard: "Главная", classes: "Классы", explore: "Курсы", library: "Библиотека", games: "Игры", leaderboard: "Рейтинг", ielts: "IELTS", profile: "Профиль", raschmodel: "Rasch", milliy: "Milliy sertifikat", sat: "SAT" , mistakes: "Мои ошибки" },
     topbar: { streak: "Серия", profile: "Профиль", settings: "Настройки", logout: "Выйти", language: "Язык" },
     loading: "Загрузка...",
     logoutConfirm: { title: "Выход", desc: "Вы уверены, что хотите выйти из аккаунта?", cancel: "Отмена", confirm: "Да, выйти" }
@@ -133,6 +133,9 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
             const profile = await getUserProfile(user.uid);
             if (profile?.role === 'manager') router.push('/manager/dashboard');
             else if (profile?.role === 'teacher') router.push('/teacher/dashboard');
+            // Office staff (docs/OFFICE.md) — without this they'd fall through
+            // to the student dashboard, which has no data for them.
+            else if (profile?.role === 'director' || profile?.role === 'accountant') router.push('/office');
             else setIsAuthorized(true);
           } catch (error) {
             console.error(error);
@@ -230,6 +233,9 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
     // reason as Milliy sertifikat. A different exam programme, not a subject
     // inside that one. See docs/SAT_QUIZ.md.
     { href: '/sat', label: t.menu.sat, icon: Target, hideOnMobile: true },
+    // My Mistakes (docs/MISTAKES.md) — fed by SAT / Milliy / Rasch, so it sits
+    // with them rather than under Classes.
+    { href: '/mistakes', label: t.menu.mistakes, icon: Brain, hideOnMobile: true },
     // Hidden from the mobile dock: M3 caps a bottom bar at 5 destinations, and
     // Profile is already one tap away in the avatar menu.
     { href: '/profile', label: t.menu.profile, icon: UserIcon, hideOnMobile: true },

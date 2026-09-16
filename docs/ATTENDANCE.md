@@ -51,7 +51,7 @@ and staff attendance.
 | `components/center/TeacherTodayLessons.tsx` | 🟢 **Read-only** (2026-07-29): today's lessons for a center teacher, on the teacher dashboard + center hub. ONE live `centerId + date == today` listener covers every group; "Davomat olish" deep-links to `…?tab=attendance`. Never a per-doc `get()` (rule #2). |
 | `app/teacher/center/_components/AttendanceTab.tsx` | 🟢 **Read-only** month overview (2026-07-29): one `centerId+date` range query per month → overall rate, per-group bars (`rateOfSessions`), recent sessions, month nav. Marking still happens in each group's own grid. |
 | `app/manager/attendance/page.tsx` · `[classId]/page.tsx` | Manager attendance: group grid + walk-in tab → class detail. The class-detail "Dars jadvali" tab is **read-only** (a link to the group page); schedule **editing** moved to the group. |
-| `app/manager/groups/[classId]/_components/ScheduleTab.tsx` | **Schedule + room editor** (moved here from attendance). Group detail's "Jadval & xona" tab. Writes `classes/{id}.schedule` directly. |
+| `app/manager/groups/_shared/ScheduleTab.tsx` | **Schedule + room editor** (moved here from attendance; 2026-09-14 promoted to `_shared` so both the flat group detail and a School Class subject's detail reuse it). "Jadval & xona" tab. Writes `classes/{id}.schedule` directly. |
 | `app/manager/staff-attendance/page.tsx` | Staff attendance page (resolves centerId, feeds teachers into `StaffAttendanceGrid`). |
 | `app/manager/dashboard/page.tsx` | Real analytics dashboard (today rate, monthly rate, chronic absentees, per-group bars, today's lessons). |
 | `app/manager/students/page.tsx` | **Consumer** of today's `records` — reads `.status` (tolerant of legacy string); also shows the `FaceTerminalStatus` badge + Face ID config link. |
@@ -158,7 +158,7 @@ readable or writable by any client** — Cloud Functions (Admin SDK) only.
 ### `classes/{id}.schedule` — the lesson calendar source
 `{ dayOfWeek: 0-6, startTime: "HH:MM", endTime: "HH:MM" }[]`. Student lesson dates are **derived** from this
 (not stored per-day) over a ±31-day window, unioned with persisted docs (for makeup days). Edited by
-`ScheduleTab` (now under `app/manager/groups/[classId]/_components/`). Do not confuse with `app/admin/students/[id]/_components/ClassesTab.tsx` which treats
+`ScheduleTab` (now under `app/manager/groups/_shared/`). Do not confuse with `app/admin/students/[id]/_components/ClassesTab.tsx` which treats
 `schedule` as a legacy string.
 
 ### centerId / role resolution (needed for every attendance surface)

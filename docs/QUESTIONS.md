@@ -2,7 +2,7 @@
 
 > **Agent workflow:** read this BEFORE touching anything that creates, stores, renders or grades a question — `teacher_questions`, `questions1`, the embedded `custom_tests.questions[]` snapshots, any `app/teacher/create/*` page, or a student runner. Also read [DATA_MODEL.md](DATA_MODEL.md). Index: [README.md](README.md).
 
-**Last verified:** 2026-07-31 (camera capture on every image slot; the `?back=` return trip from a paper builder); 2026-07-30 (biology + chemistry added to the taxonomy); rest 2026-07-14.
+**Last verified:** 2026-09-16 (the `sharedBank` visibility flag + the SAT JSON importer, and the `sat-matematika` subtopics were swapped for the centre's own book sections — docs/SAT_QUIZ.md); 2026-07-31 (camera capture on every image slot; the `?back=` return trip from a paper builder); 2026-07-30 (biology + chemistry added to the taxonomy); rest 2026-07-14.
 
 ## The one rule
 
@@ -37,6 +37,37 @@ A v1 doc repeats four fields at the top level even though they also live nested:
 Firestore cannot filter across two different document shapes, and an OR-query over both would **double the reads**. These four names are exactly what legacy docs already use, so **one query + one index serves both eras**. Never filter on `difficulty.name` or `metadata.creatorId`.
 
 ⚠️ Consequence: `where("difficulty", "==", "easy")` is **wrong** — it silently returns zero v1 docs. Filter `difficultyId == DIFFICULTY_ID_BY_NAME.easy` instead.
+
+### `sharedBank: true` — a teacher's own question, visible to everyone
+
+🟢 2026-09-16. The SAT JSON importer (`/teacher/sat/import`, docs/SAT_QUIZ.md)
+writes ordinary documents with the uploader's own `creatorId`, plus a flat
+`sharedBank: true` flag when they opt in. Any picker querying
+`sharedBank == true && subject.id == …` then sees them.
+
+⚠️ **Not the same thing as the sentinel below.** `sharedBank` changes
+VISIBILITY; `creatorId` still names the uploader, so they alone can edit or
+delete it (the `teacher_questions` update/delete rule) and the picker attributes
+it to them. The sentinel below changes OWNERSHIP to nobody and is Admin-SDK-only
+— a client literally cannot write it (`create` requires
+`creatorId == request.auth.uid`). Use the flag for user-contributed content and
+the sentinel only for curated content a script imports.
+
+### `creatorId: ''` — the "no owner" / platform-content sentinel
+
+`teacher_questions` rules are `allow read: if isAuth()` for every signed-in
+user (not scoped to the creator) — the `creatorId ==` filter above is a
+CLIENT-side convention for "browse my own bank," not a rules-enforced
+restriction. That gap is what lets a bank hold **platform-owned** content
+visible to every teacher: write documents with `creatorId: ''` (the same "no
+owner" sentinel `scripts/createSatSampleTest.ts` uses for
+`sat_math_tests.teacherId`) via an Admin-SDK script, and any picker that
+queries `creatorId == ''` instead of the signed-in uid sees them — no rules
+change needed. First used by
+[scripts/importSATEnglishQuestions.ts](../scripts/importSATEnglishQuestions.ts)
+(1,406 SAT English questions, docs/SAT_QUIZ.md) picked from a "Platform bank"
+tab in `app/teacher/sat/english/_components/SatEnglishBankPicker.tsx`
+alongside each teacher's own bank.
 
 ## Enums (types/question.ts)
 
@@ -74,6 +105,13 @@ The load-bearing rule: **a machine-written question lands in `review`, a hand-wr
 🟢 **Four subjects now (2026-07-30): `algebra` (18 topics), `geometriya` (11), `biologiya` (8 topics / 126 subtopics), `kimyo` (4 topics / 117 subtopics).** Both were appended for the Milliy sertifikat subject papers ([MILLIY_QUIZ.md](MILLIY_QUIZ.md)) by [scripts/addBiologyTopics.mjs](../scripts/addBiologyTopics.mjs) and [scripts/addChemistryTopics.mjs](../scripts/addChemistryTopics.mjs) — the reviewable way to add the next one, since 100+ ids have to be slugified exactly like the existing ones and they are PERSISTED into docs. Adding a subject needs **no changes to any creator**: `create/question` and `create/block` read `SUBJECTS`, so open, closed and block questions became authorable the moment each taxonomy landed.
 
 ⚠️ **Topic counts differ wildly by subject and that is deliberate** — biology has 8 topics, chemistry only 4. The topic level mirrors each official programme's own numbered sections (chemistry's programme has four: Umumiy / Anorganik / Organik / Kimyoviy tahlil), because that is the level a paper's question distribution is published at and the level the results pages group by. Don't normalize them.
+
+⚠️ **`sat-matematika`'s SUBTOPICS were replaced on 2026-09-16** (the centre's own
+book sections, `scripts/setSATMathSubtopics.mjs`), leaving 17 old subtopic ids
+orphaned on already-saved questions — they still display and grade (the stored
+NAME is what renders), they just match no taxonomy row any more. The four TOPIC
+ids were left untouched on purpose: they are also `SatMathDomain` values and
+keys inside finished `SatMathResult.domains`. Full reasoning: docs/SAT_QUIZ.md.
 
 ⚠️ **Appending a subject is safe; reordering `algebra`/`geometriya` topics is NOT.** `ExamTeacher.slugForChapter` bridges a `questions1` chapter to a topic slug **by its 1-based position** in `subject.topics[]`. The subject lookup is by id, so extra subjects at the end change nothing — but inserting or moving an algebra/geometry topic silently re-files every bank question in the RASCH exam. Biology and chemistry have no `questions1` mirror, so `bankIds` falls back to the doc's own ids, which is what the subject papers want.
 

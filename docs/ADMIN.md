@@ -4,7 +4,7 @@
 >
 > This doc supersedes the historical plan in [ADMIN_CENTERS_PLAN.md](ADMIN_CENTERS_PLAN.md) wherever they disagree.
 
-**Last verified:** 2026-07-15.
+**Last verified:** 2026-09-15 (the Office staff tab — [OFFICE.md](OFFICE.md); previously 2026-07-15).
 
 ## Auth
 
@@ -33,6 +33,20 @@
 - **Cascade delete** (`DELETE /api/admin/centers/[id]`), idempotent, center doc last (2026-07-15 full rewrite — covers EVERY center-owned store): attendance (`center_attendance` → `center_staff_attendance` → `center_attendance_summary`) → `face_enrollments` → `rooms` → `crm_leads` → **finance** (`center_student_finance`, `center_charges`, `center_payments`, `center_expenses`, `center_payouts`, `center_finance_settings/{id}`) → `classes` (**by `classes.centerId`**, the membership anchor; `deleteClasses:true` → `recursiveDelete` each incl. subcollections, else strip `centerId`) → **center-managed IELTS twins** (`ielts_groups where centerId==`, 2026-07-29 — without this they'd be orphaned AND unmanageable, since the rules lock the teacher out of managed-group docs; `deleteClasses:true` → recursiveDelete incl. assignments/requests [`ielts_attempts` kept], else strip `centerId`+`managed` so the group reverts to a personal teacher group) → **center-created teacher accounts** (`users where accountType=='center-managed' && centerId==` — classes-per-account follow `deleteClasses`; recursiveDelete of `users/{uid}` takes `private/contact`; + `usernames` + Auth user; **self-signup teachers never touched**) → `center_teacher_credentials` → `center_teachers` → `center_students` + `center_student_credentials` (2026-07-29 — roster links/passwords no longer linger; student ACCOUNTS are never deleted here) → optionally manager (same account teardown, personal classes untouched) → `centers`. Flags `{deleteManagerAccount, deleteClasses, deleteCreatedTeacherAccounts}` all default **true**; returns `deletedCounts` per bucket.
 - **Transfer ownership**: target found by email; blocked if they own or teach at another center. `oldOwnerAction` ∈ `demote-teacher` | `demote-student` | `keep`. ⚠️ `demote-teacher` sets `role:'teacher'` but does **NOT** create a `center_teachers` link — the ex-owner ends up as a teacher with no center.
 
+### Office staff (`app/admin/centers/[id]/_components/StaffTab.tsx`) — 2026-09-15
+The center's **director** and **buxgalter** accounts ([OFFICE.md](OFFICE.md)) — a tab beside Manager.
+⚠️ **Super-admin-only by design**: a director outranks the manager, so there is deliberately no
+`/api/manager/...` twin and `center_staff` is `write: if false` for every client. All four operations
+go through `/api/admin/centers/{id}/staff` (Admin SDK + `requireSuperAdmin`): GET list (with the
+stored password), POST create (translit email/username from `lib/teacherProvision.ts`, Auth user +
+one batch over `users`/`usernames`/`private/contact`/`center_staff`/`center_staff_credentials`, Auth
+rolled back on batch failure), PATCH reset-password (Auth first, then the credential doc), DELETE
+revoke (deleting the **link** is what closes access; `deleteAccount` defaults true and also takes the
+username + user + Auth user). The synthetic email has **no inbox**, so the password is shown here —
+the super admin is the only recovery path.
+⚠️ **The cascade delete does NOT yet cover `center_staff`/`center_staff_credentials`** — see the
+Invariants list below.
+
 ### Membership (`app/admin/membership/`)
 Edits **teacher** users' `subscription.planId` + `currentLimits.{maxClasses,maxStudents,monthlyAiQuestions}` via client `updateDoc`. ⚠️ Overlaps with `admin/teachers/[id]/_components/MembershipTab.tsx`, which writes a **wider** field set (`subscription.{billingCycle,status,expiresAt}`, `includedFeatures[]`, `usage.aiLimitResetDate`, "Refund AI Usage" → `usage.aiQuestionsUsed=0`) — two editors, last-writer-wins, different coverage. Plan defaults from `app/teacher/subscription/plansData.ts`.
 
@@ -45,6 +59,7 @@ Server-paginated `classes orderBy(studentCount|createdAt)` — hard dependency o
 ## Invariants & traps
 
 - Admin-created centers are born `active`; public-signup centers are born `pending` — the only two legal creators of `status`.
+- ⚠️ **`DELETE /api/admin/centers/[id]` does not delete `center_staff` / `center_staff_credentials`** (added 2026-09-15, cascade not updated). The orphaned links point at a missing center, so `requireCenterOffice` fails and access is closed — but the documents linger. Add them to the cascade's bucket list when you next touch it.
 - `center_teachers` doc ID == teacher uid (one center per teacher) — preserved even by the admin steal path.
 - Timestamp mix: `centers.createdAt` is an ISO string; `classes.createdAt` is a Timestamp. `centerAdminService.toMillis()` tolerates both, but `GroupsTab.formatDate` and classes-detail (`createdAt.seconds`) assume Timestamp → render "—"/NaN for ISO (known minor bug).
 - Nav has Dashboard/Centers/Teachers/Memberships only — `/admin/students` and `/admin/classes` exist but are unlisted (dashboard "Active Classes" card is still a dead `#` despite `/admin/classes` being built).

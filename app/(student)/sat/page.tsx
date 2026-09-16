@@ -3,30 +3,26 @@
 import { useRouter } from "next/navigation";
 import { BadgeCheck, BookOpenText, Sigma } from "lucide-react";
 
-import { useStudentLanguage } from "../layout";
 import { SAT_SECTIONS, type SatSection } from "@/lib/SatMathQuiz";
 import { Card, Page, cn } from "@/components/student-ui";
-import type { Lang } from "@/types/Math";
 
 /**
  * SAT — the student's section hub (docs/SAT_QUIZ.md). Cards only, zero
  * Firestore reads — the section list is `SAT_SECTIONS`, mirroring how the
  * Milliy sertifikat student hub reads `MILLIY_SUBJECTS`.
+ *
+ * ⚠️ English-only, unlike the rest of the student app: the real SAT is
+ * administered in English, so this hub (and the code entry / runner it leads
+ * to) ignores `useStudentLanguage()` and always renders English chrome +
+ * English question content, regardless of the student's app-wide language.
  */
 
-const UI: Record<Lang, Record<string, string>> = {
-  uz: { title: "SAT", subtitle: "Bo'lim tanlang.", ready: "Ochiq", soon: "Tez kunda" },
-  ru: { title: "SAT", subtitle: "Выберите раздел.", ready: "Открыто", soon: "Скоро" },
-  en: { title: "SAT", subtitle: "Pick a section.", ready: "Open", soon: "Soon" },
-};
+const t = { title: "SAT", subtitle: "Pick a section.", ready: "Open", soon: "Soon" };
 
 const LOOK: Record<string, typeof Sigma> = { math: Sigma, "reading-writing": BookOpenText };
 
 export default function SatHubPage() {
   const router = useRouter();
-  const { lang } = useStudentLanguage();
-  const t = UI[lang] || UI.uz;
-  const L = (lang === "ru" || lang === "en" ? lang : "uz") as Lang;
 
   return (
     <Page>
@@ -50,7 +46,7 @@ export default function SatHubPage() {
                 <span className="flex h-11 w-11 flex-none items-center justify-center rounded-m3-md bg-primary-container text-on-primary-container">
                   <Icon size={20} strokeWidth={2.4} />
                 </span>
-                <span className="min-w-0 flex-1 text-[14px] font-bold text-on-surface">{section.name[L] || section.name.uz}</span>
+                <span className="min-w-0 flex-1 text-[14px] font-bold text-on-surface">{section.name.en}</span>
                 <span className={cn(
                   "flex-none rounded-m3-xs px-2 py-1 text-[10px] font-bold uppercase tracking-wide",
                   ready ? "bg-success-container text-on-success-container" : "bg-surface-container text-on-surface-variant",

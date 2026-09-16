@@ -8,6 +8,7 @@ import { useTeacherLanguage } from "@/app/teacher/layout";
 import { useAuth } from "@/lib/AuthContext";
 import { SAT_MATH_DOMAINS, type SatMathDomainInfo } from "@/lib/SatMathQuiz";
 import { getSatMathTest, listSatMathResults } from "@/services/satMathQuizService";
+import { formatScoreBand } from "@/lib/SATscore";
 import { Banner, Card, EmptyState, IconButton, PageHeader, Skeleton, StatTile, cn } from "@/components/ui";
 import type { SatMathDomain, SatMathResult, SatMathTest, SatQuizItem } from "@/types/SatQuiz";
 import type { Lang } from "@/types/Math";
@@ -39,6 +40,7 @@ const TR: Record<string, Record<string, string>> = {
     module1: "Modul 1", module2: "Modul 2",
     routeEasier: "Oson", routeHarder: "Qiyin",
     correctOf: "to'g'ri",
+    breakdown: "Tahlil", wrongShort: "xato", blankShort: "bo'sh",
     noItemData: "Bu urinish savol darajasida saqlanmagan.",
     loadFailed: "Natijalarni yuklab bo'lmadi",
     notFound: "Test topilmadi",
@@ -56,6 +58,7 @@ const TR: Record<string, Record<string, string>> = {
     module1: "Модуль 1", module2: "Модуль 2",
     routeEasier: "Лёгкий", routeHarder: "Трудный",
     correctOf: "верно",
+    breakdown: "Разбор", wrongShort: "неверно", blankShort: "пусто",
     noItemData: "Эта попытка не сохранена по вопросам.",
     loadFailed: "Не удалось загрузить результаты",
     notFound: "Тест не найден",
@@ -73,6 +76,7 @@ const TR: Record<string, Record<string, string>> = {
     module1: "Module 1", module2: "Module 2",
     routeEasier: "Easier", routeHarder: "Harder",
     correctOf: "correct",
+    breakdown: "Breakdown", wrongShort: "wrong", blankShort: "blank",
     noItemData: "This sitting was not saved per question.",
     loadFailed: "Could not load the results",
     notFound: "Test not found",
@@ -282,7 +286,10 @@ export default function SatMathResultsPage() {
                         )}>
                           {r.route === "harder" ? t.routeHarder : t.routeEasier}
                         </span>
-                        <span className="flex-none text-[15px] font-black tabular-nums text-on-surface">{r.scaledScore}</span>
+                        {/* The BAND when the sitting has one, else the legacy single number. */}
+                        <span className="flex-none text-[15px] font-black tabular-nums text-on-surface">
+                          {r.scoreBand ? formatScoreBand(r.scoreBand) : r.scaledScore}
+                        </span>
                         <ChevronDown size={16} className={cn("flex-none text-on-surface-variant transition-transform", open && "rotate-180")} />
                       </button>
                       {open && (
@@ -301,6 +308,16 @@ export default function SatMathResultsPage() {
                             <div className="text-[10px] font-bold uppercase tracking-wide">{t.correctOf}</div>
                             <div className="text-on-surface">{r.correct}/{r.total}</div>
                           </div>
+                          {/* Blanks vs wrong answers — hidden entirely on a sitting
+                              graded before `omitted` existed, rather than claiming 0. */}
+                          {r.omitted !== undefined && (
+                            <div>
+                              <div className="text-[10px] font-bold uppercase tracking-wide">{t.breakdown}</div>
+                              <div className="text-on-surface">
+                                {Math.max(0, r.total - r.correct - r.omitted.length)} {t.wrongShort} · {r.omitted.length} {t.blankShort}
+                              </div>
+                            </div>
+                          )}
                           {(!r.items || Object.keys(r.items).length === 0) && (
                             <div className="col-span-2 italic sm:col-span-1">{t.noItemData}</div>
                           )}

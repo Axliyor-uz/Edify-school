@@ -49,6 +49,20 @@ service cloud.firestore {
       return isAuth() && exists(myPath) && get(myPath).data.centerId == centerId;
     }
 
+    // 🟢 OFFICE STAFF HELPER (docs/OFFICE.md) — is the REQUESTER a director or
+    // buxgalter (accountant) of `centerId`? Anchored on center_staff/{uid},
+    // whose doc id MUST equal the staff uid (enforced in its own block below)
+    // and which NO client can write — exactly the center_teachers pattern.
+    //
+    // The lookup path is /center_staff/$(request.auth.uid): ALWAYS constant, so
+    // this costs ONE document access per query no matter how many docs match.
+    // That is what keeps it legal inside the finance `list` rules (rule #2 in
+    // docs/ATTENDANCE.md — a per-document get() blows the access limit).
+    function isCenterOffice(centerId) {
+      let myPath = /databases/$(database)/documents/center_staff/$(request.auth.uid);
+      return isAuth() && exists(myPath) && get(myPath).data.centerId == centerId;
+    }
+
     // 🟢 SUPER ADMIN HELPER
     function isSuperAdmin() {
       return request.auth != null && request.auth.token.super_admin == true;
@@ -693,6 +707,37 @@ service cloud.firestore {
       allow delete: if false;
     }
 
+    // --- 12e. SAT ENGLISH (Reading & Writing) TESTS/RESULTS (docs/SAT_QUIZ.md) ---
+    //
+    // Mirrors 12d exactly, in SAT English's own collections
+    // (`sat_english_tests`/`sat_english_results`) — its own code namespace,
+    // never cross-checked against `sat_math_tests`. Same known trap: the test
+    // embeds its questions (and their answers) behind `read: if isAuth()`; the
+    // 6-digit code is a sharing convenience, not a security boundary.
+    match /sat_english_tests/{testId} {
+      allow read: if isAuth();
+      allow create: if isAuth() && request.resource.data.teacherId == request.auth.uid;
+      allow update, delete: if isAuth() && resource.data.teacherId == request.auth.uid;
+    }
+
+    match /sat_english_results/{resultId} {
+      allow read: if isAuth() && (
+        resource.data.studentId == request.auth.uid ||
+        resource.data.teacherId == request.auth.uid
+      );
+      allow create: if isAuth()
+                    && request.resource.data.studentId == request.auth.uid
+                    && request.resource.data.total is int
+                    && isScaledScore(request.resource.data.scaledScore);
+      allow update: if isAuth()
+                    && resource.data.studentId == request.auth.uid
+                    && request.resource.data.studentId == resource.data.studentId
+                    && request.resource.data.testId == resource.data.testId
+                    && request.resource.data.teacherId == resource.data.teacherId
+                    && isScaledScore(request.resource.data.scaledScore);
+      allow delete: if false;
+    }
+
     // --- 13. EXAMS ---
     match /bsb_chsb_tests/{testId} {
       allow read: if isAuth();
@@ -974,13 +1019,16 @@ service cloud.firestore {
       allow get: if isAuth() && (
         resource == null ||
         isCenterManager(resource.data.centerId) ||
+        isCenterOffice(resource.data.centerId) ||
         teacherId == request.auth.uid
       );
 
       // LIST: every query filters `centerId ==` (useCenterClasses, teachers
-      // page), so isCenterManager runs ONE constant-path get() per query.
+      // page, the office panel's staff tab), so isCenterManager /
+      // isCenterOffice each run ONE constant-path get() per query.
       allow list: if isAuth() && (
         isCenterManager(resource.data.centerId) ||
+        isCenterOffice(resource.data.centerId) ||
         teacherId == request.auth.uid
       );
 
@@ -1019,6 +1067,22 @@ service cloud.firestore {
       allow update, delete: if isAuth() && isActiveCenterManager(resource.data.centerId);
     }
 
+    // 🟢 SCHOOL CLASSES (grade + subjects, docs/MANAGER.md). A grade-level
+    // container ("5-A") a manager creates to group several `classes` docs
+    // (subjects) under one shared roster. Doc id `${centerId}_${grade}_${section}`
+    // gives free uniqueness — same idiom as center_students above. centerId/
+    // grade/section are immutable after create (no rename — delete-and-recreate).
+    match /school_classes/{schoolClassId} {
+      allow read: if isAuth(); // matches classes' own read rule
+      allow create: if isAuth() &&
+        isActiveCenterManager(request.resource.data.centerId) &&
+        schoolClassId == request.resource.data.centerId + '_' + request.resource.data.grade + '_' + request.resource.data.section;
+      allow update: if isAuth() &&
+        isActiveCenterManager(resource.data.centerId) &&
+        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['centerId', 'grade', 'section']);
+      allow delete: if isAuth() && isActiveCenterManager(resource.data.centerId);
+    }
+
     // 🟢 Manager-created STUDENT accounts: the manager-visible password.
     // Doc id = student uid; exactly the center_teacher_credentials contract
     // (API-only writes, owning-center manager reads, student can't read own).
@@ -1053,39 +1117,103 @@ service cloud.firestore {
     // attendance lists. If a query ever throws "insufficient permissions",
     // the fallback is API-route reads, not relaxing these rules.
 
+    // 🟢 2026-09-15: reads also open to the center's OFFICE STAFF — the
+    // director and the buxgalter (docs/OFFICE.md). Both are read-only HERE;
+    // the accountant's ability to RECORD a payment/expense is granted by the
+    // API routes (Admin SDK), never by these rules, so `write: if false`
+    // stays absolute for every client on every money collection.
+    // isCenterOffice() is a constant-path lookup, so a director's query still
+    // costs a fixed handful of document accesses regardless of result size.
+
     match /center_finance_settings/{centerId} {
-      allow read: if isAuth() && isCenterManager(centerId);
+      allow read: if isAuth() && (isCenterManager(centerId) || isCenterOffice(centerId));
       allow write: if false;
     }
 
     match /center_student_finance/{profileId} {
-      allow get: if isAuth() && (resource == null || isCenterManager(resource.data.centerId));
-      allow list: if isAuth() && isCenterManager(resource.data.centerId);
+      allow get: if isAuth() && (resource == null || isCenterManager(resource.data.centerId) || isCenterOffice(resource.data.centerId));
+      allow list: if isAuth() && (isCenterManager(resource.data.centerId) || isCenterOffice(resource.data.centerId));
       allow write: if false;
     }
 
     match /center_charges/{chargeId} {
-      allow get: if isAuth() && (resource == null || isCenterManager(resource.data.centerId));
-      allow list: if isAuth() && isCenterManager(resource.data.centerId);
+      allow get: if isAuth() && (resource == null || isCenterManager(resource.data.centerId) || isCenterOffice(resource.data.centerId));
+      allow list: if isAuth() && (isCenterManager(resource.data.centerId) || isCenterOffice(resource.data.centerId));
       allow write: if false;
     }
 
     match /center_payments/{paymentId} {
-      allow get: if isAuth() && (resource == null || isCenterManager(resource.data.centerId));
-      allow list: if isAuth() && isCenterManager(resource.data.centerId);
+      allow get: if isAuth() && (resource == null || isCenterManager(resource.data.centerId) || isCenterOffice(resource.data.centerId));
+      allow list: if isAuth() && (isCenterManager(resource.data.centerId) || isCenterOffice(resource.data.centerId));
       allow write: if false;
     }
 
     match /center_expenses/{expenseId} {
-      allow get: if isAuth() && (resource == null || isCenterManager(resource.data.centerId));
-      allow list: if isAuth() && isCenterManager(resource.data.centerId);
+      allow get: if isAuth() && (resource == null || isCenterManager(resource.data.centerId) || isCenterOffice(resource.data.centerId));
+      allow list: if isAuth() && (isCenterManager(resource.data.centerId) || isCenterOffice(resource.data.centerId));
       allow write: if false;
     }
 
     match /center_payouts/{payoutId} {
-      allow get: if isAuth() && (resource == null || isCenterManager(resource.data.centerId));
+      allow get: if isAuth() && (resource == null || isCenterManager(resource.data.centerId) || isCenterOffice(resource.data.centerId));
+      allow list: if isAuth() && (isCenterManager(resource.data.centerId) || isCenterOffice(resource.data.centerId));
+      allow write: if false;
+    }
+
+    // 🟢 OFFICE STAFF LINK (2026-09-15) — the authorization anchor for the
+    // director / buxgalter panel. Doc id MUST equal the staff uid (that is what
+    // makes isCenterOffice()'s doc(uid) lookup trustworthy), and NO client may
+    // write it: accounts are provisioned only by a super admin through
+    // POST /api/admin/centers/{id}/staff (Admin SDK) — see docs/OFFICE.md.
+    match /center_staff/{staffUid} {
+      // GET: the staff member reads their own link (the office layout's guard
+      // resolves centerId + staffRole from it), and the center's manager may
+      // see who has back-office access to their center.
+      allow get: if isAuth() && (
+        staffUid == request.auth.uid ||
+        (resource != null && isCenterManager(resource.data.centerId))
+      );
+      // LIST: manager-only, and every query filters `centerId ==` so
+      // isCenterManager runs ONE constant-path get().
       allow list: if isAuth() && isCenterManager(resource.data.centerId);
       allow write: if false;
+    }
+
+    // 🔒 The admin-held password for an office account. Never client-readable —
+    // only the super admin sees it, through god mode / the Admin SDK. (Unlike
+    // center_teacher_credentials, which the MANAGER owns and must display,
+    // these accounts are provisioned by the admin, so the admin is the only
+    // recovery path.)
+    match /center_staff_credentials/{staffUid} {
+      allow read, write: if false;
+    }
+
+    // 🟢 MY MISTAKES (docs/MISTAKES.md, 2026-09-16) — the student's own bucket
+    // of questions they got wrong or left blank, kept so they can practise.
+    // Doc id is `${studentId}_${slotKey}`.
+    //
+    // ⚠️ Entirely PRIVATE to the student: nobody else reads it, not even their
+    // teacher or the centre manager. It is a study aid, not an assessment
+    // record — the teacher already has the authoritative per-question outcomes
+    // in `teacher_rasch_results` / `milliy_quiz_results` / the SAT results.
+    // Exposing a student's private revision list would change what it is for.
+    //
+    // The id is NOT trusted as the owner check (a uid is not separable from a
+    // slotKey by string surgery — question ids contain underscores too), so
+    // both branches compare the `studentId` FIELD instead.
+    match /student_mistakes/{mistakeId} {
+      allow get: if isAuth() && (resource == null || resource.data.studentId == request.auth.uid);
+      // LIST: every query filters `studentId ==` (the service has no other
+      // read path), so this is provable without a get().
+      allow list: if isAuth() && resource.data.studentId == request.auth.uid;
+
+      allow create: if isAuth()
+                    && request.resource.data.studentId == request.auth.uid
+                    && mistakeId == request.resource.data.id;
+      allow update: if isAuth()
+                    && resource.data.studentId == request.auth.uid
+                    && request.resource.data.studentId == request.auth.uid;
+      allow delete: if isAuth() && resource.data.studentId == request.auth.uid;
     }
 
     // 🟢 NEW — System Config (Syllabus, etc.)

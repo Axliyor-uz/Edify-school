@@ -5,7 +5,7 @@
 > **Quick reference:** [FINANCE_DATABASE.md](FINANCE_DATABASE.md) maps every collection and,
 > per UI action, exactly which documents change — read that first for "where does my data go".
 
-**Last verified:** 2026-07-12 (commit `7c31a96`). Tuition core (Phase 1) and payroll & expenses (Phase 3) are **built — this is a current-state reference**; §10 lists what remains future. (Formerly `FINANCE_PLAN.md`.)
+**Last verified:** 2026-09-15 (the buxgalter/director back-office got read access + an accountant write path — §5.1, [OFFICE.md](OFFICE.md); previously 2026-09-14, the multi-method split §4.2a). Tuition core (Phase 1) and payroll & expenses (Phase 3) are **built — this is a current-state reference**; §10 lists what remains future. (Formerly `FINANCE_PLAN.md`.)
 
 ## 0. Locked product decisions
 
@@ -137,6 +137,7 @@ the period; fall back to calendar-day ratio when the class has no schedule. Roun
   type: 'payment' | 'refund',
   amount: number,                             // always positive; direction comes from `type`
   method: 'cash' | 'card' | 'click' | 'payme' | 'transfer' | 'other',
+  methodSplit?: { method, amount, label? }[], // ⚠️ (2026-09-14) present only when paid across 2+ methods — see 4.2a
   source: 'manual',                           // future: 'payme_gateway' | 'click_gateway'
   externalId?: string,                        // future gateway transaction id
   allocations: { chargeId: string, amount: number }[],
@@ -190,6 +191,40 @@ Server algorithm:
 4. Response includes the post-payment state for the confirmation screen ("Iyul to'landi ✓,
    avans: 200 000 so'm").
 
+### 4.2a Splitting one payment/expense across several methods (2026-09-14)
+The manager panel now lets ONE payment (`RecordPaymentModal`) or expense (`ExpensesTab`'s
+`AddExpenseModal`) be paid across more than one method in a single entry — e.g. 500,000 so'm as
+300,000 by card + 200,000 cash — via the shared
+[`MethodSplitEditor`](../app/manager/finance/_components/MethodSplitEditor.tsx) component. The
+common single-method case is UNCHANGED (it still renders as one button row and sends no split at
+all); the split UI only appears once the manager opts in.
+
+- **Wire shape**: an optional `methodSplit: { method, amount, label? }[]` alongside the existing
+  `amount`/`method` on both `RecordPaymentRequest` and `createExpense`'s params. `label` is
+  FREE TEXT (e.g. "AAA karta") — ⚠️ **there is no named-card/account registry anywhere in this
+  repo**; a manager types the label fresh every time and it is simply snapshotted onto that one
+  split line, exactly like every other snapshot field in this module. Deliberate: adding a
+  reusable "cards" list was considered and explicitly deferred.
+- **Server validation is the source of truth** (`lib/server/financeOps.ts::normalizeMethodSplit`,
+  shared by `recordPayment` and `createExpense`): every line's `method` must be one of
+  `PAYMENT_METHODS`, every `amount` a positive integer (`requireValidMoney`), the lines must sum
+  to **exactly** the payment/expense's own `amount` (400 if not), and at most `MAX_SPLIT_LINES` (8)
+  lines are accepted. When `methodSplit` is absent/empty, behavior is byte-for-byte what it was
+  before this field existed.
+- **The stored scalar `method` is DERIVED, never the caller's raw input, once `methodSplit` is
+  present**: all lines sharing one method → that method; more than one distinct method → `'other'`.
+  This is why every pre-existing reader that only knows the scalar field (the old Excel export
+  column, an older Android client, a future report) still shows something sane — `methodSplit`
+  is the detailed, authoritative breakdown layered on top, not a replacement.
+- **Expenses gained the `method`/`methodSplit` fields from scratch** — they had NO method concept
+  at all before. Both are optional; an expense recorded before this change, or via a caller that
+  never sets them, simply has neither and reads/displays as "—".
+- Display: `formatMethodSplit()` in
+  [`financeFormat.ts`](../app/manager/finance/_components/financeFormat.ts) — "Karta" for a plain
+  entry, "Naqd 200 000 + Karta (AAA karta) 300 000" once split. The Excel export
+  ([`lib/finance/exportExcel.ts`](../lib/finance/exportExcel.ts)) has its OWN small equivalent
+  (`methodSummary`) by design — that file is deliberately kept free of `app/`-level imports.
+
 ### 4.3 Cancellations
 - **Cancel payment**: reverse its allocations (decrement charges' `paidAmount`, recompute statuses),
   set status + audit fields, adjust balance. One transaction.
@@ -206,10 +241,29 @@ Server algorithm:
 | `/api/manager/finance/charges/waive` | `{ chargeId, reason }` | verifies `charge.centerId` matches caller |
 | `/api/manager/finance/charges/cancel` | `{ chargeId, reason }` | `paidAmount == 0` guard |
 | `/api/manager/finance/charges/adjust` | `{ chargeId, amount, note? }` | `paidAmount == 0` guard |
-| `/api/manager/finance/payments` | `{ studentId, amount, type, method, paidAt?, note? }` | §4.2 |
+| `/api/manager/finance/payments` | `{ studentId, amount, type, method, methodSplit?, paidAt?, note? }` | §4.2, §4.2a |
 | `/api/manager/finance/payments/cancel` | `{ paymentId, reason }` | §4.3 |
 | `/api/manager/finance/student` | `{ studentId, patch }` | discount, overrides, freeze/unfreeze, enrollmentDates fixes |
 | `/api/manager/finance/group-fees` | bulk `classes.monthlyFee` update | `updateGroupFees` in `financeOps.ts`; ownership check via server-side `resolveCenterClasses` (deliberately not client rules); used by Sozlamalar "Guruh narxlari" (`GroupPricesSection.tsx`) |
+
+### 5.1 Office staff on these routes (2026-09-15)
+
+Five of the routes above also accept a **buxgalter** or a **director** ([OFFICE.md](OFFICE.md)), via a
+new `options.office` argument on the `financePostHandler` factory:
+
+| Route | `office` | Who |
+|---|---|---|
+| `/payments`, `/payments/cancel`, `/expenses`, `/expenses/cancel` | `'accountant'` | manager **or** buxgalter |
+| `/payroll/calculate` | `'any'` | manager **or** any office role (it writes nothing) |
+| everything else | *(omitted)* | manager only — unchanged |
+
+`resolveFinanceCaller` tries `requireActiveCenterManager` first and only falls through to
+`requireCenterOffice` on a **403** (authenticated but not this center's manager); a 401 propagates.
+⚠️ `uid` in the op context is the REAL caller, so an accountant's payments carry **their** uid in
+`receivedBy`/`createdBy` — the audit trail names who typed it. Cancel is included deliberately:
+money is append-only, so cancel + re-enter IS the correction path (§4.3), and an accountant who may
+record must be able to reverse their own typo. `write: if false` on the collections is untouched —
+the route is the only write path, exactly as iron rule #4 requires.
 
 Guard: the PRE-EXISTING `lib/server/verifyCenterManager.ts` (`requireActiveCenterManager`,
 throws `ManagerApiError` with user-facing Uzbek messages) — verifies the bearer ID token,
@@ -246,6 +300,11 @@ match /center_payments/{paymentId} {
   allow write: if false;
 }
 ```
+
+🟢 **2026-09-15**: every `read`/`get`/`list` above also admits `|| isCenterOffice(<centerId>)` — the
+center's director and buxgalter ([OFFICE.md](OFFICE.md)). That helper looks up the CONSTANT path
+`center_staff/$(request.auth.uid)`, so it adds a fixed couple of document accesses per query and the
+limit argument below still holds. **`write: if false` was NOT touched on any collection.**
 
 Unlike attendance, finance list rules must **not** relax to `isAuth()` — payments are the most
 sensitive data in the app. The `list` rules above stay within the document-access limit because the
@@ -285,11 +344,11 @@ Deploy: `firebase deploy --only firestore:rules,firestore:indexes`.
 | `lib/server/financeOps.ts` | Server-side transactions: generation, payment+allocation, cancellations. **The future Payme/Click webhook calls these same functions.** |
 | `services/financeService.ts` | Client reads (charges by period, debtors, payments feed, student history, settings) + typed wrappers around the API routes |
 | `app/manager/finance/page.tsx` | Stat header + **6 tabs**: To'lovlar · Qarzdorlar · Hisob-kitob · Oyliklar · Xarajatlar · Sozlamalar |
-| `app/manager/finance/_components/` | `FinanceStats`, `GenerateChargesBanner`, `ChargesTab`, `PaymentsTab`, `RecordPaymentModal`, `PaymentKindSheet`, `RecordTeacherPayoutModal`, `ExportFinanceButton`, `DebtorsTab`, `SettingsTab`, `StudentFinanceSection`, `PayrollTab`, `ExpensesTab`, `GroupPricesSection`, `StartGuide`, `MonthNav`, `StudentInfoDialog`, `ReasonDialog`, `financeFormat.ts` |
+| `app/manager/finance/_components/` | `FinanceStats`, `GenerateChargesBanner`, `ChargesTab`, `PaymentsTab`, `RecordPaymentModal`, `PaymentKindSheet`, `RecordTeacherPayoutModal`, `ExportFinanceButton`, `DebtorsTab`, `SettingsTab`, `StudentFinanceSection`, `PayrollTab`, `ExpensesTab`, `GroupPricesSection`, `StartGuide`, `MonthNav`, `StudentInfoDialog`, `ReasonDialog`, `MethodSplitEditor` (§4.2a), `financeFormat.ts` |
 | `lib/finance/exportExcel.ts` | Pure `.xlsx` workbook builder (SheetJS `xlsx` package) — no Firestore |
 | `app/manager/students/_components/ManagerStudentInfoPanel.tsx` | Embed `StudentFinanceSection` (balance, history, discount, freeze) |
-| `app/manager/groups/[classId]/_components/ManagerSettingsTab.tsx` | Add `monthlyFee` field |
-| `app/manager/groups/[classId]/_components/ManagerAddStudentModal.tsx` | Best-effort enrollment-date stamp via `/finance/student` after add |
+| `app/manager/groups/detail/[classId]/_components/ManagerSettingsTab.tsx`, `[schoolClassId]/subjects/[classId]/_components/SubjectSettingsTab.tsx` | `monthlyFee` field (2026-09-14: same field, now editable from either the flat group view or a School Class subject's settings) |
+| `app/manager/groups/detail/[classId]/_components/ManagerAddStudentModal.tsx`, `services/schoolClassService.ts` (`syncSchoolClassRoster`) | Best-effort enrollment-date stamp via `/finance/student` after add — the School Class roster fan-out stamps it per subject |
 | `firestore.rules`, `firestore.indexes.json` | §6 |
 
 ## 8. Build order (historical — the module is built; §8.6 remains useful as a manual verification script)
@@ -314,9 +373,12 @@ Deploy: `firebase deploy --only firestore:rules,firestore:indexes`.
 ## 9. Phase 3 — payroll & expenses (BUILT)
 
 - **`center_expenses/{autoId}`** — `{ centerId, category, amount, date (YYYY-MM-DD, not future),
-  note?, teacherId?, payoutId?, createdBy, createdAt, status: 'active'|'cancelled' + cancel audit }`.
-  Append-only. Salary payouts create expenses with the reserved category `'salary'` and a `payoutId`
-  link — **salary-linked expenses cannot be cancelled** (v1). Index: `centerId+date`.
+  note?, method?, methodSplit?, teacherId?, payoutId?, createdBy, createdAt, status:
+  'active'|'cancelled' + cancel audit }`. `method`/`methodSplit` (2026-09-14, see §4.2a) are
+  optional — absent on every expense recorded before that date, incl. every salary payout expense
+  (payroll never sets them). Append-only. Salary payouts create expenses with the reserved category
+  `'salary'` and a `payoutId` link — **salary-linked expenses cannot be cancelled** (v1).
+  Index: `centerId+date`.
 - **Salary config** = `salary: { fixed?, percent?, perLesson? }` map on `center_teachers/{uid}` —
   all parts optional, the payout is the SUM of configured parts (no salaryType enum). Edited via
   `POST /teacher-salary`.

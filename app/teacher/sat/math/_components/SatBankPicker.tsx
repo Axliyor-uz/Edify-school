@@ -5,7 +5,7 @@ import type { QueryDocumentSnapshot } from "firebase/firestore";
 import { Check, Plus, Search } from "lucide-react";
 
 import LatexRenderer from "@/components/LatexRenderer";
-import { fetchMyQuestionsPage } from "@/services/questionBankService";
+import { fetchMyQuestionsPage, fetchSharedQuestionsPage } from "@/services/questionBankService";
 import { SAT_MATH_TAXONOMY_SLUG, isSatAuthorableType, satQuizItem } from "@/lib/SatMathQuiz";
 import { Button, cn } from "@/components/ui";
 import {
@@ -36,6 +36,18 @@ const PAGE = 10;
 type Source = "all" | "ai" | "mine";
 const SOURCES: Source[] = ["all", "ai", "mine"];
 
+/**
+ * WHICH BANK, a separate axis from `Source` above (which is a PROVENANCE
+ * filter — who/what wrote the question). `mine` is this teacher's own
+ * `teacher_questions`; `shared` is the cross-teacher pool any teacher
+ * published from `/teacher/sat/import` (`sharedBank == true`).
+ *
+ * ⚠️ The provenance chips are hidden in `shared`: the shared query is
+ * `sharedBank + subject.id + createdAt` and adding a `creationMethod in […]`
+ * leg would need yet another composite index for a filter nobody asked for.
+ */
+type Bank = "mine" | "shared";
+
 const methodsFor = (source: Source): string[] | undefined =>
   source === "ai" ? [...AI_CREATION_METHODS, ...IMAGE_CREATION_METHODS]
     : source === "mine" ? MANUAL_CREATION_METHODS
@@ -46,6 +58,7 @@ export interface SatPickerStrings {
   load: string; loadMore: string; none: string; reads: string;
   add: string; added: string; imageOnly: string; full: string; aiBadge: string;
   mcqBadge: string; numericBadge: string;
+  bank: string; bankMine: string; bankShared: string; by: string;
 }
 
 export default function SatBankPicker({
@@ -58,6 +71,7 @@ export default function SatBankPicker({
   disabled: boolean;
   onAdd: (item: SatQuizItem) => void;
 }) {
+  const [bank, setBank] = useState<Bank>("mine");
   const [source, setSource] = useState<Source>("all");
   const [rows, setRows] = useState<NormalizedQuestion[]>([]);
   const [cursor, setCursor] = useState<QueryDocumentSnapshot | null>(null);
@@ -74,14 +88,16 @@ export default function SatBankPicker({
       let read = 0;
       const found: NormalizedQuestion[] = [];
 
-      const methods = methodsFor(source);
+      const methods = bank === "shared" ? undefined : methodsFor(source);
       // The mcq/numeric filter is CLIENT-side (a `type in […]` beside
       // creatorId + subject.id + orderBy createdAt would need a third
       // composite index), so a press walks up to 3 pages until something
       // matches, and the read count is printed on screen rather than hidden.
       const maxPages = 3;
       for (let i = 0; i < maxPages; i++) {
-        const page = await fetchMyQuestionsPage(uid, PAGE, next, methods, SAT_MATH_TAXONOMY_SLUG);
+        const page = bank === "shared"
+          ? await fetchSharedQuestionsPage(SAT_MATH_TAXONOMY_SLUG, PAGE, next)
+          : await fetchMyQuestionsPage(uid, PAGE, next, methods, SAT_MATH_TAXONOMY_SLUG);
         read += page.questions.length;
         found.push(...page.questions.filter(isSatAuthorableType));
         if (page.cursor) next = page.cursor;
@@ -124,10 +140,10 @@ export default function SatBankPicker({
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-[11px] font-bold uppercase tracking-wider text-on-surface-variant">{t.source}</span>
-        {SOURCES.map((s) => (
-          <button key={s} onClick={() => reset(() => setSource(s))} className={chip(source === s)}>
-            {s === "all" ? t.srcAll : s === "ai" ? t.srcAi : t.srcMine}
+        <span className="text-[11px] font-bold uppercase tracking-wider text-on-surface-variant">{t.bank}</span>
+        {(["mine", "shared"] as Bank[]).map((b) => (
+          <button key={b} onClick={() => reset(() => setBank(b))} className={chip(bank === b)}>
+            {b === "mine" ? t.bankMine : t.bankShared}
           </button>
         ))}
 
@@ -135,6 +151,17 @@ export default function SatBankPicker({
           {t.load}
         </Button>
       </div>
+
+      {bank === "mine" && (
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-on-surface-variant">{t.source}</span>
+          {SOURCES.map((s) => (
+            <button key={s} onClick={() => reset(() => setSource(s))} className={chip(source === s)}>
+              {s === "all" ? t.srcAll : s === "ai" ? t.srcAi : t.srcMine}
+            </button>
+          ))}
+        </div>
+      )}
 
       {reads > 0 && (
         <p className="text-[11px] font-medium text-on-surface-variant">{reads} {t.reads}</p>
@@ -174,6 +201,11 @@ export default function SatBankPicker({
                       <span className="rounded-m3-xs bg-surface-container-high px-1.5 py-0.5">{t.aiBadge}</span>
                     )}
                     <span className="normal-case tracking-normal">{q.topic}</span>
+                    {/* Attribution — the whole point of "shared" being a flag
+                        rather than a creatorId swap: the uploader stays named. */}
+                    {bank === "shared" && q.creatorName && (
+                      <span className="normal-case tracking-normal opacity-70">{t.by} {q.creatorName}</span>
+                    )}
                   </p>
                 </div>
 

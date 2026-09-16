@@ -40,8 +40,13 @@ interface Props {
   fallbackName: string;
   classes: ClassData[];
   onClose: () => void;
-  /** Close this dialog and open the payment modal preselected on the student. */
-  onRecordPayment: (studentId: string) => void;
+  /** Close this dialog and open the payment modal preselected on the student.
+   *  `null` hides the button entirely (a read-only DIRECTOR — docs/OFFICE.md). */
+  onRecordPayment: ((studentId: string) => void) | null;
+  /** 🟢 Office panel: discount + freeze are MANAGER-only writes
+   *  (/api/manager/finance/student rejects office staff). Defaults to true so
+   *  the manager page is unchanged. */
+  canManage?: boolean;
 }
 
 const T_UZ = {
@@ -180,6 +185,7 @@ export default function StudentInfoDialog({
   classes,
   onClose,
   onRecordPayment,
+  canManage = true,
 }: Props) {
   const { lang } = useManagerLanguage();
   const t = TRANSLATIONS[lang];
@@ -398,8 +404,8 @@ export default function StudentInfoDialog({
               </p>
             </div>
 
-            {/* ── Discount / freeze management ── */}
-            {editingDiscount ? (
+            {/* ── Discount / freeze management (manager-only writes) ── */}
+            {!canManage ? null : editingDiscount ? (
               <div className="bg-surface-container-lowest border border-outline-variant rounded-m3-xl p-4">
                 <p className="text-[13.5px] font-bold text-on-surface flex items-center gap-1.5">
                   <BadgePercent size={15} className="text-tertiary" /> {t.discountTitle}
@@ -615,9 +621,11 @@ export default function StudentInfoDialog({
               </div>
             </section>
 
-            <Button icon={<Banknote />} onClick={() => onRecordPayment(studentId)} className="w-full">
-              {t.recordPayment}
-            </Button>
+            {onRecordPayment && (
+              <Button icon={<Banknote />} onClick={() => onRecordPayment(studentId)} className="w-full">
+                {t.recordPayment}
+              </Button>
+            )}
           </div>
         )}
       </div>

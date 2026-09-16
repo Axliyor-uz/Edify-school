@@ -23,6 +23,12 @@ export interface ClassData {
   /** Linked ielts_groups doc id (2026-07-29) — present only on center IELTS groups.
    *  Roster writes must mirror ielts_groups.studentIds (managedRosterBatch). */
   ieltsGroupId?: string;
+  /** Back-link to a school_classes doc when this class is a "subject" slot of a
+   *  School Class — roster writes must mirror the shared roster (see
+   *  services/schoolClassService.ts::syncSchoolClassRoster). */
+  schoolClassId?: string;
+  /** Denormalized school_classes.displayName (e.g. "5-A") — display-only. */
+  schoolClassName?: string;
 }
 
 export interface CenterTeacher {

@@ -26,6 +26,8 @@ import {
   type GenerateChargesRequest,
   type GenerateChargesResult,
   type Payment,
+  type PaymentMethod,
+  type PaymentMethodSplit,
   type RecordPaymentRequest,
   type RecordPaymentResult,
   type StudentFinancePatch,
@@ -200,8 +202,14 @@ export const saveGroupFeesApi = (fees: Record<string, number>) =>
 
 // ─── Phase 3: expenses + payroll ──────────────────────────────────────────────
 
-export const createExpenseApi = (body: { category: string; amount: number; date?: string; note?: string }) =>
-  apiFetch<{ expenseId: string }>("/api/manager/finance/expenses", { method: "POST", body });
+export const createExpenseApi = (body: {
+  category: string;
+  amount: number;
+  date?: string;
+  note?: string;
+  method?: PaymentMethod;
+  methodSplit?: PaymentMethodSplit[];
+}) => apiFetch<{ expenseId: string }>("/api/manager/finance/expenses", { method: "POST", body });
 
 export const cancelExpenseApi = (expenseId: string, reason: string) =>
   apiFetch("/api/manager/finance/expenses/cancel", { method: "POST", body: { expenseId, reason } });

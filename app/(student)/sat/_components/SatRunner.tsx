@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Calculator, ChevronLeft, ChevronRight, Clock, Eye, EyeOff, Flag,
   Grid3x3, Maximize, Ruler, ShieldAlert,
@@ -10,12 +10,10 @@ import LatexRenderer from "@/components/LatexRenderer";
 import { Button, Dialog, IconButton, cn } from "@/components/student-ui";
 import { useExamLockdown } from "@/hooks/useExamLockdown";
 import { isSatItemCorrect } from "@/lib/SatMathQuiz";
-import { estimateScaledScore } from "@/lib/SATscore";
-import { saveSatMathResult } from "@/services/satMathQuizService";
+import { estimateScaledScore, estimateScoreBand } from "@/lib/SATscore";
 import SatCalculator from "./SatCalculator";
 import SatReferenceSheet from "./SatReferenceSheet";
-import type { SatExamSnapshot, SatMathDomain, SatMathResult, SatQuizItem } from "@/types/SatQuiz";
-import type { Lang } from "@/types/Math";
+import type { SatDomain, SatExamSnapshot, SatMathResult, SatQuizItem } from "@/types/SatQuiz";
 
 /**
  * The Bluebook-style adaptive SAT Math sitting: Module 1, then (after the
@@ -30,68 +28,38 @@ import type { Lang } from "@/types/Math";
  * Fully controlled: `snapshot` is the whole sitting, `onChange` persists every
  * mutation (the caller writes it to `lib/SatSession.ts`), `onSubmit` fires
  * once grading is done and the result is saved. Local UI-only state (timer
- * visibility, calculator/reference panel, dialogs) stays inside this
- * component — it does not need to survive a reload.
+ * visibility, calculator/reference panel, dialogs, split-pane width) stays
+ * inside this component — it does not need to survive a reload.
+ *
+ * ⚠️ English-only chrome, unlike every other student-facing runner in this
+ * repo — the real SAT is administered in English. `snapshot.examLang` is
+ * hard-set to `'en'` by the caller for every new sitting.
+ *
+ * ⚠️ Shared by BOTH SAT subjects — Math and English (Reading & Writing),
+ * docs/SAT_QUIZ.md. `subjectName` labels the module header (`"Module 1: Math"`
+ * / `"Module 1: Reading & Writing"`); `onSave` is dependency-injected so this
+ * component never imports a subject-specific Firestore write — the caller
+ * page passes `saveSatMathResult`/`saveSatEnglishResult`.
  */
 
-const UI: Record<Lang, Record<string, string>> = {
-  uz: {
-    module1: "Modul 1: Matematika", module2: "Modul 2: Matematika",
-    question: "Savol", of: "/",
-    flag: "Belgilash", flagged: "Belgilangan",
-    prev: "Oldingi", next: "Keyingi",
-    continueModule: "Modulni yakunlash", continueConfirm: "Modulni yakunlaysizmi? Bu modulga qaytib bo'lmaydi.",
-    yes: "Ha, yakunlash", cancel: "Bekor qilish",
-    reviewTitle: "Ko'rib chiqish", reviewUnanswered: "Javobsiz", reviewAnswered: "Javob berilgan", reviewFlagged: "Belgilangan",
-    transitionTitle: "Modul 1 yakunlandi", transitionBody: "Endi Modul 2 boshlanadi. Modul 1 natijasi ko'rsatilmaydi — bu haqiqiy raqamli SAT'ga xos xususiyat.",
-    startModule2: "Modul 2'ni boshlash",
-    numericLabel: "Javobingizni kiriting",
-    calculator: "Kalkulyator", reference: "Formulalar",
-    navigator: "Savollar ro'yxati",
-    hideTime: "Vaqtni yashirish", showTime: "Vaqtni ko'rsatish",
-    fullscreen: "To'liq ekran",
-    focusTitle: "Testdan chiqdingiz!",
-    focusDesc: "Test davomida boshqa oyna yoki ilovaga o'tish mumkin emas. Bu holat qayd etildi.",
-    focusBtn: "Testga qaytish", focusCount: "Chiqishlar",
-  },
-  ru: {
-    module1: "Модуль 1: Математика", module2: "Модуль 2: Математика",
-    question: "Вопрос", of: "/",
-    flag: "Отметить", flagged: "Отмечено",
-    prev: "Назад", next: "Далее",
-    continueModule: "Завершить модуль", continueConfirm: "Завершить модуль? Вернуться в него будет нельзя.",
-    yes: "Да, завершить", cancel: "Отмена",
-    reviewTitle: "Проверка", reviewUnanswered: "Без ответа", reviewAnswered: "Отвечено", reviewFlagged: "Отмечено",
-    transitionTitle: "Модуль 1 завершён", transitionBody: "Сейчас начнётся Модуль 2. Результат Модуля 1 не показывается — так устроен настоящий цифровой SAT.",
-    startModule2: "Начать Модуль 2",
-    numericLabel: "Введите ваш ответ",
-    calculator: "Калькулятор", reference: "Формулы",
-    navigator: "Список вопросов",
-    hideTime: "Скрыть время", showTime: "Показать время",
-    fullscreen: "Полный экран",
-    focusTitle: "Вы покинули тест!",
-    focusDesc: "Во время теста нельзя переходить в другое окно или приложение. Это зафиксировано.",
-    focusBtn: "Вернуться к тесту", focusCount: "Выходы",
-  },
-  en: {
-    module1: "Module 1: Math", module2: "Module 2: Math",
-    question: "Question", of: "of",
-    flag: "Mark for Review", flagged: "Flagged",
-    prev: "Back", next: "Next",
-    continueModule: "Finish module", continueConfirm: "Finish this module? You can't come back to it.",
-    yes: "Yes, finish", cancel: "Cancel",
-    reviewTitle: "Review", reviewUnanswered: "Unanswered", reviewAnswered: "Answered", reviewFlagged: "Flagged",
-    transitionTitle: "Module 1 complete", transitionBody: "Module 2 starts now. Module 1's result isn't shown — that's how the real digital SAT works too.",
-    startModule2: "Start Module 2",
-    numericLabel: "Enter your answer",
-    calculator: "Calculator", reference: "Reference",
-    navigator: "Question list",
-    hideTime: "Hide time", showTime: "Show time",
-    fullscreen: "Full screen",
-    focusTitle: "You left the test!",
-    focusDesc: "Switching to another window or app during the test is not allowed. This has been recorded.",
-    focusBtn: "Back to the test", focusCount: "Exits",
-  },
+const t = {
+  question: "Question", of: "of",
+  flag: "Mark for Review", flagged: "Flagged",
+  prev: "Back", next: "Next",
+  continueModule: "Finish module", continueConfirm: "Finish this module? You can't come back to it.",
+  yes: "Yes, finish", cancel: "Cancel",
+  reviewTitle: "Review", reviewUnanswered: "Unanswered", reviewAnswered: "Answered", reviewFlagged: "Flagged",
+  transitionTitle: "Module 1 complete", transitionBody: "Module 2 starts now. Module 1's result isn't shown — that's how the real digital SAT works too.",
+  startModule2: "Start Module 2",
+  numericLabel: "Enter your answer",
+  calculator: "Calculator", reference: "Reference",
+  navigator: "Question list",
+  textSize: "Text size",
+  hideTime: "Hide time", showTime: "Show time",
+  fullscreen: "Full screen",
+  focusTitle: "You left the test!",
+  focusDesc: "Switching to another window or app during the test is not allowed. This has been recorded.",
+  focusBtn: "Back to the test", focusCount: "Exits",
 };
 
 const formatTime = (totalSeconds: number) => {
@@ -104,14 +72,36 @@ const formatTime = (totalSeconds: number) => {
 export interface SatRunnerProps {
   uid: string;
   studentName: string;
+  /** `"Math"` or `"Reading & Writing"` — labels the module header. */
+  subjectName: string;
   snapshot: SatExamSnapshot;
-  appLang: Lang;
   onChange: (next: SatExamSnapshot) => void;
+  /** Writes the result to THIS subject's own results collection. */
+  onSave: (result: SatMathResult) => Promise<void>;
   onSubmit: (result: SatMathResult, finished: SatExamSnapshot) => void;
 }
 
-export default function SatRunner({ uid, studentName, snapshot, appLang, onChange, onSubmit }: SatRunnerProps) {
-  const t = UI[appLang] || UI.uz;
+/** Split-pane bounds, in percent of the row width the question column may take on desktop. */
+const MIN_PANE_PCT = 22;
+const MAX_PANE_PCT = 65;
+
+// Text-size ramp — mirrors the IELTS runner's own scale
+// (app/(student)/ielts/_components/runner/IeltsRunner.tsx) so the "A-/A+"
+// control behaves the same wherever a student meets it.
+const FONT_SIZES = [12, 14, 16, 18, 20, 23, 26, 30];
+const DEFAULT_FONT_STEP = 2; // 16px
+const FONT_PREF_KEY = "sat:runner:font";
+
+const readFontPref = (): number => {
+  if (typeof window === "undefined") return DEFAULT_FONT_STEP;
+  const n = Number(window.localStorage.getItem(FONT_PREF_KEY));
+  return Number.isFinite(n) && n >= 0 && n < FONT_SIZES.length ? n : DEFAULT_FONT_STEP;
+};
+const writeFontPref = (step: number) => {
+  try { window.localStorage.setItem(FONT_PREF_KEY, String(step)); } catch { /* private mode */ }
+};
+
+export default function SatRunner({ uid, studentName, subjectName, snapshot, onChange, onSave, onSubmit }: SatRunnerProps) {
   const L = snapshot.examLang;
 
   // A tick-driven re-render for the countdown — the value itself is never
@@ -123,6 +113,21 @@ export default function SatRunner({ uid, studentName, snapshot, appLang, onChang
   const [showNav, setShowNav] = useState(false);
   const [confirmFinish, setConfirmFinish] = useState(false);
   const [saving, setSaving] = useState(false);
+  // Smaller question column, bigger workspace column by default — draggable via the divider.
+  const [leftPanePct, setLeftPanePct] = useState(38);
+  const draggingRef = useRef(false);
+  // Device-local reading comfort pref, shared across Math and English —
+  // restored after mount so the server-rendered markup stays identical.
+  const [fontStep, setFontStep] = useState(DEFAULT_FONT_STEP);
+  useEffect(() => { setFontStep(readFontPref()); }, []);
+  const changeFont = (delta: number) => {
+    setFontStep((f) => {
+      const next = Math.min(FONT_SIZES.length - 1, Math.max(0, f + delta));
+      writeFontPref(next);
+      return next;
+    });
+  };
+  const fontSize = FONT_SIZES[fontStep];
 
   useEffect(() => {
     const id = setInterval(() => setTick((n) => n + 1), 1000);
@@ -132,6 +137,26 @@ export default function SatRunner({ uid, studentName, snapshot, appLang, onChang
   const { interruptions, warned, dismiss, isFullscreen, enterFullscreen } = useExamLockdown({
     active: snapshot.phase !== "submitted",
   });
+
+  // Draggable divider between the question column and the workspace column —
+  // pointer capture keeps delivering move/up events to the handle even once
+  // the cursor leaves it, so no window-level listener is needed.
+  const startPaneDrag = (e: React.PointerEvent<HTMLDivElement>) => {
+    draggingRef.current = true;
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+  const onPaneDrag = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (!draggingRef.current) return;
+    const row = e.currentTarget.parentElement;
+    if (!row) return;
+    const rect = row.getBoundingClientRect();
+    const pct = ((e.clientX - rect.left) / rect.width) * 100;
+    setLeftPanePct(Math.min(MAX_PANE_PCT, Math.max(MIN_PANE_PCT, pct)));
+  }, []);
+  const endPaneDrag = (e: React.PointerEvent<HTMLDivElement>) => {
+    draggingRef.current = false;
+    e.currentTarget.releasePointerCapture(e.pointerId);
+  };
 
   const module2Pool = useMemo(
     () => (snapshot.route === "harder" ? snapshot.module2Harder : snapshot.module2Easier),
@@ -182,19 +207,30 @@ export default function SatRunner({ uid, studentName, snapshot, appLang, onChang
       const module2Correct = pool.filter((q) => isSatItemCorrect(q, snapshot.module2Answers[q.id])).length;
       const correct = module1Correct + module2Correct;
       const total = snapshot.module1.length + pool.length;
-      const scaledScore = estimateScaledScore(snapshot.route ?? "easier", correct, total);
+      const route = snapshot.route ?? "easier";
+      const scaledScore = estimateScaledScore(route, correct, total);
+      const scoreBand = estimateScoreBand(route, correct, total);
 
       const itemOutcomes: Record<string, number> = {};
-      const domains: Partial<Record<SatMathDomain, { correct: number; total: number }>> = {};
+      const omitted: string[] = [];
+      const domains: Partial<Record<SatDomain, { correct: number; total: number }>> = {};
+      // A BLANK still scores 0 — `omitted` only records which zeros were blanks,
+      // so the score report can say "left empty" instead of "got it wrong".
+      // Same emptiness test `isSatItemCorrect` uses, so the two can never disagree.
+      const isBlank = (v: string | undefined) => !(v ?? "").trim();
       for (const q of snapshot.module1) {
-        const ok = isSatItemCorrect(q, snapshot.module1Answers[q.id]) ? 1 : 0;
+        const given = snapshot.module1Answers[q.id];
+        const ok = isSatItemCorrect(q, given) ? 1 : 0;
         itemOutcomes[q.id] = ok;
+        if (!ok && isBlank(given)) omitted.push(q.id);
         const d = domains[q.domain] ?? { correct: 0, total: 0 };
         domains[q.domain] = { correct: d.correct + ok, total: d.total + 1 };
       }
       for (const q of pool) {
-        const ok = isSatItemCorrect(q, snapshot.module2Answers[q.id]) ? 1 : 0;
+        const given = snapshot.module2Answers[q.id];
+        const ok = isSatItemCorrect(q, given) ? 1 : 0;
         itemOutcomes[q.id] = ok;
+        if (!ok && isBlank(given)) omitted.push(q.id);
         const d = domains[q.domain] ?? { correct: 0, total: 0 };
         domains[q.domain] = { correct: d.correct + ok, total: d.total + 1 };
       }
@@ -207,20 +243,22 @@ export default function SatRunner({ uid, studentName, snapshot, appLang, onChang
         studentName,
         module1Correct,
         module1Total: snapshot.module1.length,
-        route: snapshot.route ?? "easier",
+        route,
         module2Correct,
         module2Total: pool.length,
         correct,
         total,
         scaledScore,
+        scoreBand,
         durationSec: Math.max(0, Math.round((Date.now() - snapshot.startedAt) / 1000)),
         submittedAt: Date.now(),
         examLang: snapshot.examLang,
         items: itemOutcomes,
+        omitted,
         domains,
       };
 
-      await saveSatMathResult(result);
+      await onSave(result);
       const finished: SatExamSnapshot = { ...snapshot, phase: "submitted" };
       onChange(finished);
       // ⚠️ Passes the finished snapshot alongside the result — `onSubmit` fires
@@ -355,7 +393,7 @@ export default function SatRunner({ uid, studentName, snapshot, appLang, onChang
 
       <header className="z-30 flex shrink-0 flex-wrap items-center justify-between gap-2 border-b border-outline-variant bg-surface px-3 py-2.5 sm:px-4">
         <span className="text-[13px] font-black text-on-surface">
-          {snapshot.phase === "module1" ? t.module1 : t.module2}
+          {snapshot.phase === "module1" ? "Module 1" : "Module 2"}: {subjectName}
         </span>
 
         <div className="flex items-center gap-1.5">
@@ -364,6 +402,33 @@ export default function SatRunner({ uid, studentName, snapshot, appLang, onChang
               <ShieldAlert size={13} strokeWidth={3} /> {interruptions}×
             </span>
           )}
+          {/* Text size — 8 steps, remembered per device (matches the IELTS runner's control). */}
+          <div
+            className="flex items-center rounded-m3-sm border border-outline-variant bg-surface-container p-0.5"
+            title={`${t.textSize}: ${fontSize}px`}
+          >
+            <button
+              type="button"
+              onClick={() => changeFont(-1)}
+              disabled={fontStep === 0}
+              aria-label={`${t.textSize} −`}
+              className="rounded-m3-xs px-2 py-0.5 text-[12px] font-bold text-on-surface-variant hover:bg-state-hover disabled:opacity-35"
+            >
+              A−
+            </button>
+            <span className="s-num hidden min-w-[22px] text-center text-[11px] font-black text-on-surface-variant sm:block">
+              {fontSize}
+            </span>
+            <button
+              type="button"
+              onClick={() => changeFont(1)}
+              disabled={fontStep === FONT_SIZES.length - 1}
+              aria-label={`${t.textSize} +`}
+              className="rounded-m3-xs px-2 py-0.5 text-[15px] font-bold text-on-surface-variant hover:bg-state-hover disabled:opacity-35"
+            >
+              A+
+            </button>
+          </div>
           {!isFullscreen && (
             <IconButton aria-label={t.fullscreen} size="sm" onClick={enterFullscreen}><Maximize /></IconButton>
           )}
@@ -390,94 +455,122 @@ export default function SatRunner({ uid, studentName, snapshot, appLang, onChang
         </div>
       )}
 
-      <div className="flex-1 overflow-y-auto p-4 sm:p-6">
-        <div className="mx-auto max-w-2xl">
-          <div className="mb-3 flex items-center justify-between">
-            <span className="text-[12px] font-black uppercase tracking-wider text-on-surface-variant">
-              {t.question} {snapshot.current + 1}{t.of}{items.length}
-            </span>
-            <button
-              onClick={toggleFlag}
-              className={cn(
-                "flex items-center gap-1.5 rounded-m3-sm px-2.5 py-1.5 text-[12px] font-bold",
-                isFlagged ? "bg-warning-container text-on-warning-container" : "bg-surface-container text-on-surface-variant",
-              )}
-            >
-              <Flag size={13} className={isFlagged ? "fill-current" : undefined} />
-              {isFlagged ? t.flagged : t.flag}
-            </button>
-          </div>
+      <div
+        className="flex flex-1 flex-col overflow-hidden md:flex-row"
+        style={{ ["--sat-left" as string]: `${leftPanePct}%` }}
+      >
+        <div className="w-full flex-1 overflow-y-auto p-4 sm:p-6 md:w-[var(--sat-left)] md:flex-none">
+          <div className="mx-auto max-w-2xl md:mx-0 md:max-w-none">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-[19px] font-black text-on-surface">{t.question} {snapshot.current + 1}</h2>
+              <button
+                onClick={toggleFlag}
+                className={cn(
+                  "flex items-center gap-1.5 rounded-m3-sm px-2.5 py-1.5 text-[12px] font-bold",
+                  isFlagged ? "bg-warning-container text-on-warning-container" : "bg-surface-container text-on-surface-variant",
+                )}
+              >
+                <Flag size={13} className={isFlagged ? "fill-current" : undefined} />
+                {isFlagged ? t.flagged : t.flag}
+              </button>
+            </div>
 
-          <div className="mb-5 text-[15px] font-medium leading-relaxed text-on-surface">
-            <LatexRenderer latex={q.question[L] || q.question.uz || ""} />
+            <div
+              className="mb-5 font-medium leading-relaxed text-on-surface"
+              style={{ fontSize: `${fontSize}px`, lineHeight: 1.65 }}
+            >
+              <LatexRenderer latex={q.question[L] || q.question.uz || ""} />
+            </div>
+            {q.imageUrl && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={q.imageUrl} alt="" className="mb-5 max-h-72 w-auto rounded-m3-md border border-outline-variant md:hidden" />
+            )}
+
+            {q.qType === "mcq" ? (
+              <div className="flex flex-col gap-2.5">
+                {q.optionKeys.map((letter) => {
+                  const selected = answers[q.id] === letter;
+                  const isCrossed = crossed.has(letter);
+                  return (
+                    <div
+                      key={letter}
+                      onClick={() => answer(letter)}
+                      className={cn(
+                        "flex cursor-pointer items-center gap-3 rounded-m3-lg border-2 p-3.5 transition-colors",
+                        selected ? "border-primary bg-primary-container" : "border-outline-variant bg-surface-container-lowest",
+                        isCrossed && "opacity-50",
+                      )}
+                    >
+                      <span className={cn(
+                        "flex h-7 w-7 flex-none items-center justify-center rounded-full border-2 text-[13px] font-black",
+                        selected ? "border-primary bg-primary text-on-primary" : "border-outline-variant text-on-surface-variant",
+                      )}>
+                        {letter}
+                      </span>
+                      <span
+                        className={cn("min-w-0 flex-1 font-medium text-on-surface", isCrossed && "line-through")}
+                        style={{ fontSize: `${fontSize}px`, lineHeight: 1.5 }}
+                      >
+                        <LatexRenderer latex={q.options[letter]?.[L] || q.options[letter]?.uz || ""} />
+                      </span>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); toggleCross(letter); }}
+                        className="flex h-7 w-7 flex-none items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container"
+                        aria-label="cross out"
+                      >
+                        {isCrossed ? <Eye size={14} /> : <span className="text-[11px] font-black underline">{letter}</span>}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div>
+                <label className="mb-1.5 block text-[12px] font-bold text-on-surface-variant">{t.numericLabel}</label>
+                <input
+                  type="text"
+                  inputMode="decimal"
+                  value={answers[q.id] ?? ""}
+                  onChange={(e) => answer(e.target.value)}
+                  className="w-full max-w-xs rounded-m3-lg border-2 border-outline-variant bg-surface-container-lowest px-4 py-3 text-[16px] font-bold text-on-surface outline-none focus:border-primary"
+                />
+              </div>
+            )}
           </div>
+        </div>
+
+        {/* Draggable divider — pointer capture keeps routing move/up events here even once the cursor leaves the handle. */}
+        <div
+          onPointerDown={startPaneDrag}
+          onPointerMove={onPaneDrag}
+          onPointerUp={endPaneDrag}
+          role="separator"
+          aria-orientation="vertical"
+          aria-label="Resize panes"
+          className="hidden shrink-0 touch-none md:block md:w-1.5 md:cursor-col-resize md:bg-outline-variant md:hover:bg-primary md:active:bg-primary"
+        />
+
+        {/* Bluebook-style workspace pane — plots/images live here; otherwise mostly empty real estate. The calculator/reference toggles float on top of it. */}
+        <div className="hidden md:flex md:flex-1 md:flex-col md:items-center md:overflow-y-auto md:p-6">
           {q.imageUrl && (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={q.imageUrl} alt="" className="mb-5 max-h-72 w-auto rounded-m3-md border border-outline-variant" />
-          )}
-
-          {q.qType === "mcq" ? (
-            <div className="flex flex-col gap-2.5">
-              {q.optionKeys.map((letter) => {
-                const selected = answers[q.id] === letter;
-                const isCrossed = crossed.has(letter);
-                return (
-                  <div
-                    key={letter}
-                    onClick={() => answer(letter)}
-                    className={cn(
-                      "flex cursor-pointer items-center gap-3 rounded-m3-lg border-2 p-3.5 transition-colors",
-                      selected ? "border-primary bg-primary-container" : "border-outline-variant bg-surface-container-lowest",
-                      isCrossed && "opacity-50",
-                    )}
-                  >
-                    <span className={cn(
-                      "flex h-7 w-7 flex-none items-center justify-center rounded-full border-2 text-[13px] font-black",
-                      selected ? "border-primary bg-primary text-on-primary" : "border-outline-variant text-on-surface-variant",
-                    )}>
-                      {letter}
-                    </span>
-                    <span className={cn("min-w-0 flex-1 text-[14px] font-medium text-on-surface", isCrossed && "line-through")}>
-                      <LatexRenderer latex={q.options[letter]?.[L] || q.options[letter]?.uz || ""} />
-                    </span>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); toggleCross(letter); }}
-                      className="flex h-7 w-7 flex-none items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container"
-                      aria-label="cross out"
-                    >
-                      {isCrossed ? <Eye size={14} /> : <span className="text-[11px] font-black underline">{letter}</span>}
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <div>
-              <label className="mb-1.5 block text-[12px] font-bold text-on-surface-variant">{t.numericLabel}</label>
-              <input
-                type="text"
-                inputMode="decimal"
-                value={answers[q.id] ?? ""}
-                onChange={(e) => answer(e.target.value)}
-                className="w-full max-w-xs rounded-m3-lg border-2 border-outline-variant bg-surface-container-lowest px-4 py-3 text-[16px] font-bold text-on-surface outline-none focus:border-primary"
-              />
-            </div>
+            <img src={q.imageUrl} alt="" className="max-h-full w-auto max-w-full rounded-m3-md border border-outline-variant" />
           )}
         </div>
       </div>
 
-      <div className="z-30 flex shrink-0 items-center gap-2 border-t border-outline-variant bg-surface-container-low px-3 py-2.5 sm:px-4">
-        <IconButton aria-label={t.prev} disabled={snapshot.current === 0} onClick={() => goto(-1)}>
-          <ChevronLeft />
-        </IconButton>
+      <div className="z-30 flex shrink-0 items-center justify-between gap-2 border-t border-outline-variant bg-surface-container-low px-3 py-2.5 sm:px-4">
+        <Button variant="outlined" tone="secondary" disabled={snapshot.current === 0} onClick={() => goto(-1)} icon={<ChevronLeft size={16} />}>
+          {t.prev}
+        </Button>
         <button
           onClick={() => setShowNav(true)}
-          className="flex flex-1 items-center justify-center gap-2 rounded-m3-md bg-surface-container px-3 py-2 text-[13px] font-bold text-on-surface"
+          className="flex items-center gap-2 rounded-full bg-on-surface px-4 py-2.5 text-[13px] font-bold text-surface"
         >
           <Grid3x3 size={14} />
           {t.question} {snapshot.current + 1} {t.of} {items.length}
         </button>
-        <Button onClick={() => goto(1)} icon={snapshot.current === items.length - 1 ? undefined : <ChevronRight />}>
+        <Button onClick={() => goto(1)} trailingIcon={snapshot.current === items.length - 1 ? undefined : <ChevronRight size={16} />}>
           {t.next}
         </Button>
       </div>

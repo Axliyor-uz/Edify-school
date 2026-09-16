@@ -215,7 +215,7 @@ export default function AttendanceClassPage() {
                 {t.scheduleHint}
               </p>
               <Link
-                href={`/manager/groups/${classData.id}`}
+                href={`/manager/groups/detail/${classData.id}`}
                 className="m3-interactive inline-flex items-center gap-1.5 px-4 py-2 bg-secondary-container text-on-secondary-container rounded-full text-[12.5px] font-bold transition-colors shrink-0"
               >
                 <Pencil size={14} /> {t.editSchedule}

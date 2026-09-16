@@ -88,6 +88,20 @@ export interface PaymentAllocation {
   amount: number;
 }
 
+/**
+ * One line of a payment/expense split across several methods — e.g. 500,000
+ * so'm as 300,000 by card + 200,000 cash. `label` is a free-text tag for a
+ * `card`/`transfer`/`other` line (e.g. "AAA karta") — there is no named-account
+ * registry, so it is typed fresh on every entry and simply snapshotted here.
+ * Sibling lines' `amount`s must sum to the payment/expense's own `amount`
+ * (enforced server-side — `lib/server/financeOps.ts::normalizeMethodSplit`).
+ */
+export interface PaymentMethodSplit {
+  method: PaymentMethod;
+  amount: number;
+  label?: string;
+}
+
 /** Doc: center_payments/{autoId} — append-only, cancel-not-delete. `amount` is always positive; direction = `type`. */
 export interface Payment {
   id: string;
@@ -96,7 +110,15 @@ export interface Payment {
   studentName: string;
   type: PaymentType;
   amount: number;
+  /** The single method, OR — when `methodSplit` has more than one distinct
+   *  method — `"other"`. Kept so every existing reader that only knows this
+   *  scalar field still shows something sane; `methodSplit` (below) is the
+   *  detailed, authoritative breakdown when present. */
   method: PaymentMethod;
+  /** Present only when the manager entered more than one method/line. Absent
+   *  on every payment recorded before this field existed, and on a plain
+   *  single-method payment recorded after — both read as "just `method`". */
+  methodSplit?: PaymentMethodSplit[];
   source: PaymentSource;
   /** Future gateway transaction id. */
   externalId?: string;
@@ -164,7 +186,14 @@ export interface RecordPaymentRequest {
   studentId: string;
   amount: number;
   type: PaymentType;
+  /** Ignored server-side when `methodSplit` is a non-empty array (the method
+   *  is then derived from it) — still required on the wire so an older caller
+   *  that never learned about splitting keeps working unchanged. */
   method: PaymentMethod;
+  /** Optional: pay/refund this `amount` across 2+ methods at once. Each line's
+   *  `amount` must be a positive integer, and every line together must sum to
+   *  exactly `amount` — validated in `recordPayment`. */
+  methodSplit?: PaymentMethodSplit[];
   paidAt?: string;
   note?: string;
 }
@@ -198,6 +227,11 @@ export interface Expense {
   /** Business date "YYYY-MM-DD" (backdatable, not future). */
   date: string;
   note?: string;
+  /** Absent on every expense recorded before this field existed (incl. salary
+   *  payouts, which never set it) — those simply show no method. Same
+   *  single-vs-split relationship to `methodSplit` as `Payment.method`. */
+  method?: PaymentMethod;
+  methodSplit?: PaymentMethodSplit[];
   /** Set on salary expenses — links back to the payout. */
   teacherId?: string;
   payoutId?: string;

@@ -3,7 +3,8 @@
 // pass `lang` from useManagerLanguage().
 
 import { addMonthsClamped } from "@/lib/finance/billingEngine";
-import type { Charge, ChargeStatus, PaymentMethod } from "@/types/finance";
+import { formatSum } from "@/lib/finance/money";
+import type { Charge, ChargeStatus, PaymentMethod, PaymentMethodSplit } from "@/types/finance";
 import type { LangType } from "@/app/manager/_components/ManagerLanguage";
 
 export const MONTHS: Record<LangType, string[]> = {
@@ -123,3 +124,21 @@ export const PAYMENT_METHOD_T: Record<LangType, Record<PaymentMethod, string>> =
 
 /** Stable method order for pickers (values, not labels). */
 export const PAYMENT_METHOD_KEYS: PaymentMethod[] = ["cash", "card", "click", "payme", "transfer", "other"];
+
+/**
+ * "Karta" for a plain single-method payment/expense, or
+ * "Naqd 200 000 + Karta (AAA karta) 300 000" once it was split
+ * (`Payment.methodSplit` / `Expense.methodSplit`). Falls back to the scalar
+ * `method` (or "—" for an old expense that has neither) when there is no split.
+ */
+export function formatMethodSplit(
+  doc: { method?: PaymentMethod; methodSplit?: PaymentMethodSplit[] },
+  lang: LangType
+): string {
+  if (doc.methodSplit?.length) {
+    return doc.methodSplit
+      .map((s) => `${PAYMENT_METHOD_T[lang][s.method]}${s.label ? ` (${s.label})` : ""} ${formatSum(s.amount)}`)
+      .join(" + ");
+  }
+  return doc.method ? PAYMENT_METHOD_T[lang][doc.method] : "—";
+}

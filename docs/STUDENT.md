@@ -4,6 +4,8 @@
 
 **Last verified:** 2026-07-30 (**2 maths papers a day / 12-hour cooldown**; the dashboard's hero is now a **rotating announcement card** driven by `lib/announcements.ts`, and `MmsCard` moved to `/raschmodel`; `MilliyCard` replaces `MathLevelSummary` there, because the mobile dock has no slot for the programme; Milliy sertifikat is the only nav entry, maths inside it; full-screen exam lockdown; Milliy sertifikat subject papers + the single code box); 2026-07-28 (teacher-built Rasch papers, the shared exam runner, and the one level component).
 
+🟢 **My Mistakes (2026-09-16)** — a new student page at `/mistakes` (nav entry beside SAT) banking every question the student got wrong or left blank in a SAT, Milliy sertifikat or Rasch sitting, with a "practise 5 similar" lookup per row. Capture hangs off those three runners' submit paths (fire-and-forget, after the result write). Full contract: [MISTAKES.md](MISTAKES.md).
+
 ## Purpose & scope
 
 The student route tree `app/(student)/` (route group, no URL segment): dashboard, classes (assignments + exams), explore, games, history, leaderboard, library, notifications, profile, settings, IELTS (see [IELTS.md](IELTS.md)). All pages consume `useStudentLanguage()` from the layout (uz/en/ru).

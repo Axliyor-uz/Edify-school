@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import {
   ArrowDown, ArrowLeft, ArrowUp, BadgeCheck, Database, HelpCircle, KeyRound,
-  Save, Send, Trash2,
+  Save, Send, Trash2, Wand2,
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -16,6 +16,7 @@ import {
   SAT_MATH_DOMAINS, SAT_MATH_TAXONOMY_SLUG, SAT_MAX_BYTES,
   checkSatAdd, defaultSatRoutingThreshold, satByteSize, satItemPreview, satPickedIds, satQuizItem,
 } from "@/lib/SatMathQuiz";
+import { loadSatSamplePaper } from "@/lib/SatDefaultPaper";
 import { fetchQuestionById } from "@/services/questionBankService";
 import { questionBuilderHref } from "@/app/teacher/create/_components/returnTo";
 import {
@@ -42,12 +43,22 @@ import type { Lang } from "@/types/Math";
 type ModuleKey = "module1" | "module2Easier" | "module2Harder";
 const MODULE_KEYS: ModuleKey[] = ["module1", "module2Easier", "module2Harder"];
 
+/** `{n}` / `{problem}` … in a dictionary string, filled at the call site. */
+const fmt = (template: string, vars: Record<string, string | number>) =>
+  template.replace(/\{(\w+)\}/g, (_, key: string) => String(vars[key] ?? `{${key}}`));
+
 const TR: Record<string, Record<string, string>> = {
   uz: {
     back: "Orqaga",
     newTitle: "Yangi SAT Matematika testi",
     editTitle: "Testni tahrirlash",
     subtitle: "Modul 1 barcha o'quvchilar uchun bir xil; Modul 2 natijaga qarab tanlanadi.",
+    fillDefault: "Namunaviy variant",
+    fillDefaultHint: "Barcha uchala modulga tayyor namuna savollar qo'yiladi — keyin o'chirish, tartibini o'zgartirish va o'zingiznikini qo'shish mumkin.",
+    defaultConfirm: "Modullardagi savollar namunaviy savollar bilan almashtiriladi. Davom etasizmi?",
+    defaultLoaded: "Namunaviy variant yuklandi — {n} ta savol",
+    defaultBroken: "Namunaviy variant noto'g'ri: {problem}",
+    defaultFailed: "Namunaviy variantni yuklab bo'lmadi",
     name: "Test nomi",
     namePlaceholder: "Masalan: SAT Matematika — 1-amaliyot",
     description: "Tavsif (ixtiyoriy)",
@@ -73,6 +84,7 @@ const TR: Record<string, Record<string, string>> = {
     newSingle: "Yangi savol yaratish",
     newSingleHint: "Variantli (4 ta javob) yoki sonli javob; rasm ham qo'shsa bo'ladi.",
     source: "Kim yozgan", srcAll: "Hammasi", srcAi: "AI", srcMine: "O'zim",
+    bank: "Baza", bankMine: "Mening bazam", bankShared: "Ulashilgan", by: "·",
     load: "Yuklash", loadMore: "Yana 10 ta", none: "Savol topilmadi",
     reads: "ta hujjat o'qildi",
     add: "Qo'shish", added: "Qo'shilgan", imageOnly: "Rasmli savol", full: "To'ldi",
@@ -102,6 +114,12 @@ const TR: Record<string, Record<string, string>> = {
     newTitle: "Новый тест SAT Математика",
     editTitle: "Редактирование теста",
     subtitle: "Модуль 1 одинаков для всех; Модуль 2 выбирается по результату.",
+    fillDefault: "Образцовый вариант",
+    fillDefaultHint: "Готовые вопросы для всех трёх модулей — после загрузки их можно удалять, менять местами и добавлять свои.",
+    defaultConfirm: "Вопросы модулей будут заменены образцовыми. Продолжить?",
+    defaultLoaded: "Образцовый вариант загружен — {n} вопросов",
+    defaultBroken: "Образцовый вариант некорректен: {problem}",
+    defaultFailed: "Не удалось загрузить образцовый вариант",
     name: "Название теста",
     namePlaceholder: "Например: SAT Математика — практика 1",
     description: "Описание (необязательно)",
@@ -127,6 +145,7 @@ const TR: Record<string, Record<string, string>> = {
     newSingle: "Создать новый вопрос",
     newSingleHint: "С вариантами (4 ответа) или числовой ответ; можно с картинкой.",
     source: "Кто написал", srcAll: "Все", srcAi: "ИИ", srcMine: "Я сам",
+    bank: "База", bankMine: "Моя база", bankShared: "Общие", by: "·",
     load: "Загрузить", loadMore: "Ещё 10", none: "Вопросы не найдены",
     reads: "документов прочитано",
     add: "Добавить", added: "Добавлен", imageOnly: "Вопрос с картинкой", full: "Заполнено",
@@ -156,6 +175,12 @@ const TR: Record<string, Record<string, string>> = {
     newTitle: "New SAT Math test",
     editTitle: "Edit test",
     subtitle: "Module 1 is the same for everyone; Module 2 is chosen from the result.",
+    fillDefault: "Sample test",
+    fillDefaultHint: "Ready-made questions for all three modules — once loaded you can remove, reorder and add your own.",
+    defaultConfirm: "The questions on the modules will be replaced by the sample ones. Continue?",
+    defaultLoaded: "Sample test loaded — {n} questions",
+    defaultBroken: "The sample test is invalid: {problem}",
+    defaultFailed: "Could not load the sample test",
     name: "Test name",
     namePlaceholder: "e.g. SAT Math — Practice 1",
     description: "Description (optional)",
@@ -181,6 +206,7 @@ const TR: Record<string, Record<string, string>> = {
     newSingle: "Create a new question",
     newSingleHint: "Multiple choice (4 options) or a numeric answer; an image if you want one.",
     source: "Written by", srcAll: "All", srcAi: "AI", srcMine: "Me",
+    bank: "Bank", bankMine: "My bank", bankShared: "Shared", by: "·",
     load: "Load", loadMore: "10 more", none: "No questions found",
     reads: "documents read",
     add: "Add", added: "Added", imageOnly: "Image question", full: "Full",
@@ -242,6 +268,7 @@ function BuilderInner() {
   const [saving, setSaving] = useState(false);
   const [restored, setRestored] = useState(false);
   const [thresholdTouched, setThresholdTouched] = useState(false);
+  const [filling, setFilling] = useState(false);
 
   const backHere = (module: ModuleKey) =>
     `${base}/build${editId ? `?id=${editId}&module=${module}` : `?module=${module}`}`;
@@ -352,6 +379,47 @@ function BuilderInner() {
       [next[index], next[to]] = [next[to], next[index]];
       return { ...prev, [module]: next };
     });
+
+  /**
+   * Drop the bundled sample test (`data/sat-math-default-paper.json`) onto all
+   * three modules at once.
+   *
+   * It REPLACES every module rather than topping it up — appending would leave
+   * the teacher to work out which of a mixed set were theirs. Once loaded the
+   * items are ordinary quiz items: remove, reorder and mix in your own exactly
+   * as with a hand-picked one.
+   *
+   * ⚠️ The file is checked before anything is set (`buildSatSamplePaper`), and
+   * a fault ABORTS with the first problem named — a silently-wrong sample
+   * would publish a test with items the results page cannot group.
+   */
+  const fillDefault = async () => {
+    const hasAny = modules.module1.length > 0 || modules.module2Easier.length > 0 || modules.module2Harder.length > 0;
+    if (hasAny && !confirm(t.defaultConfirm)) return;
+    setFilling(true);
+    try {
+      const paper = await loadSatSamplePaper();
+      if (paper.problems.length > 0) {
+        console.error("data/sat-math-default-paper.json:", paper.problems);
+        toast.error(fmt(t.defaultBroken, { problem: paper.problems[0] }));
+        return;
+      }
+      setModules({ module1: paper.module1, module2Easier: paper.module2Easier, module2Harder: paper.module2Harder });
+      // The name is the teacher's to choose — only fill one in if they have not.
+      if (!title.trim()) setTitle(paper.title[L] || paper.title.uz);
+      setModule1Minutes(paper.module1Minutes);
+      setModule2Minutes(paper.module2Minutes);
+      setThresholdTouched(true);
+      setRoutingThreshold(paper.routingThreshold);
+      const n = paper.module1.length + paper.module2Easier.length + paper.module2Harder.length;
+      toast.success(fmt(t.defaultLoaded, { n }));
+    } catch (err) {
+      console.error(err);
+      toast.error(t.defaultFailed);
+    } finally {
+      setFilling(false);
+    }
+  };
 
   /** Park the test before leaving for a question builder. */
   const stashModules = useCallback((next: Record<ModuleKey, SatQuizItem[]>) => {
@@ -467,6 +535,7 @@ function BuilderInner() {
 
   const pickerStrings: SatPickerStrings = {
     source: t.source, srcAll: t.srcAll, srcAi: t.srcAi, srcMine: t.srcMine,
+    bank: t.bank, bankMine: t.bankMine, bankShared: t.bankShared, by: t.by,
     load: t.load, loadMore: t.loadMore, none: t.none, reads: t.reads,
     add: t.add, added: t.added, imageOnly: t.imageOnly, full: t.full, aiBadge: t.aiBadge,
     mcqBadge: t.mcqBadge, numericBadge: t.numericBadge,
@@ -626,8 +695,17 @@ function BuilderInner() {
         <Card className="p-4">
           <div className="mb-1 flex flex-wrap items-start justify-between gap-3">
             <h2 className="min-w-[180px] flex-1 text-[14px] font-bold text-on-surface">{t.addTitle}</h2>
+
+            {/* The bundled sample test (data/sat-math-default-paper.json). Sits
+                at the TOP of this card because it is the fastest route to a
+                publishable test — a teacher who wants their own questions
+                simply ignores it and picks below. */}
+            <Button size="sm" variant="tonal" icon={<Wand2 />} loading={filling} onClick={fillDefault}>
+              {t.fillDefault}
+            </Button>
           </div>
           <p className="mb-3 text-[12px] font-medium leading-relaxed text-on-surface-variant">{t.addHint}</p>
+          <p className="-mt-2 mb-3 text-[11px] font-normal leading-snug text-on-surface-variant">{t.fillDefaultHint}</p>
 
           {/* ⚠️ Writing a question happens in the REAL builder, never in a
               cut-down form embedded here — see docs/QUESTIONS.md. The link

@@ -20,7 +20,13 @@ import { formatUZS } from "@/lib/finance/money";
 import { getTodayKey } from "@/lib/dateUtils";
 import { Button, EmptyState, StatusChip } from "@/components/manager-ui";
 import { useManagerLanguage, type LangType } from "@/app/manager/_components/ManagerLanguage";
-import { shortDateLabel } from "./financeFormat";
+import { formatMethodSplit, shortDateLabel } from "./financeFormat";
+import MethodSplitEditor, {
+  methodSplitPayload,
+  methodSplitValid,
+  singleSplitLine,
+  type MethodSplitLine,
+} from "./MethodSplitEditor";
 import MonthNav from "./MonthNav";
 import ReasonDialog from "./ReasonDialog";
 import SearchInput from "../../_components/SearchInput";
@@ -31,6 +37,9 @@ interface Props {
   monthLabel: string;
   onShiftMonth: (delta: number) => void;
   onChanged: () => void;
+  /** 🟢 Office panel (docs/OFFICE.md): a DIRECTOR reads expenses but may not
+   *  add or cancel one. Defaults to true — manager + accountant unchanged. */
+  canRecord?: boolean;
 }
 
 // Keys are the stored category values — never translated.
@@ -142,7 +151,7 @@ const CATEGORY_META: Record<string, { Icon: LucideIcon; avatar: string }> = {
 const categoryMeta = (c: string) => CATEGORY_META[c] || CATEGORY_META.boshqa;
 
 /** Month's expenses: per-category totals, add, cancel. Salary rows come from payroll and are protected. */
-export default function ExpensesTab({ expenses, categories, monthLabel, onShiftMonth, onChanged }: Props) {
+export default function ExpensesTab({ expenses, categories, monthLabel, onShiftMonth, onChanged, canRecord = true }: Props) {
   const { lang } = useManagerLanguage();
   const t = TRANSLATIONS[lang];
   const [showAdd, setShowAdd] = useState(false);
@@ -169,9 +178,11 @@ export default function ExpensesTab({ expenses, categories, monthLabel, onShiftM
     <div className="space-y-3">
       <div className="flex items-center justify-between flex-wrap gap-2">
         <MonthNav label={monthLabel} onShift={onShiftMonth} />
-        <Button icon={<Plus />} onClick={() => setShowAdd(true)}>
-          {t.addExpense}
-        </Button>
+        {canRecord && (
+          <Button icon={<Plus />} onClick={() => setShowAdd(true)}>
+            {t.addExpense}
+          </Button>
+        )}
       </div>
 
       {expenses.length > 5 && (
@@ -223,7 +234,10 @@ export default function ExpensesTab({ expenses, categories, monthLabel, onShiftM
                     {categoryLabel(e.category, lang)}
                     {e.note && <span className="font-medium text-on-surface-variant"> · {e.note}</span>}
                   </p>
-                  <p className="text-[12.5px] text-on-surface-variant mt-0.5">{shortDateLabel(e.date, lang)}</p>
+                  <p className="text-[12.5px] text-on-surface-variant mt-0.5">
+                    {shortDateLabel(e.date, lang)}
+                    {(e.method || e.methodSplit?.length) && ` · ${formatMethodSplit(e, lang)}`}
+                  </p>
                 </div>
                 {cancelled && (
                   <StatusChip tone="muted" noDot className="shrink-0">
@@ -237,7 +251,7 @@ export default function ExpensesTab({ expenses, categories, monthLabel, onShiftM
                 >
                   −{formatUZS(e.amount)}
                 </p>
-                {!cancelled && !e.payoutId && (
+                {!cancelled && !e.payoutId && canRecord && (
                   <button
                     onClick={() => setCancelTarget(e)}
                     title={t.cancelExpenseTitle}
@@ -299,12 +313,14 @@ function AddExpenseModal({
   const options = categories.filter((c) => c !== "salary");
   const [category, setCategory] = useState(options[0] || "boshqa");
   const [amount, setAmount] = useState("");
+  const [methodLines, setMethodLines] = useState<MethodSplitLine[]>(singleSplitLine());
   const [date, setDate] = useState(todayKey);
   const [note, setNote] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   const parsed = parseInt(amount, 10);
-  const valid = Number.isInteger(parsed) && parsed > 0 && !!category;
+  const amountValid = Number.isInteger(parsed) && parsed > 0;
+  const valid = amountValid && !!category && methodSplitValid(methodLines, parsed);
 
   const submit = async () => {
     if (!valid || submitting) return;
@@ -313,6 +329,8 @@ function AddExpenseModal({
       await createExpenseApi({
         category,
         amount: parsed,
+        method: methodLines[0].method,
+        ...(methodLines.length > 1 ? { methodSplit: methodSplitPayload(methodLines) } : {}),
         ...(date !== todayKey ? { date } : {}),
         ...(note.trim() ? { note: note.trim() } : {}),
       });
@@ -354,6 +372,13 @@ function AddExpenseModal({
           onChange={(e) => setAmount(e.target.value)}
           placeholder={t.amountPlaceholder}
           className="w-full px-3.5 py-3 bg-transparent border border-outline-variant rounded-m3-md text-[16px] font-bold text-on-surface tabular-nums focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+        />
+
+        <MethodSplitEditor
+          lang={lang}
+          totalAmount={amountValid ? parsed : 0}
+          lines={methodLines}
+          onChange={setMethodLines}
         />
 
         <div className="grid grid-cols-2 gap-2.5">

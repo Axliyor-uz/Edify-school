@@ -232,6 +232,8 @@ function ManagerShell({ children }: { children: React.ReactNode }) {
               setIsAuthorized(true);
             }
             else if (profile?.role === "teacher") router.push("/teacher/dashboard");
+            // Office staff (docs/OFFICE.md) — the manager panel is not theirs.
+            else if (profile?.role === "director" || profile?.role === "accountant") router.push("/office");
             else router.push("/dashboard");
           } catch (error) {
             // Fail closed: an unreadable profile must not grant access.

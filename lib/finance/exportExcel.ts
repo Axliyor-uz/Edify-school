@@ -6,7 +6,7 @@
 // app/ — status/method labels are intentionally simple, not the full i18n
 // treatment those files give the on-screen tabs.
 import * as XLSX from "xlsx";
-import type { Charge, Expense, Payment, PayrollRow } from "@/types/finance";
+import type { Charge, Expense, Payment, PaymentMethod, PaymentMethodSplit, PayrollRow } from "@/types/finance";
 import type { LangType } from "@/app/manager/_components/ManagerLanguage";
 
 export type FinanceExportSection = "charges" | "payments" | "debtors" | "payroll" | "expenses";
@@ -102,6 +102,24 @@ const PAYOUT_STATUS_T: Record<LangType, Record<"none" | "approved" | "paid", str
 
 const openAmountOf = (c: Charge) => Math.max(0, c.amount - (c.paidAmount || 0));
 
+// Own small label map, matching the header comment: this file must not import
+// financeFormat.ts (that would reach up into app/).
+const PAYMENT_METHOD_T: Record<LangType, Record<PaymentMethod, string>> = {
+  uz: { cash: "Naqd", card: "Karta", click: "Click", payme: "Payme", transfer: "O'tkazma", other: "Boshqa" },
+  en: { cash: "Cash", card: "Card", click: "Click", payme: "Payme", transfer: "Transfer", other: "Other" },
+  ru: { cash: "Наличные", card: "Карта", click: "Click", payme: "Payme", transfer: "Перевод", other: "Другое" },
+};
+
+/** "Karta" for a plain single-method doc, or "Naqd 200000 + Karta (AAA) 300000" once split. */
+function methodSummary(doc: { method?: PaymentMethod; methodSplit?: PaymentMethodSplit[] }, lang: LangType): string {
+  if (doc.methodSplit?.length) {
+    return doc.methodSplit
+      .map((s) => `${PAYMENT_METHOD_T[lang][s.method]}${s.label ? ` (${s.label})` : ""} ${s.amount}`)
+      .join(" + ");
+  }
+  return doc.method ? PAYMENT_METHOD_T[lang][doc.method] : "";
+}
+
 function appendSheet(wb: XLSX.WorkBook, name: string, aoa: (string | number)[][], colWidths: number[]) {
   const ws = XLSX.utils.aoa_to_sheet(aoa);
   ws["!cols"] = colWidths.map((wch) => ({ wch }));
@@ -155,7 +173,7 @@ export function buildFinanceWorkbook(params: BuildFinanceWorkbookParams): { blob
       p.paidAt,
       p.studentName,
       typeT[p.type] || p.type,
-      p.method,
+      methodSummary(p, lang),
       p.amount,
       p.note || "",
       statusT[p.status] || p.status,
@@ -172,7 +190,7 @@ export function buildFinanceWorkbook(params: BuildFinanceWorkbookParams): { blob
         [],
         [TOTAL_LABEL_T[lang], "", "", "", total, "", ""],
       ],
-      [12, 22, 12, 12, 14, 26, 16]
+      [12, 22, 12, 28, 14, 26, 16]
     );
   }
 
@@ -219,13 +237,25 @@ export function buildFinanceWorkbook(params: BuildFinanceWorkbookParams): { blob
 
   if (sections.has("expenses")) {
     const statusT = EXPENSE_STATUS_T[lang];
-    const rows: (string | number)[][] = expenses.map((e) => [e.date, e.category, e.amount, e.note || "", statusT[e.status] || e.status]);
+    const rows: (string | number)[][] = expenses.map((e) => [
+      e.date,
+      e.category,
+      methodSummary(e, lang),
+      e.amount,
+      e.note || "",
+      statusT[e.status] || e.status,
+    ]);
     const total = expenses.filter((e) => e.status === "active").reduce((s, e) => s + e.amount, 0);
     appendSheet(
       wb,
       sectionLabel("expenses", lang),
-      [["Sana", "Kategoriya", "Summa (so'm)", "Izoh", "Holat"], ...rows, [], [TOTAL_LABEL_T[lang], "", total, "", ""]],
-      [12, 14, 14, 32, 16]
+      [
+        ["Sana", "Kategoriya", "Usul", "Summa (so'm)", "Izoh", "Holat"],
+        ...rows,
+        [],
+        [TOTAL_LABEL_T[lang], "", "", total, "", ""],
+      ],
+      [12, 14, 28, 14, 32, 16]
     );
   }
 

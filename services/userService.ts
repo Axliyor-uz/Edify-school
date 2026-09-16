@@ -40,7 +40,11 @@ export interface UserProfile {
 
   // Metadata
   createdAt?: string;
-  role?: 'student' | 'teacher' | 'manager' | 'admin';
+  /** ⚠️ An authorization HINT only — this doc is client-writable, so every
+   *  privileged path proves itself independently (docs/AUTH.md). 'director' /
+   *  'accountant' are the back-office roles from docs/OFFICE.md; they are
+   *  written only by the Admin SDK and are NOT in the rules' create allowlist. */
+  role?: 'student' | 'teacher' | 'manager' | 'admin' | 'director' | 'accountant';
   
   // Teacher Specific (Optional)
   createdTests?: string[];

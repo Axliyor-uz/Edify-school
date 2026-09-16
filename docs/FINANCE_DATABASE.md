@@ -2,7 +2,7 @@
 
 > **Agent workflow:** read this (and [FINANCE.md](FINANCE.md)) BEFORE touching finance code; update it in the same change whenever a UI action's writes change. Simple map of every Firestore collection the **Moliya** module touches, and — for every button in the UI — exactly which documents are written. Design decisions and deeper rules live in [FINANCE.md](FINANCE.md). Index: [README.md](README.md).
 
-**Last verified:** 2026-07-12 (commit `7c31a96`) — checked against code; accurate.
+**Last verified:** 2026-09-14 (`center_payments`/`center_expenses` gained an optional `methodSplit` — see docs/FINANCE.md §4.2a; previously 2026-07-12, commit `7c31a96`).
 
 ---
 
@@ -83,7 +83,8 @@ why clicking "Yaratish" twice can never create the same charge twice.
 | Field | Meaning |
 |---|---|
 | `type` | `'payment'` or `'refund'` (money returned; needs a note) |
-| `amount`, `method` | so'm + `cash / card / click / payme / transfer / other` |
+| `amount`, `method` | so'm + `cash / card / click / payme / transfer / other` — `method` is DERIVED when `methodSplit` is set (single method shared by every line, else `'other'`) |
+| `methodSplit?` | ⚠️ (2026-09-14) `[{method, amount, label?}]` — set only when the manager split this payment across 2+ methods; lines sum to `amount`. `label` is free text (e.g. "AAA karta") — no named-card registry exists. Absent = plain single-method payment, same as before this field existed |
 | `allocations` | `[{chargeId, amount}]` — which months this money covered (oldest debt first, automatic) |
 | `unallocatedAmount` | leftover = **avans**; automatically consumed by future charge generation |
 | `paidAt` | business date — **backdatable** (for entering old paper-notebook records) |
@@ -95,6 +96,7 @@ why clicking "Yaratish" twice can never create the same charge twice.
 |---|---|
 | `category` | from settings (`ijara`, `kommunal`…) or the reserved `'salary'` |
 | `amount`, `date`, `note` | so'm, business date (backdatable, not future), optional note |
+| `method?`, `methodSplit?` | ⚠️ (2026-09-14) same shape and same derivation rule as `center_payments` above — NEW fields, both optional. Absent on every expense recorded before this date, and always absent on salary-linked expenses (payroll never sets them) |
 | `teacherId`, `payoutId` | set only on salary expenses — links back to the payout. **Salary-linked expenses cannot be cancelled manually** |
 | `status` | `'active'` or `'cancelled'` (+ audit fields) |
 

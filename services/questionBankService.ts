@@ -277,6 +277,44 @@ export async function fetchMyQuestionsPage(
 }
 
 /**
+ * ONE page of the SHARED SAT pool — questions any teacher uploaded via
+ * `/teacher/sat/import` and chose to share (`sharedBank == true`), narrowed to
+ * one taxonomy subject. Newest first. Contract: docs/SAT_QUIZ.md.
+ *
+ * ⚠️ Distinct from `fetchMyQuestionsPage('')`, which reads the ANONYMOUS
+ * platform pool (`creatorId: ''`, Admin-SDK-written, owned by nobody). These
+ * documents keep their uploader's `creatorId`/`creatorName`, so the picker can
+ * attribute them and only that teacher can edit or delete them — which is the
+ * whole point of shipping "shared" as a flag rather than as a creatorId swap.
+ *
+ * Needs its own composite index (`sharedBank + subject.id + createdAt desc`);
+ * it cannot ride the `creatorId + subject.id + createdAt` one, since the whole
+ * query is deliberately NOT creator-scoped.
+ */
+export async function fetchSharedQuestionsPage(
+  subjectSlug: string,
+  pageSize = 10,
+  cursor: QueryDocumentSnapshot | null = null,
+): Promise<QuestionPage> {
+  const snap = await getDocs(
+    query(
+      collection(db, "teacher_questions"),
+      where("sharedBank", "==", true),
+      where("subject.id", "==", subjectSlug),
+      orderBy("createdAt", "desc"),
+      ...(cursor ? [startAfter(cursor)] : []),
+      limit(pageSize),
+    ),
+  );
+
+  return {
+    questions: snap.docs.map((d) => normalizeQuestion({ id: d.id, ...d.data() })),
+    cursor: snap.docs[snap.docs.length - 1] ?? null,
+    hasMore: snap.docs.length === pageSize,
+  };
+}
+
+/**
  * One question by id. **Usually costs ZERO reads**: the list that routed to the
  * editor already put it in the cache (`cacheQuestion`), so only a cold deep link
  * (a pasted `?edit=…` URL, or an expired 60s TTL) actually hits Firestore.

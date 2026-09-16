@@ -4,7 +4,7 @@ import { createExpense } from '@/lib/server/financeOps';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-/** POST — record an expense. Body: { category, amount, date?, note? }. */
+/** POST — record an expense. Body: { category, amount, date?, note?, method?, methodSplit? }. */
 export const POST = financePostHandler('/api/manager/finance/expenses', ({ uid, centerId }, body) =>
   createExpense({
     centerId,
@@ -13,5 +13,8 @@ export const POST = financePostHandler('/api/manager/finance/expenses', ({ uid, 
     amount: body.amount,
     date: body.date,
     note: body.note,
-  })
+    method: body.method,
+    methodSplit: body.methodSplit,
+  }),
+  { office: 'accountant' }
 );

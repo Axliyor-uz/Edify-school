@@ -36,9 +36,9 @@ unaffected.
 | `app/manager/rooms/_components/RoomModal.tsx` | Create/edit room (name, capacity, building, color, features, active). |
 | `app/manager/rooms/_components/featureIcons.tsx` | Icon per `RoomFeature`. |
 | `app/manager/timetable/page.tsx` | Weekly grid: rooms × weekdays, group+teacher chips, room clashes red, teacher-clash count, day/teacher filters, "Biriktirilmagan" row. **Promoted to a top-level "Jadval & Xonalar" nav item** (`/manager/rooms/timetable` now redirects here). **Editable**: click a booking → a drawer with that group's `ScheduleTab` (`autoEdit`); click an empty room×day cell → pick a group → editor opens `prefill`ed with that room+day. Saves apply optimistically (schedule `overrides`) then `refetch`. |
-| `app/manager/groups/[classId]/_components/ScheduleTab.tsx` | **Where rooms are assigned** (moved here from attendance) — per-slot room picker ("same room for all" default + per-day), live conflict panel (room/teacher/capacity), "Bo'sh xona" suggestion, room chips in view mode. Reused by the timetable drawer via optional `autoEdit` (open in edit mode) + `prefill` (`{ dayOfWeek, roomId }`) props. |
-| `app/manager/groups/[classId]/page.tsx` | Group detail — schedule+room summary chips + a **"Jadval & xona" tab** (in-page, renders `ScheduleTab`). |
-| `app/manager/groups/_components/CreateGroupModal.tsx` | Writes `centerId` on group create. |
+| `app/manager/groups/_shared/ScheduleTab.tsx` | **Where rooms are assigned** (moved here from attendance; 2026-09-14 promoted to `_shared`) — per-slot room picker ("same room for all" default + per-day), live conflict panel (room/teacher/capacity), "Bo'sh xona" suggestion, room chips in view mode. Reused by the timetable drawer via optional `autoEdit` (open in edit mode) + `prefill` (`{ dayOfWeek, roomId }`) props, AND by both group-detail routes below. |
+| `app/manager/groups/detail/[classId]/page.tsx` · `[schoolClassId]/subjects/[classId]/page.tsx` | Group detail (IELTS/unlinked groups) and School Class subject detail (2026-09-14, [MANAGER.md](MANAGER.md)) — each renders its own schedule+room summary chips and a **"Jadval & xona" tab** (in-page, renders the shared `ScheduleTab`). |
+| `services/schoolClassService.ts` (`addSubjectGroup`), `app/manager/groups/_components/CreateIeltsGroupModal.tsx` | Write `centerId` on group/subject create. |
 | `app/manager/dashboard/page.tsx` | "N/M xona band" (rooms in use now) + room chip on today's lessons. |
 | `app/manager/layout.tsx` | **Sectioned** sidebar ("Jadval & Xonalar" section holds Dars jadvali + Xonalar); full-width layout for `/manager/timetable`. |
 
@@ -85,7 +85,7 @@ Query: `where centerId == orderBy orderIndex`. No composite index needed.
 
 ## 5. Verification (dev server)
 - **Rooms**: create/edit/delete; deleting an assigned room is blocked with the using groups listed.
-- **Assign**: group's schedule (via `/manager/groups/{classId}` → Jadval & xona) → pick a room;
+- **Assign**: group's schedule (via `/manager/groups/detail/{classId}` or a School Class's `/manager/groups/{schoolClassId}/subjects/{classId}` → Jadval & xona) → pick a room;
   double-book a room/time → amber conflict panel names the clashing group; over-capacity → warning;
   "Bo'sh xona" suggests a free room. Room chips show in view mode + on the group page.
 - **Timetable**: `/manager/timetable` shows every booking in its room/day; a real double-book is
