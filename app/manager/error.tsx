@@ -13,6 +13,7 @@ const TRANSLATIONS = {
     retry: "Qayta urinish",
     home: "Bosh sahifa",
   },
+
   en: {
     title: "Something went wrong",
     body: "An unexpected problem occurred while loading the page. Try again — this usually resolves right away.",
