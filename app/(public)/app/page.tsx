@@ -6,6 +6,7 @@ export const metadata = {
   description: "O'quv markazi menejerlari uchun Edify Manager Android ilovasini yuklab oling.",
 };
 
+
 // Manager APK download page (docs/APP_DISTRIBUTION.md). The Android app's
 // update gate sends users here; version info comes from public/app/version.json
 // which deploys together with the APK, so page and file never disagree.
