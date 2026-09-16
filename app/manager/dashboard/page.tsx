@@ -9,6 +9,7 @@ import {
   Users, CheckCircle, CalendarDays, Clock, AlertTriangle, TrendingUp,
   ArrowRight, GraduationCap, UserPlus, DoorOpen, Banknote, Wallet,
 } from "lucide-react";
+
 import type { LucideIcon } from "lucide-react";
 import { useAuth } from "@/lib/AuthContext";
 import { getUserProfile } from "@/services/userService";
