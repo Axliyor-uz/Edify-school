@@ -27,8 +27,9 @@ import {
   LayoutDashboard, GraduationCap, Layers, Users, Wallet, LogOut, Menu, X,
   BookOpen, CalendarCheck, UserCheck, DoorOpen, CalendarRange, Building2,
   UserIcon, PanelLeft, MoreVertical, MoreHorizontal, Sun, Moon, Monitor, QrCode,
-  Briefcase,
+  Briefcase, GitBranch,
 } from "lucide-react";
+import { fetchMyBranches } from "@/services/branchService";
 
 // ============================================================================
 // TRANSLATIONS — layout chrome only; pages carry their own TRANSLATIONS dicts
@@ -36,7 +37,7 @@ import {
 // ============================================================================
 const LAYOUT_TRANSLATIONS = {
   uz: {
-    nav: { dashboard: "Boshqaruv paneli", dashboardShort: "Asosiy", groups: "Guruhlar", students: "O'quvchilar", parents: "Ota-onalar", teachers: "O'qituvchilar", teachersShort: "Ustozlar", employees: "Xodimlar", attendance: "Davomat", staffAttendance: "Xodimlar davomati", staffAttendanceShort: "Xodimlar", timetable: "Dars jadvali", timetableShort: "Jadval", rooms: "Xonalar", finance: "To'lovlar" },
+    nav: { dashboard: "Boshqaruv paneli", dashboardShort: "Asosiy", branches: "Filiallar", groups: "Guruhlar", students: "O'quvchilar", parents: "Ota-onalar", teachers: "O'qituvchilar", teachersShort: "Ustozlar", employees: "Xodimlar", attendance: "Davomat", staffAttendance: "Xodimlar davomati", staffAttendanceShort: "Xodimlar", timetable: "Dars jadvali", timetableShort: "Jadval", rooms: "Xonalar", finance: "To'lovlar" },
     bar: { home: "Asosiy", groups: "Guruhlar", attendance: "Davomat", finance: "To'lovlar", menu: "Menyu" },
     theme: { label: "Mavzu", light: "Yorug'", system: "Tizim", dark: "Tun" },
     language: "Til", profile: "Profilim", manager: "Menejer", more: "Yana",
@@ -44,7 +45,7 @@ const LAYOUT_TRANSLATIONS = {
     logout: { title: "Tizimdan chiqish", desc: "Rostdan ham hisobingizdan chiqmoqchimisiz?", confirm: "Chiqish", cancel: "Bekor qilish", error: "Tizimdan chiqishda xatolik yuz berdi" },
   },
   en: {
-    nav: { dashboard: "Dashboard", dashboardShort: "Home", groups: "Groups", students: "Students", parents: "Parents", teachers: "Teachers", teachersShort: "Teachers", employees: "Employees", attendance: "Attendance", staffAttendance: "Staff attendance", staffAttendanceShort: "Staff", timetable: "Timetable", timetableShort: "Schedule", rooms: "Rooms", finance: "Payments" },
+    nav: { dashboard: "Dashboard", dashboardShort: "Home", branches: "Branches", groups: "Groups", students: "Students", parents: "Parents", teachers: "Teachers", teachersShort: "Teachers", employees: "Employees", attendance: "Attendance", staffAttendance: "Staff attendance", staffAttendanceShort: "Staff", timetable: "Timetable", timetableShort: "Schedule", rooms: "Rooms", finance: "Payments" },
     bar: { home: "Home", groups: "Groups", attendance: "Attendance", finance: "Payments", menu: "Menu" },
     theme: { label: "Theme", light: "Light", system: "System", dark: "Dark" },
     language: "Language", profile: "My profile", manager: "Manager", more: "More",
@@ -52,7 +53,7 @@ const LAYOUT_TRANSLATIONS = {
     logout: { title: "Sign out", desc: "Are you sure you want to sign out of your account?", confirm: "Sign out", cancel: "Cancel", error: "Something went wrong while signing out" },
   },
   ru: {
-    nav: { dashboard: "Панель управления", dashboardShort: "Главная", groups: "Группы", students: "Ученики", parents: "Родители", teachers: "Учителя", teachersShort: "Учителя", employees: "Сотрудники", attendance: "Посещаемость", staffAttendance: "Посещаемость сотрудников", staffAttendanceShort: "Сотрудники", timetable: "Расписание", timetableShort: "Расписание", rooms: "Кабинеты", finance: "Платежи" },
+    nav: { dashboard: "Панель управления", dashboardShort: "Главная", branches: "Филиалы", groups: "Группы", students: "Ученики", parents: "Родители", teachers: "Учителя", teachersShort: "Учителя", employees: "Сотрудники", attendance: "Посещаемость", staffAttendance: "Посещаемость сотрудников", staffAttendanceShort: "Сотрудники", timetable: "Расписание", timetableShort: "Расписание", rooms: "Кабинеты", finance: "Платежи" },
     bar: { home: "Главная", groups: "Группы", attendance: "Посещения", finance: "Платежи", menu: "Меню" },
     theme: { label: "Тема", light: "День", system: "Система", dark: "Ночь" },
     language: "Язык", profile: "Мой профиль", manager: "Менеджер", more: "Ещё",
@@ -72,6 +73,10 @@ type NavItem = { name: string; href: string; icon: typeof LayoutDashboard; short
 
 const NAV_DEFS: NavDef[] = [
   { key: "dashboard", shortKey: "dashboardShort", href: "/manager/dashboard", icon: LayoutDashboard },
+  // 🟢 Multi-branch owner view (docs/MANAGER.md) — shown ONLY when this manager
+  // can operate more than one branch; filtered out of NAV_ITEMS below otherwise,
+  // so a single-branch manager sees zero UI change.
+  { key: "branches", href: "/manager/branches", icon: GitBranch },
   { key: "groups", href: "/manager/groups", icon: Layers, groupStart: true },
   { key: "students", href: "/manager/students", icon: Users },
   // Parent QR access (docs/PARENTS.md) — a sibling of Students on purpose: it is
@@ -153,6 +158,8 @@ function ManagerShell({ children }: { children: React.ReactNode }) {
   const [userPhoto, setUserPhoto] = useState<string | null>(null);
   const [centerName, setCenterName] = useState("Markaz");
   const [centerId, setCenterId] = useState<string | null>(null);
+  // 🟢 Multi-branch owner view — only >1 branch shows the "Filiallar" nav item.
+  const [hasMultipleBranches, setHasMultipleBranches] = useState(false);
   // Approval gate: writes are blocked by Firestore rules until the center is
   // 'active'; this drives the matching UX. Unknown/missing status → 'pending'.
   const [centerStatus, setCenterStatus] = useState<CenterApprovalStatus>("pending");
@@ -248,6 +255,17 @@ function ManagerShell({ children }: { children: React.ReactNode }) {
     checkRole();
   }, [user, loading, router]);
 
+  // 🟢 Multi-branch owner view: a SEPARATE, best-effort check — never blocks
+  // the gate above, and a failure just means the nav item stays hidden.
+  useEffect(() => {
+    if (!user || !centerId) return;
+    let mounted = true;
+    fetchMyBranches(user.uid, centerId)
+      .then((branches) => { if (mounted) setHasMultipleBranches(branches.length > 1); })
+      .catch(() => { /* stays false */ });
+    return () => { mounted = false; };
+  }, [user, centerId]);
+
   // Global face event processor: processes both staff and student check-ins
   // silently in the background as long as the manager panel is open.
   useEffect(() => {
@@ -282,14 +300,18 @@ function ManagerShell({ children }: { children: React.ReactNode }) {
 
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
 
-  // Language-resolved navigation items.
-  const NAV_ITEMS: NavItem[] = NAV_DEFS.map((d) => ({
-    name: t.nav[d.key],
-    short: d.shortKey ? t.nav[d.shortKey] : undefined,
-    href: d.href,
-    icon: d.icon,
-    groupStart: d.groupStart,
-  }));
+  // Language-resolved navigation items. "branches" is filtered out entirely
+  // for a single-branch manager — not just hidden, absent — so nothing about
+  // their nav changes.
+  const NAV_ITEMS: NavItem[] = NAV_DEFS
+    .filter((d) => d.key !== "branches" || hasMultipleBranches)
+    .map((d) => ({
+      name: t.nav[d.key],
+      short: d.shortKey ? t.nav[d.shortKey] : undefined,
+      href: d.href,
+      icon: d.icon,
+      groupStart: d.groupStart,
+    }));
 
   // Topbar shell: first 5 destinations inline, the rest behind "More".
   // Toolbar shell shows every destination on its own nav row instead.

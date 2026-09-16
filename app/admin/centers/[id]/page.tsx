@@ -6,7 +6,7 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import {
   ArrowLeft, Building2, Loader2, Copy, Check, LayoutDashboard,
-  Users, School, UserCog, AlertTriangle, Archive, Briefcase
+  Users, School, UserCog, AlertTriangle, Archive, Briefcase, GitBranch
 } from "lucide-react";
 import { fetchCenterDetailData, centerStatusOf, type CenterDetailData } from "@/services/centerAdminService";
 import OverviewTab from "./_components/OverviewTab";
@@ -14,6 +14,7 @@ import TeachersTab from "./_components/TeachersTab";
 import GroupsTab from "./_components/GroupsTab";
 import ManagerTab from "./_components/ManagerTab";
 import StaffTab from "./_components/StaffTab";
+import BranchesTab from "./_components/BranchesTab";
 import DangerTab from "./_components/DangerTab";
 
 function CopyIdButton({ id }: { id: string }) {
@@ -34,7 +35,7 @@ function CopyIdButton({ id }: { id: string }) {
   );
 }
 
-type TabKey = "overview" | "teachers" | "groups" | "manager" | "staff" | "danger";
+type TabKey = "overview" | "teachers" | "groups" | "manager" | "staff" | "branches" | "danger";
 
 export default function AdminCenterDetailPage() {
   const params = useParams();
@@ -104,6 +105,8 @@ export default function AdminCenterDetailPage() {
     { key: "manager", label: "Manager", icon: UserCog },
     // Director / buxgalter accounts — super-admin-only provisioning, docs/OFFICE.md.
     { key: "staff", label: "Office staff", icon: Briefcase },
+    // Multi-branch owner view — super-admin-only provisioning, docs/MANAGER.md.
+    { key: "branches", label: "Branches", icon: GitBranch },
     { key: "danger", label: "Danger Zone", icon: AlertTriangle },
   ];
 
@@ -162,6 +165,7 @@ export default function AdminCenterDetailPage() {
       {activeTab === "groups" && <GroupsTab data={data} />}
       {activeTab === "manager" && <ManagerTab data={data} onUpdated={load} />}
       {activeTab === "staff" && <StaffTab data={data} />}
+      {activeTab === "branches" && <BranchesTab data={data} />}
       {activeTab === "danger" && <DangerTab data={data} onUpdated={load} />}
     </div>
   );

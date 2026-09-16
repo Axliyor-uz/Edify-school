@@ -4,7 +4,7 @@
 >
 > Subsystem docs: attendance → [ATTENDANCE.md](ATTENDANCE.md) · rooms/timetable → [ROOMS.md](ROOMS.md) · finance → [FINANCE.md](FINANCE.md) + [FINANCE_DATABASE.md](FINANCE_DATABASE.md) · **parent QR access → [PARENTS.md](PARENTS.md)**.
 
-**Last verified:** 2026-09-15 (office staff — [OFFICE.md](OFFICE.md); previously 2026-07-15).
+**Last verified:** 2026-09-16 (non-teaching employees + multi-branch owner view; previously 2026-09-15, office staff — [OFFICE.md](OFFICE.md); previously 2026-07-15).
 
 ## Purpose & scope
 
@@ -135,6 +135,52 @@ one would let them appoint their own oversight; `center_staff` is `write: if fal
 The manager CAN read their center's `center_staff` links (`centerId ==` filtered) to see who has
 back-office access — `fetchCenterOfficeStaff()` in `services/officeService.ts` — though no manager
 page renders that list yet.
+
+## Multi-branch owner view (2026-09-16)
+
+**Confirmed model: the same owner personally switches between branches to operate each one** — not
+"each branch keeps its own separate manager, the owner only ever views a rollup." This is why
+`centers.ownerUid` was left completely unchanged (still the exact `isCenterManager`/
+`requireActiveCenterManager` comparison, on every existing rule and API route) and can now
+legitimately repeat across several `centers` docs for the same owner uid.
+
+- **`center_oversight/{ownerUid}_{centerId}`** ([types/branch.ts](../types/branch.ts)) — a new,
+  purely additive link collection recording that an owner may operate a branch. It is NOT the
+  authorization boundary for anything except the switch route below; every finance/attendance/
+  roster rule still checks `ownerUid` directly and needed zero changes. `write: if false` — only
+  the super-admin "attach branch" flow creates one. Doc id is O(1)-checkable by construction (mirrors
+  `center_students`/`center_teachers`), so `list` costs one plain field compare, cheaper even than
+  `isCenterManager`'s constant-path `get()`.
+- **`POST /api/manager/switch-branch { centerId }`** — the ONLY place `users/{uid}.centerId` is ever
+  rewritten after signup. `users.centerId` is locked against client UPDATE (only CREATE, at signup —
+  docs/AUTH.md's privileged-field denylist), so this needed the Admin SDK. Verifies the caller directly
+  owns the target OR holds a `center_oversight` grant for it, and that the target is `status:'active'`
+  (approval-gate parity). Every existing manager page/API/rule re-resolves against the new `centerId`
+  automatically on the next call — none of them changed.
+- **`POST /api/admin/centers`** gained a second mode: an optional `attachToOwnerUid` field skips
+  `adminAuth.createUser`/`users`/`usernames` entirely and creates the new `centers` doc with
+  `ownerUid` set to that EXISTING manager's uid, plus a matching `center_oversight` grant. The
+  original brand-new-owner path is byte-for-byte unchanged when the field is absent. Admin UI:
+  `app/admin/centers/[id]/_components/BranchesTab.tsx` (super-admin-only, mirrors `StaffTab.tsx`'s
+  placement — attaching a branch to an existing owner is a privileged action a manager cannot self-serve).
+- **`/manager/branches`** — a read-only comparison table, `services/branchService.ts`'s
+  `fetchMyBranches` (dedupes direct-owner `centers` ∪ `center_oversight` grants — both already
+  legally client-readable, no API route needed for listing) looped through the EXACT same
+  centerId-scoped fetchers/`computeFinanceStats`/`rateOfSessions` the dashboard uses — zero new
+  aggregation logic. A "Switch to this branch" button calls `switchBranchApi` then does a **hard**
+  `window.location.assign('/manager/dashboard')` — NOT `router.push`. ⚠️ **This is load-bearing**:
+  `app/manager/layout.tsx`'s `centerId`-resolving effect runs once per mount (deps don't include
+  pathname), so a soft client-side navigation would keep showing the PREVIOUS branch's data until a
+  manual reload.
+- **Nav visibility**: `app/manager/layout.tsx` calls `fetchMyBranches` once centerId resolves and
+  shows "Filiallar" in the nav ONLY when it returns more than one branch — filtered OUT of
+  `NAV_ITEMS` entirely (not just hidden) for a single-branch manager, so nothing about their
+  experience changes.
+
+⚠️ **Reserved seam, not built**: `OversightAccessLevel` has only one value, `'operate'`, today. If the
+model ever needs to change to "each branch keeps its own manager, the owner only views a rollup," a
+future `'view_only'` level would let that coexist WITHOUT ever touching `centers.ownerUid`'s meaning —
+don't retrofit that by mutating `ownerUid` semantics instead.
 
 ## Walk-in check-in (`services/checkInService.ts`)
 
